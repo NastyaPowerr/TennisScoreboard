@@ -7,11 +7,35 @@
     <groupId>org.roadmap</groupId>
     <artifactId>TennisScoreboard</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jakarta.servelt.version>6.1.0</jakarta.servelt.version>
+        <h2database.version>2.3.232</h2database.version>
+        <hikariCP.version>7.0.2</hikariCP.version>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>${jakarta.servelt.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2database.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>${hikariCP.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 </project>
