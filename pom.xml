@@ -16,6 +16,7 @@
         <jakarta.servelt.version>6.1.0</jakarta.servelt.version>
         <h2database.version>2.3.232</h2database.version>
         <hikariCP.version>7.0.2</hikariCP.version>
+        <hibernate.version>7.2.4.Final</hibernate.version>
     </properties>
 
     <dependencies>
@@ -36,6 +37,11 @@
             <artifactId>HikariCP</artifactId>
             <version>${hikariCP.version}</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
         </dependency>
     </dependencies>
 </project>
