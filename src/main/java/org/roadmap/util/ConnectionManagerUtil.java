@@ -2,6 +2,7 @@ package org.roadmap.util;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.h2.tools.Server;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -16,14 +17,19 @@ public class ConnectionManagerUtil {
     static {
         try {
             Class.forName("org.h2.Driver");
-
             HikariConfig config = new HikariConfig();
+
             config.setJdbcUrl(DB_URL);
+            config.setUsername("test");
+            config.setPassword("123");
 
             dataSource = new HikariDataSource(config);
-            System.out.println("connected successfully");
+
+            Server webServer = Server.createWebServer("-web", "-webAllowOthers", "-webPort", "8082").start();
         } catch (ClassNotFoundException ex) {
             throw new RuntimeException("Couldn't load driver for database.");
+        } catch (SQLException ex) {
+            throw new RuntimeException("Couldn't load the DB in browser.");
         }
     }
 
