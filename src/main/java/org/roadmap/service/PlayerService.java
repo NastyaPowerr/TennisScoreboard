@@ -1,7 +1,7 @@
 package org.roadmap.service;
 
-import org.roadmap.model.dto.PlayerDtoRequest;
-import org.roadmap.model.entity.PlayerEntity;
+import org.roadmap.dto.request.PlayerDtoRequest;
+import org.roadmap.entity.Player;
 import org.roadmap.repository.PlayerRepository;
 
 public class PlayerService {
@@ -12,8 +12,8 @@ public class PlayerService {
     }
 
     public PlayerDtoRequest create(PlayerDtoRequest player) {
-        PlayerEntity entity = new PlayerEntity(null, player.name());
-        PlayerEntity savedPlayer = playerRepository.save(entity);
+        Player entity = new Player(null, player.name());
+        Player savedPlayer = playerRepository.save(entity);
         return new PlayerDtoRequest(
                 savedPlayer.getId(),
                 savedPlayer.getName()
@@ -21,7 +21,7 @@ public class PlayerService {
     }
 
     public PlayerDtoRequest getById(Integer id) {
-        PlayerEntity savedPlayer = playerRepository.findById(id);
+        Player savedPlayer = playerRepository.findById(id);
         return new PlayerDtoRequest(
                 savedPlayer.getId(),
                 savedPlayer.getName()

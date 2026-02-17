@@ -5,7 +5,7 @@ import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
 import org.roadmap.H2DatabaseViewer;
-import org.roadmap.model.dto.MatchDto;
+import org.roadmap.dto.MatchDto;
 import org.roadmap.repository.MatchRepository;
 import org.roadmap.repository.PlayerRepository;
 import org.roadmap.service.MatchService;

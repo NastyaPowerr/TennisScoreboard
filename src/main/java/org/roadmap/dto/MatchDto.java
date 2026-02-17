@@ -1,4 +1,4 @@
-package org.roadmap.model.dto;
+package org.roadmap.dto;
 
 public class MatchDto {
     private Integer firstPlayerId;

@@ -1,12 +1,11 @@
 package org.roadmap.service;
 
-import org.roadmap.model.dto.MatchDto;
-import org.roadmap.model.dto.MatchDtoResponse;
-import org.roadmap.model.dto.PlayerDtoRequest;
-import org.roadmap.model.dto.PlayerDtoResponse;
-import org.roadmap.model.dto.Score;
-import org.roadmap.model.entity.MatchEntity;
-import org.roadmap.model.entity.PlayerEntity;
+import org.roadmap.dto.MatchDto;
+import org.roadmap.dto.response.MatchDtoResponse;
+import org.roadmap.dto.response.PlayerDtoResponse;
+import org.roadmap.dto.Score;
+import org.roadmap.entity.Match;
+import org.roadmap.entity.Player;
 import org.roadmap.repository.MatchRepository;
 import org.roadmap.repository.PlayerRepository;
 
@@ -42,12 +41,12 @@ public class MatchService {
         System.out.println(match);
     }
 
-    public MatchDtoResponse save(MatchDto match, PlayerEntity winner) {
-        PlayerEntity firstPlayer = playerRepository.findById(match.getFirstPlayerId());
-        PlayerEntity secondPlayer = playerRepository.findById(match.getSecondPlayerId());
-        MatchEntity entity = new MatchEntity(firstPlayer, secondPlayer, winner);
+    public MatchDtoResponse save(MatchDto match, Player winner) {
+        Player firstPlayer = playerRepository.findById(match.getFirstPlayerId());
+        Player secondPlayer = playerRepository.findById(match.getSecondPlayerId());
+        Match entity = new Match(firstPlayer, secondPlayer, winner);
 
-        MatchEntity savedEntity = matchRepository.save(entity);
+        Match savedEntity = matchRepository.save(entity);
 
         PlayerDtoResponse firstPlayerDto = new PlayerDtoResponse(firstPlayer.getName());
         PlayerDtoResponse secondPlayerDto = new PlayerDtoResponse(secondPlayer.getName());

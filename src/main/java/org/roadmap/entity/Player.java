@@ -1,4 +1,4 @@
-package org.roadmap.model.entity;
+package org.roadmap.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "players")
-public class PlayerEntity {
+public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -17,10 +17,10 @@ public class PlayerEntity {
     @Column(name = "name")
     private String name;
 
-    public PlayerEntity() {
+    public Player() {
     }
 
-    public PlayerEntity(Integer id, String name) {
+    public Player(Integer id, String name) {
         this.id = id;
         this.name = name;
     }

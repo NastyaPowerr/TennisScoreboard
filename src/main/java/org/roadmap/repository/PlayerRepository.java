@@ -3,7 +3,7 @@ package org.roadmap.repository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.roadmap.model.entity.PlayerEntity;
+import org.roadmap.entity.Player;
 import org.roadmap.util.HibernateSessionFactoryUtil;
 
 public class PlayerRepository {
@@ -13,17 +13,17 @@ public class PlayerRepository {
         this.sessionFactory = HibernateSessionFactoryUtil.getSessionFactory();
     }
 
-    public PlayerEntity save(PlayerEntity playerEntity) {
+    public Player save(Player player) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        session.persist(playerEntity);
+        session.persist(player);
         transaction.commit();
         session.close();
-        return playerEntity;
+        return player;
     }
 
-    public PlayerEntity findById(Integer id) {
+    public Player findById(Integer id) {
         Session session = sessionFactory.openSession();
-        return session.find(PlayerEntity.class, id);
+        return session.find(Player.class, id);
     }
 }

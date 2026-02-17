@@ -3,8 +3,8 @@ package org.roadmap.util;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.roadmap.model.entity.MatchEntity;
-import org.roadmap.model.entity.PlayerEntity;
+import org.roadmap.entity.Match;
+import org.roadmap.entity.Player;
 
 public class HibernateSessionFactoryUtil {
     private static SessionFactory sessionFactory;
@@ -15,8 +15,8 @@ public class HibernateSessionFactoryUtil {
         if (sessionFactory == null) {
             try {
                 Configuration configuration = new Configuration().configure();
-                configuration.addAnnotatedClass(PlayerEntity.class);
-                configuration.addAnnotatedClass(MatchEntity.class);
+                configuration.addAnnotatedClass(Player.class);
+                configuration.addAnnotatedClass(Match.class);
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());
             } catch (Exception ex) {

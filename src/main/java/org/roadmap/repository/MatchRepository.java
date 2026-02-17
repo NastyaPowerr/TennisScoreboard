@@ -3,7 +3,7 @@ package org.roadmap.repository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.roadmap.model.entity.MatchEntity;
+import org.roadmap.entity.Match;
 import org.roadmap.util.HibernateSessionFactoryUtil;
 
 public class MatchRepository {
@@ -13,7 +13,7 @@ public class MatchRepository {
         this.sessionFactory = HibernateSessionFactoryUtil.getSessionFactory();
     }
 
-    public MatchEntity save(MatchEntity entity) {
+    public Match save(Match entity) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         session.persist(entity);

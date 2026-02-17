@@ -5,9 +5,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.roadmap.model.dto.MatchDto;
-import org.roadmap.model.dto.Score;
-import org.roadmap.model.entity.PlayerEntity;
+import org.roadmap.dto.MatchDto;
+import org.roadmap.dto.Score;
+import org.roadmap.entity.Player;
 import org.roadmap.repository.PlayerRepository;
 import org.roadmap.service.MatchService;
 
@@ -31,11 +31,11 @@ public class NewMatchPageServlet extends HttpServlet {
         String firstPlayerName = req.getParameter("player1");
         String secondPlayerName = req.getParameter("player2");
 
-        PlayerEntity firstPlayerEntity = playerRepository.save(new PlayerEntity(null, firstPlayerName));
-        PlayerEntity secondPlayerEntity = playerRepository.save(new PlayerEntity(null, secondPlayerName));
+        Player firstPlayer = playerRepository.save(new Player(null, firstPlayerName));
+        Player secondPlayer = playerRepository.save(new Player(null, secondPlayerName));
 
         // экземпляр класса, содержащего айди игроков и текущий счёт (ТЗ)
-        MatchDto match = new MatchDto(firstPlayerEntity.getId(), secondPlayerEntity.getId(), new Score(0, 0));
+        MatchDto match = new MatchDto(firstPlayer.getId(), secondPlayer.getId(), new Score(0, 0));
         UUID uuid = matchService.create(match);
 
         resp.sendRedirect("match-score?uuid=" + uuid);
