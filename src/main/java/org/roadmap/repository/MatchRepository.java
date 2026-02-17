@@ -3,27 +3,22 @@ package org.roadmap.repository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.roadmap.model.entity.PlayerEntity;
+import org.roadmap.model.entity.MatchEntity;
 import org.roadmap.util.HibernateSessionFactoryUtil;
 
-public class PlayerRepository {
+public class MatchRepository {
     private final SessionFactory sessionFactory;
 
-    public PlayerRepository() {
+    public MatchRepository() {
         this.sessionFactory = HibernateSessionFactoryUtil.getSessionFactory();
     }
 
-    public PlayerEntity save(PlayerEntity playerEntity) {
+    public MatchEntity save(MatchEntity entity) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        session.persist(playerEntity);
+        session.persist(entity);
         transaction.commit();
         session.close();
-        return playerEntity;
-    }
-
-    public PlayerEntity findById(Integer id) {
-        Session session = sessionFactory.openSession();
-        return session.find(PlayerEntity.class, id);
+        return entity;
     }
 }

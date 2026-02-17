@@ -49,4 +49,15 @@ public class Score {
     public void setSecondPlayerSet(int secondPlayerSet) {
         this.secondPlayerSet = secondPlayerSet;
     }
+
+    //for test only
+    @Override
+    public String toString() {
+        return "Score{" +
+                "firstPlayerScore=" + firstPlayerScore +
+                ", secondPlayerScore=" + secondPlayerScore +
+                ", firstPlayerSet=" + firstPlayerSet +
+                ", secondPlayerSet=" + secondPlayerSet +
+                '}';
+    }
 }

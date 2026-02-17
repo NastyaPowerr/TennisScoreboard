@@ -42,6 +42,12 @@ public class MatchEntity {
         this.winner = winner;
     }
 
+    public MatchEntity(PlayerEntity firstPlayerEntity, PlayerEntity secondPlayerEntity, PlayerEntity winner) {
+        this.firstPlayerEntity = firstPlayerEntity;
+        this.secondPlayerEntity = secondPlayerEntity;
+        this.winner = winner;
+    }
+
     public Integer getId() {
         return id;
     }
