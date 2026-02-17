@@ -3,14 +3,25 @@ package org.roadmap.dto;
 public class Score {
     private int firstPlayerScore;
     private int secondPlayerScore;
+    private int firstPlayerGame;
+    private int secondPlayerGame;
     private int firstPlayerSet;
     private int secondPlayerSet;
 
-    public Score(int firstPlayerScore, int secondPlayerScore, int firstPlayerSet, int secondPlayerSet) {
+    public Score(int firstPlayerScore, int secondPlayerScore, int firstPlayerGame, int secondPlayerGame, int firstPlayerSet, int secondPlayerSet) {
         this.firstPlayerScore = firstPlayerScore;
         this.secondPlayerScore = secondPlayerScore;
+        this.firstPlayerGame = firstPlayerGame;
+        this.secondPlayerGame = secondPlayerGame;
         this.firstPlayerSet = firstPlayerSet;
         this.secondPlayerSet = secondPlayerSet;
+    }
+
+    public Score(int firstPlayerScore, int secondPlayerScore, int firstPlayerGame, int secondPlayerGame) {
+        this.firstPlayerScore = firstPlayerScore;
+        this.secondPlayerScore = secondPlayerScore;
+        this.firstPlayerGame = firstPlayerGame;
+        this.secondPlayerGame = secondPlayerGame;
     }
 
     public Score(int firstPlayerScore, int secondPlayerScore) {
@@ -32,6 +43,22 @@ public class Score {
 
     public void setSecondPlayerScore(int secondPlayerScore) {
         this.secondPlayerScore = secondPlayerScore;
+    }
+
+    public int getFirstPlayerGame() {
+        return firstPlayerGame;
+    }
+
+    public void setFirstPlayerGame(int firstPlayerGame) {
+        this.firstPlayerGame = firstPlayerGame;
+    }
+
+    public int getSecondPlayerGame() {
+        return secondPlayerGame;
+    }
+
+    public void setSecondPlayerGame(int secondPlayerGame) {
+        this.secondPlayerGame = secondPlayerGame;
     }
 
     public int getFirstPlayerSet() {
@@ -56,6 +83,8 @@ public class Score {
         return "Score{" +
                 "firstPlayerScore=" + firstPlayerScore +
                 ", secondPlayerScore=" + secondPlayerScore +
+                ", firstPlayerGame=" + firstPlayerGame +
+                ", secondPlayerGame=" + secondPlayerGame +
                 ", firstPlayerSet=" + firstPlayerSet +
                 ", secondPlayerSet=" + secondPlayerSet +
                 '}';

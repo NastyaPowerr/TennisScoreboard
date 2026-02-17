@@ -45,6 +45,7 @@ public class MatchScorePageServlet extends HttpServlet {
         String secondPlayerScore = req.getParameter("secondPlayerScore");
 
         MatchDto match = matchService.getById(matchId);
+        System.out.println(match);
 
         System.out.println(firstPlayerScore);
         System.out.println(secondPlayerScore);

@@ -1,9 +1,9 @@
 package org.roadmap.service;
 
 import org.roadmap.dto.MatchDto;
+import org.roadmap.dto.Score;
 import org.roadmap.dto.response.MatchDtoResponse;
 import org.roadmap.dto.response.PlayerDtoResponse;
-import org.roadmap.dto.Score;
 import org.roadmap.entity.Match;
 import org.roadmap.entity.Player;
 import org.roadmap.repository.MatchRepository;
@@ -14,6 +14,9 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MatchService {
+    private static final Integer FIRST_AND_SECOND_SCORE_ADD = 15;
+    private static final Integer THIRD_SCORE_ADD = 10;
+    private static final Integer AD = 100;
     private final MatchRepository matchRepository;
     private final PlayerRepository playerRepository;
     private final Map<UUID, MatchDto> matches;
@@ -35,9 +38,103 @@ public class MatchService {
     }
 
     public void givePoint(Integer playerId, MatchDto match) {
+        Integer firstPlayerId = match.getFirstPlayerId();
+        Integer secondPlayerId = match.getSecondPlayerId();
+
         Score currenctScore = match.getScore();
-        // правила тенниса
-        currenctScore.setFirstPlayerScore(15);
+
+        int firstPlayerScore = currenctScore.getFirstPlayerScore();
+        int secondPlayerScore = currenctScore.getSecondPlayerScore();
+
+        int firstPlayerGame = currenctScore.getFirstPlayerGame();
+        int secondPlayerGame = currenctScore.getSecondPlayerGame();
+
+        int firstPlayerSet = currenctScore.getFirstPlayerSet();
+        int secondPlayerSet = currenctScore.getSecondPlayerSet();
+
+        if (firstPlayerSet == 2) {
+            save(match, playerRepository.findById(match.getFirstPlayerId()));
+            return;
+        }
+        if (secondPlayerSet == 2) {
+            save(match, playerRepository.findById(match.getSecondPlayerId()));
+            return;
+        }
+
+        if (playerId.equals(firstPlayerId)) {
+            System.out.println("FIRST PLAYER SCORED");
+            if (firstPlayerScore == 0 || firstPlayerScore == 15) {
+                currenctScore.setFirstPlayerScore(firstPlayerScore + FIRST_AND_SECOND_SCORE_ADD);
+                match.setScore(currenctScore);
+                return;
+            }
+            if (firstPlayerScore == 30) {
+                currenctScore.setFirstPlayerScore(firstPlayerScore + THIRD_SCORE_ADD);
+                match.setScore(currenctScore);
+                return;
+            }
+            if (firstPlayerScore == 40) {
+                if (secondPlayerScore == AD) {
+                    currenctScore.setSecondPlayerScore(40);
+                    match.setScore(currenctScore);
+                    return;
+                }
+                currenctScore.setFirstPlayerScore(AD);
+                match.setScore(currenctScore);
+                return;
+            }
+            if (firstPlayerScore == AD) {
+                currenctScore.setFirstPlayerScore(0);
+                currenctScore.setFirstPlayerGame(firstPlayerGame + 1);
+                match.setScore(currenctScore);
+                return;
+            }
+            if (firstPlayerGame == 6) {
+                currenctScore.setFirstPlayerSet(firstPlayerSet + 1);
+                currenctScore.setFirstPlayerScore(0);
+                currenctScore.setFirstPlayerGame(0);
+                currenctScore.setSecondPlayerGame(0);
+                currenctScore.setSecondPlayerScore(0);
+                match.setScore(currenctScore);
+            }
+        }
+        if (playerId.equals(secondPlayerId)) {
+            System.out.println("SECOND PLAYER SCORED");
+            if (secondPlayerScore == 0 || secondPlayerScore == 15) {
+                currenctScore.setSecondPlayerScore(secondPlayerScore + FIRST_AND_SECOND_SCORE_ADD);
+                match.setScore(currenctScore);
+                return;
+            }
+            if (secondPlayerScore == 30) {
+                currenctScore.setSecondPlayerScore(secondPlayerScore + THIRD_SCORE_ADD);
+                match.setScore(currenctScore);
+                return;
+            }
+            if (secondPlayerScore == 40) {
+                if (firstPlayerScore == AD) {
+                    currenctScore.setFirstPlayerScore(40);
+                    match.setScore(currenctScore);
+                    return;
+                }
+                currenctScore.setSecondPlayerScore(AD);
+                match.setScore(currenctScore);
+                return;
+            }
+            if (secondPlayerScore == AD) {
+                currenctScore.setSecondPlayerScore(0);
+                currenctScore.setSecondPlayerGame(secondPlayerGame + 1);
+                match.setScore(currenctScore);
+                return;
+            }
+            if (secondPlayerGame == 6) {
+                currenctScore.setSecondPlayerSet(secondPlayerSet + 1);
+                currenctScore.setFirstPlayerScore(0);
+                currenctScore.setFirstPlayerGame(0);
+                currenctScore.setSecondPlayerGame(0);
+                currenctScore.setSecondPlayerScore(0);
+                match.setScore(currenctScore);
+            }
+        }
         System.out.println(match);
     }
 
