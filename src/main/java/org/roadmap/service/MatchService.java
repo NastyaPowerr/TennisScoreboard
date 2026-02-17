@@ -9,6 +9,8 @@ import org.roadmap.entity.Player;
 import org.roadmap.repository.MatchRepository;
 import org.roadmap.repository.PlayerRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,6 +39,20 @@ public class MatchService {
         return matches.get(id);
     }
 
+    public List<MatchDtoResponse> getAll() {
+        List<Match> matches = matchRepository.findAll();
+        List<MatchDtoResponse> responseMatches = new ArrayList<>();
+        for (Match match : matches) {
+            PlayerDtoResponse firstPlayer = new PlayerDtoResponse(match.getFirstPlayer().getName());
+            PlayerDtoResponse secondPlayer = new PlayerDtoResponse(match.getSecondPlayer().getName());
+            PlayerDtoResponse winner = new PlayerDtoResponse(match.getWinner().getName());
+
+            MatchDtoResponse matchDto = new MatchDtoResponse(firstPlayer, secondPlayer, winner);
+            responseMatches.add(matchDto);
+        }
+        return responseMatches;
+    }
+
     public void givePoint(Integer playerId, MatchDto match) {
         Integer firstPlayerId = match.getFirstPlayerId();
         Integer secondPlayerId = match.getSecondPlayerId();
@@ -51,6 +67,25 @@ public class MatchService {
 
         int firstPlayerSet = currenctScore.getFirstPlayerSet();
         int secondPlayerSet = currenctScore.getSecondPlayerSet();
+
+        if (firstPlayerGame == 6) {
+            currenctScore.setFirstPlayerSet(firstPlayerSet + 1);
+            currenctScore.setFirstPlayerScore(0);
+            currenctScore.setFirstPlayerGame(0);
+            currenctScore.setSecondPlayerGame(0);
+            currenctScore.setSecondPlayerScore(0);
+            match.setScore(currenctScore);
+            return;
+        }
+        if (secondPlayerGame == 6) {
+            currenctScore.setSecondPlayerSet(secondPlayerSet + 1);
+            currenctScore.setFirstPlayerScore(0);
+            currenctScore.setFirstPlayerGame(0);
+            currenctScore.setSecondPlayerGame(0);
+            currenctScore.setSecondPlayerScore(0);
+            match.setScore(currenctScore);
+            return;
+        }
 
         if (firstPlayerSet == 2) {
             save(match, playerRepository.findById(match.getFirstPlayerId()));
@@ -89,14 +124,6 @@ public class MatchService {
                 match.setScore(currenctScore);
                 return;
             }
-            if (firstPlayerGame == 6) {
-                currenctScore.setFirstPlayerSet(firstPlayerSet + 1);
-                currenctScore.setFirstPlayerScore(0);
-                currenctScore.setFirstPlayerGame(0);
-                currenctScore.setSecondPlayerGame(0);
-                currenctScore.setSecondPlayerScore(0);
-                match.setScore(currenctScore);
-            }
         }
         if (playerId.equals(secondPlayerId)) {
             System.out.println("SECOND PLAYER SCORED");
@@ -125,14 +152,6 @@ public class MatchService {
                 currenctScore.setSecondPlayerGame(secondPlayerGame + 1);
                 match.setScore(currenctScore);
                 return;
-            }
-            if (secondPlayerGame == 6) {
-                currenctScore.setSecondPlayerSet(secondPlayerSet + 1);
-                currenctScore.setFirstPlayerScore(0);
-                currenctScore.setFirstPlayerGame(0);
-                currenctScore.setSecondPlayerGame(0);
-                currenctScore.setSecondPlayerScore(0);
-                match.setScore(currenctScore);
             }
         }
         System.out.println(match);
