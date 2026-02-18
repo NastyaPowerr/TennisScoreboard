@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html;charset=UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -22,8 +24,8 @@
         </div>
         <div>
             <nav class="nav-links">
-                <a class="nav-link" href="/TennisScoreboard/">Home</a>
-                <a class="nav-link" href="/TennisScoreboard/matches">Matches</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/">Home</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/matches">Matches</a>
             </nav>
         </div>
     </section>
@@ -32,7 +34,9 @@
     <div class="container">
         <h1>Matches</h1>
         <div class="input-container">
-            <input class="input-filter" placeholder="Filter by name" type="text" />
+            <label>
+                <input class="input-filter" placeholder="Filter by name" type="text" />
+            </label>
             <div>
                 <a href="#">
                     <button class="btn-filter">Reset Filter</button>
@@ -46,31 +50,14 @@
                 <th>Player Two</th>
                 <th>Winner</th>
             </tr>
+           <c:forEach items ="${matches}" var="match">
             <tr>
-                <td>Rafael Nadal</td>
-                <td>Roger Federer</td>
-                <td><span class="winner-name-td">Rafael Nadal</span></td>
-            </tr>
-            <tr>
-                <td>Rafael Nadal</td>
-                <td>Roger Federer</td>
-                <td><span class="winner-name-td">Roger Federer</span></td>
-            </tr>
-            <tr>
-                <td>Rafael Nadal</td>
-                <td>Roger Federer</td>
-                <td><span class="winner-name-td">Rafael Nadal</span></td>
-            </tr>
-            <tr>
-                <td>Rafael Nadal</td>
-                <td>Roger Federer</td>
-                <td><span class="winner-name-td">Roger Federer</span></td>
-            </tr>
-            <tr>
-                <td>Rafael Nadal</td>
-                <td>Roger Federer</td>
-                <td><span class="winner-name-td">Rafael Nadal</span></td>
-            </tr>
+                <td>${match.firstPlayer().name()}</td>
+                <td>${match.secondPlayer().name()}</td>
+                <td>
+                    <span class="winner-name-td">${match.winner().name()}</span>
+                </td>
+           </c:forEach>
         </table>
 
         <div class="pagination">

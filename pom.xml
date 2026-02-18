@@ -14,10 +14,13 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jakarta.servelt.version>6.1.0</jakarta.servelt.version>
+        <jakarta.servlet.jsp.version>4.0.0</jakarta.servlet.jsp.version>
+        <jakarta.servlet.jsp.jstl-api.version>3.0.2</jakarta.servlet.jsp.jstl-api.version>
         <h2database.version>2.3.232</h2database.version>
         <hikariCP.version>7.0.2</hikariCP.version>
         <hibernate.version>7.2.4.Final</hibernate.version>
         <jackson-databind.version>3.0.3</jackson-databind.version>
+        <glassfish.web.version>3.0.1</glassfish.web.version>
     </properties>
 
     <dependencies>
@@ -49,6 +52,21 @@
             <artifactId>jackson-databind</artifactId>
             <version>${jackson-databind.version}</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.servlet.jsp</groupId>
+            <artifactId>jakarta.servlet.jsp-api</artifactId>
+            <version>${jakarta.servlet.jsp.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.servlet.jsp.jstl</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+            <version>${jakarta.servlet.jsp.jstl-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+            <version>${glassfish.web.version}</version>
         </dependency>
     </dependencies>
 </project>

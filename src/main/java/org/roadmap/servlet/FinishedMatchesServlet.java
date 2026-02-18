@@ -29,12 +29,7 @@ public class FinishedMatchesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         List<MatchDtoResponse> matches = matchService.getAll();
         req.setAttribute("matches", matches);
-//        resp.setContentType("text/html");
-//        resp.setContentType("application/json");
-//        resp.setStatus(200);
-//
-//        String jsonResponse = objectMapper.writeValueAsString(matches);
-//        resp.getWriter().write(jsonResponse);
-        req.getRequestDispatcher("matches.html").forward(req, resp);
+
+        req.getRequestDispatcher("matches.jsp").forward(req, resp);
     }
 }

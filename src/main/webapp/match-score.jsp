@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html;charset=UTF-8"%>
+<jsp:useBean id="match" scope="request" type="org.roadmap.dto.MatchDto"/>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -11,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 
-    <script src="js/app.js"></script>
+    <script src="${pageContext.request.contextPath}/js/app.js"></script>
 </head>
 <body>
 <header class="header">
@@ -24,8 +26,8 @@
         </div>
         <div>
             <nav class="nav-links">
-                <a class="nav-link" href="/TennisScoreboard/">Home</a>
-                <a class="nav-link" href="/TennisScoreboard/matches">Matches</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/">Home</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/matches">Matches</a>
             </nav>
         </div>
     </section>
@@ -46,21 +48,29 @@
                 </thead>
                 <tbody>
                 <tr class="player1">
-                    <td class="table-text">Rafael Nadal</td>
-                    <td class="table-text">2</td>
-                    <td class="table-text">4</td>
-                    <td class="table-text">40</td>
+                    <td class="table-text">${match.firstPlayerId}</td>
+                    <td class="table-text">${match.score.firstPlayerSet}</td>
+                    <td class="table-text">${match.score.firstPlayerGame}</td>
+                    <td class="table-text">${match.score.firstPlayerScore}</td>
                     <td class="table-text">
-                        <div class="score-btn">Score</div>
+                        <form method="post" action="${pageContext.request.contextPath}/match-score">
+                            <input type="hidden" name="uuid" value="${uuid}"/>
+                            <input type="hidden" name="playerId" value=${match.firstPlayerId}>
+                            <button type="submit" class="score-btn">Score</button>
+                        </form>
                     </td>
                 </tr>
                 <tr class="player2">
-                    <td class="table-text">Roger Federer</td>
-                    <td class="table-text">2</td>
-                    <td class="table-text">3</td>
-                    <td class="table-text">15</td>
+                    <td class="table-text">${match.secondPlayerId}</td>
+                    <td class="table-text">${match.score.secondPlayerSet}</td>
+                    <td class="table-text">${match.score.secondPlayerGame}</td>
+                    <td class="table-text">${match.score.secondPlayerScore}</td>
                     <td class="table-text">
-                        <div class="score-btn">Score</div>
+                        <form method="post" action="${pageContext.request.contextPath}/match-score">
+                            <input type="hidden" name="uuid" value="${uuid}"/>
+                            <input type="hidden" name="playerId" value=${match.secondPlayerId}>
+                            <button type="submit" class="score-btn">Score</button>
+                        </form>
                     </td>
                 </tr>
                 </tbody>
@@ -70,7 +80,8 @@
 </main>
 <footer>
     <div class="footer">
-        <p>&copy; Tennis Scoreboard, project from <a href="https://zhukovsd.github.io/java-backend-learning-course/">zhukovsd/java-backend-learning-course</a> roadmap.</p>
+        <p>&copy; Tennis Scoreboard, project from <a href="https://zhukovsd.github.io/java-backend-learning-course/">zhukovsd/java-backend-learning-course</a>
+            roadmap.</p>
     </div>
 </footer>
 </body>
