@@ -1,6 +1,7 @@
 package org.roadmap.servlet;
 
 import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,13 +26,15 @@ public class FinishedMatchesServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         List<MatchDtoResponse> matches = matchService.getAll();
-
-        resp.setContentType("application/json");
-        resp.setStatus(200);
-
-        String jsonResponse = objectMapper.writeValueAsString(matches);
-        resp.getWriter().write(jsonResponse);
+        req.setAttribute("matches", matches);
+//        resp.setContentType("text/html");
+//        resp.setContentType("application/json");
+//        resp.setStatus(200);
+//
+//        String jsonResponse = objectMapper.writeValueAsString(matches);
+//        resp.getWriter().write(jsonResponse);
+        req.getRequestDispatcher("matches.html").forward(req, resp);
     }
 }

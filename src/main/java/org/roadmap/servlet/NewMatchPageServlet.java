@@ -1,6 +1,7 @@
 package org.roadmap.servlet;
 
 import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,10 +28,17 @@ public class NewMatchPageServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String firstPlayerName = req.getParameter("player1");
-        String secondPlayerName = req.getParameter("player2");
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("new-match.html").forward(req, resp);
+    }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String firstPlayerName = req.getParameter("firstPlayerName");
+        String secondPlayerName = req.getParameter("secondPlayerName");
+
+        System.out.println(firstPlayerName);
+        System.out.println(secondPlayerName);
         Player firstPlayer = playerRepository.save(new Player(null, firstPlayerName));
         Player secondPlayer = playerRepository.save(new Player(null, secondPlayerName));
 

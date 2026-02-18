@@ -67,7 +67,6 @@ public class MatchService {
 
         int firstPlayerSet = currenctScore.getFirstPlayerSet();
         int secondPlayerSet = currenctScore.getSecondPlayerSet();
-
         if (firstPlayerGame == 6) {
             currenctScore.setFirstPlayerSet(firstPlayerSet + 1);
             currenctScore.setFirstPlayerScore(0);
@@ -95,6 +94,11 @@ public class MatchService {
             save(match, playerRepository.findById(match.getSecondPlayerId()));
             return;
         }
+
+        // FOR TEST ONLY:
+        currenctScore.setFirstPlayerSet(1);
+        currenctScore.setFirstPlayerGame(5);
+        match.setScore(currenctScore);
 
         if (playerId.equals(firstPlayerId)) {
             System.out.println("FIRST PLAYER SCORED");
