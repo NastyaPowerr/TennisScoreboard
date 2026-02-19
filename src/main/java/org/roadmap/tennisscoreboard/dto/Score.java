@@ -1,4 +1,4 @@
-package org.roadmap.dto;
+package org.roadmap.tennisscoreboard.dto;
 
 public class Score {
     private int firstPlayerScore;

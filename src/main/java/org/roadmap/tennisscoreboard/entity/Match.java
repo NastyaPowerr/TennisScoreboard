@@ -1,4 +1,4 @@
-package org.roadmap.entity;
+package org.roadmap.tennisscoreboard.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

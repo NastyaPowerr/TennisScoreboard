@@ -1,8 +1,8 @@
-package org.roadmap.service;
+package org.roadmap.tennisscoreboard.service;
 
-import org.roadmap.dto.request.PlayerDtoRequest;
-import org.roadmap.entity.Player;
-import org.roadmap.repository.PlayerRepository;
+import org.roadmap.tennisscoreboard.dto.request.PlayerDtoRequest;
+import org.roadmap.tennisscoreboard.entity.Player;
+import org.roadmap.tennisscoreboard.repository.PlayerRepository;
 
 public class PlayerService {
     private final PlayerRepository playerRepository;

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8"%>
-<jsp:useBean id="match" scope="request" type="org.roadmap.dto.MatchDto"/>
+<jsp:useBean id="match" scope="request" type="org.roadmap.tennisscoreboard.dto.MatchDto"/>
 <html>
 <head>
     <meta charset="UTF-8">

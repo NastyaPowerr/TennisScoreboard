@@ -1,4 +1,4 @@
-package org.roadmap.entity;
+package org.roadmap.tennisscoreboard.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

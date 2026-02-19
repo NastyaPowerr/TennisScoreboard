@@ -1,4 +1,4 @@
-package org.roadmap;
+package org.roadmap.tennisscoreboard;
 
 import org.h2.tools.Server;
 

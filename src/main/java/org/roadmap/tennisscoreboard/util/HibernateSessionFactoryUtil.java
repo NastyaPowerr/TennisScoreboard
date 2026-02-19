@@ -1,10 +1,10 @@
-package org.roadmap.util;
+package org.roadmap.tennisscoreboard.util;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.roadmap.entity.Match;
-import org.roadmap.entity.Player;
+import org.roadmap.tennisscoreboard.entity.Match;
+import org.roadmap.tennisscoreboard.entity.Player;
 
 public class HibernateSessionFactoryUtil {
     private static SessionFactory sessionFactory;

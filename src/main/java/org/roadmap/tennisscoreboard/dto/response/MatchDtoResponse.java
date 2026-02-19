@@ -1,4 +1,4 @@
-package org.roadmap.dto.response;
+package org.roadmap.tennisscoreboard.dto.response;
 
 public record MatchDtoResponse (PlayerDtoResponse firstPlayer, PlayerDtoResponse secondPlayer, PlayerDtoResponse winner) {
 }

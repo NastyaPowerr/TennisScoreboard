@@ -1,4 +1,4 @@
-package org.roadmap.servlet;
+package org.roadmap.tennisscoreboard.servlet;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

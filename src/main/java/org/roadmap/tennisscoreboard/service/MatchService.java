@@ -1,13 +1,13 @@
-package org.roadmap.service;
+package org.roadmap.tennisscoreboard.service;
 
-import org.roadmap.dto.MatchDto;
-import org.roadmap.dto.Score;
-import org.roadmap.dto.response.MatchDtoResponse;
-import org.roadmap.dto.response.PlayerDtoResponse;
-import org.roadmap.entity.Match;
-import org.roadmap.entity.Player;
-import org.roadmap.repository.MatchRepository;
-import org.roadmap.repository.PlayerRepository;
+import org.roadmap.tennisscoreboard.dto.MatchDto;
+import org.roadmap.tennisscoreboard.dto.Score;
+import org.roadmap.tennisscoreboard.dto.response.MatchDtoResponse;
+import org.roadmap.tennisscoreboard.dto.response.PlayerDtoResponse;
+import org.roadmap.tennisscoreboard.entity.Match;
+import org.roadmap.tennisscoreboard.entity.Player;
+import org.roadmap.tennisscoreboard.repository.MatchRepository;
+import org.roadmap.tennisscoreboard.repository.PlayerRepository;
 
 import java.util.ArrayList;
 import java.util.List;

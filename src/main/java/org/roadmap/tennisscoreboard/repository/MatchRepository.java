@@ -1,11 +1,10 @@
-package org.roadmap.repository;
+package org.roadmap.tennisscoreboard.repository;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.roadmap.entity.Match;
-import org.roadmap.entity.Player;
-import org.roadmap.util.HibernateSessionFactoryUtil;
+import org.roadmap.tennisscoreboard.entity.Match;
+import org.roadmap.tennisscoreboard.util.HibernateSessionFactoryUtil;
 
 import java.util.List;
 

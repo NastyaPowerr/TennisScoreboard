@@ -1,4 +1,4 @@
-package org.roadmap.servlet;
+package org.roadmap.tennisscoreboard.servlet;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
@@ -6,11 +6,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.roadmap.dto.MatchDto;
-import org.roadmap.dto.Score;
-import org.roadmap.entity.Player;
-import org.roadmap.repository.PlayerRepository;
-import org.roadmap.service.MatchService;
+import org.roadmap.tennisscoreboard.dto.MatchDto;
+import org.roadmap.tennisscoreboard.dto.Score;
+import org.roadmap.tennisscoreboard.entity.Player;
+import org.roadmap.tennisscoreboard.repository.PlayerRepository;
+import org.roadmap.tennisscoreboard.service.MatchService;
 
 import java.io.IOException;
 import java.util.UUID;
