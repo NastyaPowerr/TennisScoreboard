@@ -29,7 +29,7 @@ public class NewMatchPageServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("new-match.html").forward(req, resp);
+        req.getRequestDispatcher("WEB-INF/new-match.jsp").forward(req, resp);
     }
 
     @Override

@@ -30,6 +30,6 @@ public class FinishedMatchesServlet extends HttpServlet {
         List<MatchDtoResponse> matches = matchService.getAll();
         req.setAttribute("matches", matches);
 
-        req.getRequestDispatcher("matches.jsp").forward(req, resp);
+        req.getRequestDispatcher("WEB-INF/matches.jsp").forward(req, resp);
     }
 }

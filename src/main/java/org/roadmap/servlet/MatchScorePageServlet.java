@@ -33,7 +33,7 @@ public class MatchScorePageServlet extends HttpServlet {
         req.setAttribute("match", match);
         req.setAttribute("uuid", matchId);
 
-        req.getRequestDispatcher("match-score.jsp").forward(req, resp);
+        req.getRequestDispatcher("WEB-INF/match-score.jsp").forward(req, resp);
     }
 
     @Override
