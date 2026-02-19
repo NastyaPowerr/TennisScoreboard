@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebListener;
 import org.roadmap.tennisscoreboard.H2DatabaseViewer;
 import org.roadmap.tennisscoreboard.repository.MatchRepository;
 import org.roadmap.tennisscoreboard.repository.PlayerRepository;
+import org.roadmap.tennisscoreboard.service.MatchScoreService;
 import org.roadmap.tennisscoreboard.service.MatchService;
 import org.roadmap.tennisscoreboard.service.PlayerService;
 import tools.jackson.databind.ObjectMapper;
@@ -21,6 +22,7 @@ public class ApplicationContextListener implements ServletContextListener {
         PlayerRepository playerRepository = new PlayerRepository();
         MatchRepository matchRepository = new MatchRepository();
         MatchService matchService = new MatchService(matchRepository, playerRepository);
+        MatchScoreService matchScoreService = new MatchScoreService(matchService);
         PlayerService playerService = new PlayerService(playerRepository);
 
         ServletContext context = sce.getServletContext();
@@ -30,5 +32,6 @@ public class ApplicationContextListener implements ServletContextListener {
         context.setAttribute("matchRepository", matchRepository);
         context.setAttribute("matchService", matchService);
         context.setAttribute("playerService", playerService);
+        context.setAttribute("matchScoreService", matchScoreService);
     }
 }

@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.roadmap.tennisscoreboard.dto.MatchDto;
+import org.roadmap.tennisscoreboard.service.MatchScoreService;
 import org.roadmap.tennisscoreboard.service.MatchService;
 
 import java.io.IOException;
@@ -15,11 +16,13 @@ import java.util.UUID;
 @WebServlet("/match-score")
 public class MatchScorePageServlet extends HttpServlet {
     private MatchService matchService;
+    private MatchScoreService matchScoreService;
 
     @Override
     public void init() {
         ServletContext context = getServletContext();
         this.matchService = (MatchService) context.getAttribute("matchService");
+        this.matchScoreService = (MatchScoreService) context.getAttribute("matchScoreService");
     }
 
     @Override
@@ -49,10 +52,10 @@ public class MatchScorePageServlet extends HttpServlet {
         Integer firstPlayerId = match.getFirstPlayerId();
         Integer secondPlayerId = match.getSecondPlayerId();
         if (playerId.equals(firstPlayerId)) {
-            matchService.givePoint(match.getFirstPlayerId(), match);
+            matchScoreService.givePoint(match.getFirstPlayerId(), match);
         }
         if (playerId.equals(secondPlayerId)) {
-            matchService.givePoint(match.getSecondPlayerId(), match);
+            matchScoreService.givePoint(match.getSecondPlayerId(), match);
         }
         resp.sendRedirect("match-score?uuid=" + uuid);
     }
