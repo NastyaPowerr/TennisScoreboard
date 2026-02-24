@@ -1,7 +1,8 @@
 package org.roadmap.tennisscoreboard.service;
 
-import org.roadmap.tennisscoreboard.dto.MatchDto;
-import org.roadmap.tennisscoreboard.dto.Score;
+import org.roadmap.tennisscoreboard.domain.OngoingMatch;
+import org.roadmap.tennisscoreboard.domain.Score;
+import org.roadmap.tennisscoreboard.entity.Player;
 
 public class MatchScoreService {
     private static final Integer FIRST_AND_SECOND_SCORE_ADD = 15;
@@ -13,9 +14,9 @@ public class MatchScoreService {
         this.matchService = matchService;
     }
 
-    public void givePoint(Integer playerId, MatchDto match) {
-        Integer firstPlayerId = match.getFirstPlayerId();
-        Integer secondPlayerId = match.getSecondPlayerId();
+    public void givePoint(Integer playerId, OngoingMatch match) {
+        Integer firstPlayerId = match.getFirstPlayer().getId();
+        Integer secondPlayerId = match.getSecondPlayer().getId();
 
         Score currenctScore = match.getScore();
 
@@ -47,12 +48,14 @@ public class MatchScoreService {
         }
 
         if (firstPlayerSet == 2) {
-            matchService.save(match, firstPlayerId);
+            Player winner = match.getFirstPlayer();
+            matchService.save(match, winner);
             // rendering
             return;
         }
         if (secondPlayerSet == 2) {
-            matchService.save(match, secondPlayerId);
+            Player winner = match.getSecondPlayer();
+            matchService.save(match, winner);
             // rendering
             return;
         }
@@ -121,8 +124,5 @@ public class MatchScoreService {
             }
         }
         System.out.println(match);
-    }
-
-    private void finishMatch() {
     }
 }

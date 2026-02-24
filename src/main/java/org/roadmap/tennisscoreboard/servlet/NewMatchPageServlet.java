@@ -6,8 +6,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.roadmap.tennisscoreboard.dto.MatchDto;
-import org.roadmap.tennisscoreboard.dto.Score;
+import org.roadmap.tennisscoreboard.domain.OngoingMatch;
+import org.roadmap.tennisscoreboard.domain.Score;
 import org.roadmap.tennisscoreboard.entity.Player;
 import org.roadmap.tennisscoreboard.repository.PlayerRepository;
 import org.roadmap.tennisscoreboard.service.MatchService;
@@ -43,7 +43,7 @@ public class NewMatchPageServlet extends HttpServlet {
         Player secondPlayer = playerRepository.save(new Player(null, secondPlayerName));
 
         // экземпляр класса, содержащего айди игроков и текущий счёт (ТЗ)
-        MatchDto match = new MatchDto(firstPlayer.getId(), secondPlayer.getId(), new Score(0, 0));
+        OngoingMatch match = new OngoingMatch(null, firstPlayer, secondPlayer, new Score(0, 0));
         UUID uuid = matchService.create(match);
 
         resp.sendRedirect("match-score?uuid=" + uuid);

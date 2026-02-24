@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8"%>
-<jsp:useBean id="match" scope="request" type="org.roadmap.tennisscoreboard.dto.MatchDto"/>
+<jsp:useBean id="match" scope="request" type="org.roadmap.tennisscoreboard.dto.view.MatchView"/>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -48,27 +48,27 @@
                 </thead>
                 <tbody>
                 <tr class="player1">
-                    <td class="table-text">${match.firstPlayerId}</td>
+                    <td class="table-text">${match.firstPlayer().name}</td>
                     <td class="table-text">${match.score.firstPlayerSet}</td>
                     <td class="table-text">${match.score.firstPlayerGame}</td>
                     <td class="table-text">${match.score.firstPlayerScore}</td>
                     <td class="table-text">
                         <form method="post" action="${pageContext.request.contextPath}/match-score">
                             <input type="hidden" name="uuid" value="${uuid}"/>
-                            <input type="hidden" name="playerId" value=${match.firstPlayerId}>
+                            <input type="hidden" name="playerId" value=${match.firstPlayer().id}>
                             <button type="submit" class="score-btn">Score</button>
                         </form>
                     </td>
                 </tr>
                 <tr class="player2">
-                    <td class="table-text">${match.secondPlayerId}</td>
+                    <td class="table-text">${match.secondPlayer().name}</td>
                     <td class="table-text">${match.score.secondPlayerSet}</td>
                     <td class="table-text">${match.score.secondPlayerGame}</td>
                     <td class="table-text">${match.score.secondPlayerScore}</td>
                     <td class="table-text">
                         <form method="post" action="${pageContext.request.contextPath}/match-score">
                             <input type="hidden" name="uuid" value="${uuid}"/>
-                            <input type="hidden" name="playerId" value=${match.secondPlayerId}>
+                            <input type="hidden" name="playerId" value=${match.secondPlayer().id}>
                             <button type="submit" class="score-btn">Score</button>
                         </form>
                     </td>

@@ -6,7 +6,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.roadmap.tennisscoreboard.dto.MatchDto;
+import org.roadmap.tennisscoreboard.domain.OngoingMatch;
+import org.roadmap.tennisscoreboard.dto.view.MatchView;
 import org.roadmap.tennisscoreboard.service.MatchScoreService;
 import org.roadmap.tennisscoreboard.service.MatchService;
 
@@ -30,10 +31,23 @@ public class MatchScorePageServlet extends HttpServlet {
         String matchId = req.getParameter("uuid");
         System.out.println(matchId);
 
-        MatchDto match = matchService.getById(UUID.fromString(matchId));
+        OngoingMatch match = matchService.getById(UUID.fromString(matchId));
         System.out.println(match);
 
-        req.setAttribute("match", match);
+        MatchView matchView = new MatchView(
+                match.getFirstPlayer(),
+                match.getSecondPlayer(),
+                null,
+                match.getScore(),
+                match.getScore().getFirstPlayerSet(),
+                match.getScore().getSecondPlayerSet(),
+                0,
+                0,
+                0,
+                0
+        );
+
+        req.setAttribute("match", matchView);
         req.setAttribute("uuid", matchId);
 
         req.getRequestDispatcher("WEB-INF/match-score.jsp").forward(req, resp);
@@ -46,16 +60,16 @@ public class MatchScorePageServlet extends HttpServlet {
 
         Integer playerId = Integer.valueOf(req.getParameter("playerId"));
 
-        MatchDto match = matchService.getById(matchId);
+        OngoingMatch match = matchService.getById(matchId);
         System.out.println(match);
 
-        Integer firstPlayerId = match.getFirstPlayerId();
-        Integer secondPlayerId = match.getSecondPlayerId();
+        Integer firstPlayerId = match.getFirstPlayer().getId();
+        Integer secondPlayerId = match.getSecondPlayer().getId();
         if (playerId.equals(firstPlayerId)) {
-            matchScoreService.givePoint(match.getFirstPlayerId(), match);
+            matchScoreService.givePoint(firstPlayerId, match);
         }
         if (playerId.equals(secondPlayerId)) {
-            matchScoreService.givePoint(match.getSecondPlayerId(), match);
+            matchScoreService.givePoint(secondPlayerId, match);
         }
         resp.sendRedirect("match-score?uuid=" + uuid);
     }

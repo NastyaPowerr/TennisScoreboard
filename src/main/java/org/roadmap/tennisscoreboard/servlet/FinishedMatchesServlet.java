@@ -6,7 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.roadmap.tennisscoreboard.dto.response.MatchDtoResponse;
+import org.roadmap.tennisscoreboard.dto.response.FinishedMatchDto;
 import org.roadmap.tennisscoreboard.service.MatchService;
 import tools.jackson.databind.ObjectMapper;
 
@@ -27,7 +27,7 @@ public class FinishedMatchesServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        List<MatchDtoResponse> matches = matchService.getAll();
+        List<FinishedMatchDto> matches = matchService.getAll();
         req.setAttribute("matches", matches);
 
         req.getRequestDispatcher("WEB-INF/matches.jsp").forward(req, resp);

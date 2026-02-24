@@ -1,6 +1,6 @@
 package org.roadmap.tennisscoreboard.service;
 
-import org.roadmap.tennisscoreboard.dto.request.PlayerDtoRequest;
+import org.roadmap.tennisscoreboard.dto.PlayerDto;
 import org.roadmap.tennisscoreboard.entity.Player;
 import org.roadmap.tennisscoreboard.repository.PlayerRepository;
 
@@ -11,18 +11,18 @@ public class PlayerService {
         this.playerRepository = playerRepository;
     }
 
-    public PlayerDtoRequest create(PlayerDtoRequest player) {
+    public PlayerDto create(PlayerDto player) {
         Player entity = new Player(null, player.name());
         Player savedPlayer = playerRepository.save(entity);
-        return new PlayerDtoRequest(
+        return new PlayerDto(
                 savedPlayer.getId(),
                 savedPlayer.getName()
         );
     }
 
-    public PlayerDtoRequest getById(Integer id) {
+    public PlayerDto getById(Integer id) {
         Player savedPlayer = playerRepository.findById(id);
-        return new PlayerDtoRequest(
+        return new PlayerDto(
                 savedPlayer.getId(),
                 savedPlayer.getName()
         );
