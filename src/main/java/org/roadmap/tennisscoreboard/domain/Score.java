@@ -1,48 +1,36 @@
 package org.roadmap.tennisscoreboard.domain;
 
 public class Score {
-    private int firstPlayerScore;
-    private int secondPlayerScore;
+    private Point firstPlayerPoint;
+    private Point secondPlayerPoint;
     private int firstPlayerGame;
     private int secondPlayerGame;
     private int firstPlayerSet;
     private int secondPlayerSet;
 
-    public Score(int firstPlayerScore, int secondPlayerScore, int firstPlayerGame, int secondPlayerGame, int firstPlayerSet, int secondPlayerSet) {
-        this.firstPlayerScore = firstPlayerScore;
-        this.secondPlayerScore = secondPlayerScore;
-        this.firstPlayerGame = firstPlayerGame;
-        this.secondPlayerGame = secondPlayerGame;
-        this.firstPlayerSet = firstPlayerSet;
-        this.secondPlayerSet = secondPlayerSet;
+    public Score() {
+        this.firstPlayerPoint = Point.ZERO;
+        this.secondPlayerPoint = Point.ZERO;
+        this.firstPlayerGame = 0;
+        this.secondPlayerGame = 0;
+        this.firstPlayerSet = 0;
+        this.secondPlayerSet = 0;
     }
 
-    public Score(int firstPlayerScore, int secondPlayerScore, int firstPlayerGame, int secondPlayerGame) {
-        this.firstPlayerScore = firstPlayerScore;
-        this.secondPlayerScore = secondPlayerScore;
-        this.firstPlayerGame = firstPlayerGame;
-        this.secondPlayerGame = secondPlayerGame;
+    public Point getFirstPlayerPoint() {
+        return firstPlayerPoint;
     }
 
-    public Score(int firstPlayerScore, int secondPlayerScore) {
-        this.firstPlayerScore = firstPlayerScore;
-        this.secondPlayerScore = secondPlayerScore;
+    public void setFirstPlayerPoint(Point firstPlayerPoint) {
+        this.firstPlayerPoint = firstPlayerPoint;
     }
 
-    public int getFirstPlayerScore() {
-        return firstPlayerScore;
+    public Point getSecondPlayerPoint() {
+        return secondPlayerPoint;
     }
 
-    public void setFirstPlayerScore(int firstPlayerScore) {
-        this.firstPlayerScore = firstPlayerScore;
-    }
-
-    public int getSecondPlayerScore() {
-        return secondPlayerScore;
-    }
-
-    public void setSecondPlayerScore(int secondPlayerScore) {
-        this.secondPlayerScore = secondPlayerScore;
+    public void setSecondPlayerPoint(Point secondPlayerPoint) {
+        this.secondPlayerPoint = secondPlayerPoint;
     }
 
     public int getFirstPlayerGame() {
@@ -81,8 +69,8 @@ public class Score {
     @Override
     public String toString() {
         return "Score{" +
-                "firstPlayerScore=" + firstPlayerScore +
-                ", secondPlayerScore=" + secondPlayerScore +
+                "firstPlayerScore=" + firstPlayerPoint +
+                ", secondPlayerScore=" + secondPlayerPoint +
                 ", firstPlayerGame=" + firstPlayerGame +
                 ", secondPlayerGame=" + secondPlayerGame +
                 ", firstPlayerSet=" + firstPlayerSet +

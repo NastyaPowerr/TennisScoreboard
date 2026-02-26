@@ -43,7 +43,7 @@ public class NewMatchPageServlet extends HttpServlet {
         Player secondPlayer = playerRepository.save(new Player(null, secondPlayerName));
 
         // экземпляр класса, содержащего айди игроков и текущий счёт (ТЗ)
-        OngoingMatch match = new OngoingMatch(null, firstPlayer, secondPlayer, new Score(0, 0));
+        OngoingMatch match = new OngoingMatch(null, firstPlayer, secondPlayer, new Score());
         UUID uuid = matchService.create(match);
 
         resp.sendRedirect("match-score?uuid=" + uuid);

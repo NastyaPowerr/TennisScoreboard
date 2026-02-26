@@ -51,7 +51,7 @@
                     <td class="table-text">${match.firstPlayer().name}</td>
                     <td class="table-text">${match.score.firstPlayerSet}</td>
                     <td class="table-text">${match.score.firstPlayerGame}</td>
-                    <td class="table-text">${match.score.firstPlayerScore}</td>
+                    <td class="table-text">${match.score.firstPlayerPoint.toString()}</td>
                     <td class="table-text">
                         <form method="post" action="${pageContext.request.contextPath}/match-score">
                             <input type="hidden" name="uuid" value="${uuid}"/>
@@ -64,7 +64,7 @@
                     <td class="table-text">${match.secondPlayer().name}</td>
                     <td class="table-text">${match.score.secondPlayerSet}</td>
                     <td class="table-text">${match.score.secondPlayerGame}</td>
-                    <td class="table-text">${match.score.secondPlayerScore}</td>
+                    <td class="table-text">${match.score.secondPlayerPoint.toString()}</td>
                     <td class="table-text">
                         <form method="post" action="${pageContext.request.contextPath}/match-score">
                             <input type="hidden" name="uuid" value="${uuid}"/>

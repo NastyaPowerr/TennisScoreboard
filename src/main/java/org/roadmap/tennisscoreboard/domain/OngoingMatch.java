@@ -46,4 +46,14 @@ public class OngoingMatch {
     public void setScore(Score score) {
         this.score = score;
     }
+
+    @Override
+    public String toString() {
+        return "OngoingMatch{" +
+                "id=" + id +
+                ", firstPlayer=" + firstPlayer +
+                ", secondPlayer=" + secondPlayer +
+                ", score=" + score +
+                '}';
+    }
 }

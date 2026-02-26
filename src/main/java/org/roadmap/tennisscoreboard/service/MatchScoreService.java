@@ -1,13 +1,14 @@
 package org.roadmap.tennisscoreboard.service;
 
 import org.roadmap.tennisscoreboard.domain.OngoingMatch;
+import org.roadmap.tennisscoreboard.domain.Point;
 import org.roadmap.tennisscoreboard.domain.Score;
 import org.roadmap.tennisscoreboard.entity.Player;
 
 public class MatchScoreService {
-    private static final Integer FIRST_AND_SECOND_SCORE_ADD = 15;
-    private static final Integer THIRD_SCORE_ADD = 10;
-    private static final Integer AD = 100;
+    private static final Integer SETS_TO_WIN = 2;
+    private static final Integer TIE_BREAK = 6;
+    private static final Integer GAMES_TO_WIN_SET = 6;
     private final MatchService matchService;
 
     public MatchScoreService(MatchService matchService) {
@@ -15,114 +16,146 @@ public class MatchScoreService {
     }
 
     public void givePoint(Integer playerId, OngoingMatch match) {
-        Integer firstPlayerId = match.getFirstPlayer().getId();
-        Integer secondPlayerId = match.getSecondPlayer().getId();
+        System.out.println("Player's id is: " + playerId);
 
         Score currenctScore = match.getScore();
 
-        int firstPlayerScore = currenctScore.getFirstPlayerScore();
-        int secondPlayerScore = currenctScore.getSecondPlayerScore();
+        Point firstPlayerPoint = currenctScore.getFirstPlayerPoint();
+        Point secondPlayerPoint = currenctScore.getSecondPlayerPoint();
 
-        int firstPlayerGame = currenctScore.getFirstPlayerGame();
-        int secondPlayerGame = currenctScore.getSecondPlayerGame();
-
-        int firstPlayerSet = currenctScore.getFirstPlayerSet();
-        int secondPlayerSet = currenctScore.getSecondPlayerSet();
-        if (firstPlayerGame == 6) {
-            currenctScore.setFirstPlayerSet(firstPlayerSet + 1);
-            currenctScore.setFirstPlayerScore(0);
-            currenctScore.setFirstPlayerGame(0);
-            currenctScore.setSecondPlayerGame(0);
-            currenctScore.setSecondPlayerScore(0);
-            match.setScore(currenctScore);
-            return;
-        }
-        if (secondPlayerGame == 6) {
-            currenctScore.setSecondPlayerSet(secondPlayerSet + 1);
-            currenctScore.setFirstPlayerScore(0);
-            currenctScore.setFirstPlayerGame(0);
-            currenctScore.setSecondPlayerGame(0);
-            currenctScore.setSecondPlayerScore(0);
-            match.setScore(currenctScore);
+        if (currenctScore.getFirstPlayerGame() == GAMES_TO_WIN_SET) {
+            currenctScore.setFirstPlayerSet(currenctScore.getFirstPlayerSet() + 1);
+            clearPoints(currenctScore);
+            clearGames(currenctScore);
             return;
         }
 
-        if (firstPlayerSet == 2) {
-            Player winner = match.getFirstPlayer();
+        if (currenctScore.getSecondPlayerGame() == GAMES_TO_WIN_SET) {
+            currenctScore.setSecondPlayerSet(currenctScore.getSecondPlayerSet() + 1);
+            clearPoints(currenctScore);
+            clearGames(currenctScore);
+            return;
+        }
+
+        if (firstPlayerPoint.equalTo(secondPlayerPoint) && firstPlayerPoint != Point.AD) {
+            if (firstPlayerScored(playerId, match)) {
+                currenctScore.setFirstPlayerPoint(nextPoint(firstPlayerPoint));
+            } else {
+                currenctScore.setSecondPlayerPoint(nextPoint(secondPlayerPoint));
+            }
+            return;
+        }
+
+        // получает преимущество при 40-40 (AD)
+        if (firstPlayerPoint == Point.FORTY && secondPlayerPoint == Point.FORTY) {
+            if (firstPlayerScored(playerId, match)) {
+                currenctScore.setFirstPlayerPoint(Point.AD);
+            } else {
+                currenctScore.setSecondPlayerPoint(Point.AD);
+            }
+            return;
+        }
+
+        // у первого игрока преимущество (AD), выигрывает если забивает
+        // если второй игрок забивает, то у первого сбрасывается преимущество
+        if (firstPlayerPoint == Point.AD && secondPlayerPoint == Point.FORTY) {
+            if (firstPlayerScored(playerId, match)) {
+                firstPlayerWinGame(currenctScore);
+            } else {
+                currenctScore.setFirstPlayerPoint(Point.FORTY);
+            }
+            return;
+        }
+
+        // у второго игрока преимущество (AD), выигрывает если забивает
+        // если первый игрок забивает, то у второго сбрасывается преимущество
+        if (firstPlayerPoint == Point.FORTY && secondPlayerPoint == Point.AD) {
+            if (firstPlayerScored(playerId, match)) {
+                currenctScore.setSecondPlayerPoint(Point.FORTY);
+            } else {
+                secondPlayerWinGame(currenctScore);
+            }
+            return;
+        }
+
+        // простые случаи
+        if (firstPlayerScored(playerId, match)) {
+            if (currenctScore.getFirstPlayerPoint() == Point.FORTY) {
+                firstPlayerWinGame(currenctScore);
+                return;
+            }
+            currenctScore.setFirstPlayerPoint(nextPoint(firstPlayerPoint));
+        } else {
+            if (currenctScore.getSecondPlayerPoint() == Point.FORTY) {
+                secondPlayerWinGame(currenctScore);
+                return;
+            }
+            currenctScore.setSecondPlayerPoint(nextPoint(secondPlayerPoint));
+        }
+
+        // проверяем тайбрейк (если два гейма = 6, то играется тай-брейк)
+        if (isTieBrake(currenctScore)) {
+            resolveTieBrake(currenctScore);
+        }
+
+        // проверяем, закончена ли игра (у одного из игроков сет = 2)
+        if (isMatchFinished(currenctScore)) {
+            Player winner = getWinner(match, currenctScore);
             matchService.save(match, winner);
-            // rendering
-            return;
         }
-        if (secondPlayerSet == 2) {
-            Player winner = match.getSecondPlayer();
-            matchService.save(match, winner);
-            // rendering
-            return;
-        }
+    }
 
-        // FOR TEST ONLY:
-        currenctScore.setFirstPlayerSet(1);
-        currenctScore.setFirstPlayerGame(5);
-        match.setScore(currenctScore);
+    private static boolean firstPlayerScored(Integer playerId, OngoingMatch match) {
+        return playerId.equals(match.getFirstPlayer().getId());
+    }
 
-        if (playerId.equals(firstPlayerId)) {
-            System.out.println("FIRST PLAYER SCORED");
-            if (firstPlayerScore == 0 || firstPlayerScore == 15) {
-                currenctScore.setFirstPlayerScore(firstPlayerScore + FIRST_AND_SECOND_SCORE_ADD);
-                match.setScore(currenctScore);
-                return;
-            }
-            if (firstPlayerScore == 30) {
-                currenctScore.setFirstPlayerScore(firstPlayerScore + THIRD_SCORE_ADD);
-                match.setScore(currenctScore);
-                return;
-            }
-            if (firstPlayerScore == 40) {
-                if (secondPlayerScore == AD) {
-                    currenctScore.setSecondPlayerScore(40);
-                    match.setScore(currenctScore);
-                    return;
-                }
-                currenctScore.setFirstPlayerScore(AD);
-                match.setScore(currenctScore);
-                return;
-            }
-            if (firstPlayerScore == AD) {
-                currenctScore.setFirstPlayerScore(0);
-                currenctScore.setFirstPlayerGame(firstPlayerGame + 1);
-                match.setScore(currenctScore);
-                return;
-            }
+    private void firstPlayerWinGame(Score score) {
+        score.setFirstPlayerGame(score.getFirstPlayerGame() + 1);
+        clearPoints(score);
+    }
+
+
+    private void secondPlayerWinGame(Score score) {
+        score.setSecondPlayerGame(score.getSecondPlayerGame() + 1);
+        clearPoints(score);
+    }
+
+    private void clearPoints(Score score) {
+        score.setFirstPlayerPoint(Point.ZERO);
+        score.setSecondPlayerPoint(Point.ZERO);
+    }
+
+    private void clearGames(Score score) {
+        score.setFirstPlayerGame(0);
+        score.setSecondPlayerGame(0);
+    }
+
+    private boolean isMatchFinished(Score score) {
+        return score.getFirstPlayerSet() == SETS_TO_WIN || score.getSecondPlayerSet() == SETS_TO_WIN;
+    }
+
+    private boolean isTieBrake(Score score) {
+        return score.getFirstPlayerGame() == TIE_BREAK && score.getSecondPlayerGame() == TIE_BREAK;
+    }
+
+    private Player getWinner(OngoingMatch match, Score score) {
+        if (score.getFirstPlayerSet() == SETS_TO_WIN) {
+            return match.getFirstPlayer();
         }
-        if (playerId.equals(secondPlayerId)) {
-            System.out.println("SECOND PLAYER SCORED");
-            if (secondPlayerScore == 0 || secondPlayerScore == 15) {
-                currenctScore.setSecondPlayerScore(secondPlayerScore + FIRST_AND_SECOND_SCORE_ADD);
-                match.setScore(currenctScore);
-                return;
-            }
-            if (secondPlayerScore == 30) {
-                currenctScore.setSecondPlayerScore(secondPlayerScore + THIRD_SCORE_ADD);
-                match.setScore(currenctScore);
-                return;
-            }
-            if (secondPlayerScore == 40) {
-                if (firstPlayerScore == AD) {
-                    currenctScore.setFirstPlayerScore(40);
-                    match.setScore(currenctScore);
-                    return;
-                }
-                currenctScore.setSecondPlayerScore(AD);
-                match.setScore(currenctScore);
-                return;
-            }
-            if (secondPlayerScore == AD) {
-                currenctScore.setSecondPlayerScore(0);
-                currenctScore.setSecondPlayerGame(secondPlayerGame + 1);
-                match.setScore(currenctScore);
-                return;
-            }
-        }
-        System.out.println(match);
+        return match.getSecondPlayer();
+    }
+
+    private void resolveTieBrake(Score score) {
+        System.out.println("Tiebreak! Will do later.");
+    }
+
+    private Point nextPoint(Point point) {
+        return switch (point) {
+            case ZERO -> Point.FIFTEEN;
+            case FIFTEEN -> Point.THIRTY;
+            case THIRTY -> Point.FORTY;
+            case FORTY -> Point.AD;
+            default -> point;
+        };
     }
 }
