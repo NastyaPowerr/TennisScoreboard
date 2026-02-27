@@ -21,6 +21,8 @@
         <hibernate.version>7.2.4.Final</hibernate.version>
         <jackson-databind.version>3.0.3</jackson-databind.version>
         <glassfish.web.version>3.0.1</glassfish.web.version>
+        <junit-jupiter-engine.version>5.11.0-M2</junit-jupiter-engine.version>
+        <mockito-core.version>5.21.0</mockito-core.version>
     </properties>
 
     <dependencies>
@@ -67,6 +69,19 @@
             <groupId>org.glassfish.web</groupId>
             <artifactId>jakarta.servlet.jsp.jstl</artifactId>
             <version>${glassfish.web.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit-jupiter-engine.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito-core.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
