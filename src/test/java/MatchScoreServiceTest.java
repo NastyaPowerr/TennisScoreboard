@@ -1,4 +1,7 @@
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.roadmap.tennisscoreboard.domain.OngoingMatch;
 import org.roadmap.tennisscoreboard.domain.Point;
@@ -13,25 +16,54 @@ public class MatchScoreServiceTest {
     private MatchScoreService matchScoreService;
     private Player firstPlayer;
     private Player secondPlayer;
-    private Score score;
+    private OngoingMatch match;
 
-    @Test
-    void simpleWinPoint() {
+    @BeforeEach
+    void setup() {
         MatchService mockMatchService = mock(MatchService.class);
         matchScoreService = new MatchScoreService(mockMatchService);
         firstPlayer = new Player(1, "TestNameA");
         secondPlayer = new Player(2, "TestNameB");
-        score = new Score();
 
-        OngoingMatch match = new OngoingMatch(
+        match = new OngoingMatch(
                 1,
                 firstPlayer,
                 secondPlayer,
-                score
+                new Score()
         );
+    }
 
+    @Test
+    void simpleWinPoint() {
         matchScoreService.givePoint(firstPlayer.getId(), match);
 
         Assertions.assertEquals(Point.FIFTEEN, match.getScore().getFirstPlayerPoint());
+    }
+
+    @Test
+    void simpleWinGame() {
+        for (int i = 0; i < 4; i++) {
+            matchScoreService.givePoint(firstPlayer.getId(), match);
+        }
+
+        Assertions.assertEquals(1, match.getScore().getFirstPlayerGame());
+        Assertions.assertEquals(Point.ZERO, match.getScore().getFirstPlayerPoint());
+    }
+
+    // should not win game after 40-40
+    @Test
+    void advantageSituation() {
+        for (int i = 0; i < 3; i++) {
+            matchScoreService.givePoint(firstPlayer.getId(), match);
+            matchScoreService.givePoint(secondPlayer.getId(), match);
+        }
+
+        Assertions.assertEquals(Point.FORTY, match.getScore().getFirstPlayerPoint());
+        Assertions.assertEquals(Point.FORTY, match.getScore().getSecondPlayerPoint());
+
+        matchScoreService.givePoint(firstPlayer.getId(), match);
+        Assertions.assertEquals(0, match.getScore().getFirstPlayerGame());
+        Assertions.assertEquals(Point.AD, match.getScore().getFirstPlayerPoint());
+        Assertions.assertEquals(Point.FORTY, match.getScore().getSecondPlayerPoint());
     }
 }
