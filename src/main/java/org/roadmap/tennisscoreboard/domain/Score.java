@@ -8,6 +8,10 @@ public class Score {
     private int firstPlayerSet;
     private int secondPlayerSet;
 
+    private boolean isTieBreak;
+    private int firstPlayerTiebreakPoint;
+    private int secondPlayerTiebreakPoint;
+
     public Score() {
         this.firstPlayerPoint = Point.ZERO;
         this.secondPlayerPoint = Point.ZERO;
@@ -15,6 +19,9 @@ public class Score {
         this.secondPlayerGame = 0;
         this.firstPlayerSet = 0;
         this.secondPlayerSet = 0;
+        this.isTieBreak = false;
+        this.firstPlayerTiebreakPoint = 0;
+        this.secondPlayerTiebreakPoint = 0;
     }
 
     public Point getFirstPlayerPoint() {
@@ -65,6 +72,30 @@ public class Score {
         this.secondPlayerSet = secondPlayerSet;
     }
 
+    public int getFirstPlayerTiebreakPoint() {
+        return firstPlayerTiebreakPoint;
+    }
+
+    public void setFirstPlayerTiebreakPoint(int firstPlayerTiebreakPoint) {
+        this.firstPlayerTiebreakPoint = firstPlayerTiebreakPoint;
+    }
+
+    public int getSecondPlayerTiebreakPoint() {
+        return secondPlayerTiebreakPoint;
+    }
+
+    public void setSecondPlayerTiebreakPoint(int secondPlayerTiebreakPoint) {
+        this.secondPlayerTiebreakPoint = secondPlayerTiebreakPoint;
+    }
+
+    public boolean isTieBreak() {
+        return isTieBreak;
+    }
+
+    public void setTieBreak(boolean tieBreak) {
+        isTieBreak = tieBreak;
+    }
+
     //for test only
     @Override
     public String toString() {
@@ -75,6 +106,9 @@ public class Score {
                 ", secondPlayerGame=" + secondPlayerGame +
                 ", firstPlayerSet=" + firstPlayerSet +
                 ", secondPlayerSet=" + secondPlayerSet +
+                ", tiebreak=" + isTieBreak +
+                ", firstPlayerTieBreakPoint=" + firstPlayerTiebreakPoint +
+                ", secondPlayerTieBreakPoint=" + secondPlayerTiebreakPoint +
                 '}';
     }
 }

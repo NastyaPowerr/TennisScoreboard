@@ -1,8 +1,5 @@
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.roadmap.tennisscoreboard.domain.OngoingMatch;
 import org.roadmap.tennisscoreboard.domain.Point;
@@ -70,7 +67,6 @@ public class MatchScoreServiceTest {
 
     // for TDD strategy:
     @Test
-    @Disabled
     void tiebreakSituation() {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 4; j++) {
@@ -85,5 +81,13 @@ public class MatchScoreServiceTest {
         Assertions.assertEquals(6, match.getScore().getSecondPlayerGame());
         Assertions.assertEquals(0, match.getScore().getFirstPlayerSet());
         Assertions.assertEquals(0, match.getScore().getSecondPlayerSet());
+
+        for (int i = 0; i < 7; i++) {
+            matchScoreService.givePoint(firstPlayer.getId(), match);
+        }
+
+        Assertions.assertEquals(1, match.getScore().getFirstPlayerSet());
+        Assertions.assertEquals(0, match.getScore().getFirstPlayerGame());
+        Assertions.assertEquals(0, match.getScore().getSecondPlayerGame());
     }
 }

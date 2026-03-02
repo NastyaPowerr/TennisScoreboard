@@ -20,17 +20,26 @@ public class MatchScoreService {
 
         Score currenctScore = match.getScore();
 
+
+        // проверяем тайбрейк (если два гейма = 6, то играется тай-брейк)
+        if (isTieBrake(currenctScore)) {
+            resolveTieBrake(playerId, match, currenctScore);
+            return;
+        }
+
         Point firstPlayerPoint = currenctScore.getFirstPlayerPoint();
         Point secondPlayerPoint = currenctScore.getSecondPlayerPoint();
 
-        if (currenctScore.getFirstPlayerGame() == GAMES_TO_WIN_SET) {
+        if (currenctScore.getFirstPlayerGame() >= GAMES_TO_WIN_SET &&
+                currenctScore.getFirstPlayerGame() - currenctScore.getSecondPlayerGame() >= 2) {
             currenctScore.setFirstPlayerSet(currenctScore.getFirstPlayerSet() + 1);
             clearPoints(currenctScore);
             clearGames(currenctScore);
             return;
         }
 
-        if (currenctScore.getSecondPlayerGame() == GAMES_TO_WIN_SET) {
+        if (currenctScore.getSecondPlayerGame() >= GAMES_TO_WIN_SET &&
+                currenctScore.getSecondPlayerGame() - currenctScore.getFirstPlayerGame() >= 2) {
             currenctScore.setSecondPlayerSet(currenctScore.getSecondPlayerSet() + 1);
             clearPoints(currenctScore);
             clearGames(currenctScore);
@@ -93,11 +102,6 @@ public class MatchScoreService {
             currenctScore.setSecondPlayerPoint(nextPoint(secondPlayerPoint));
         }
 
-        // проверяем тайбрейк (если два гейма = 6, то играется тай-брейк)
-        if (isTieBrake(currenctScore)) {
-            resolveTieBrake(currenctScore);
-        }
-
         // проверяем, закончена ли игра (у одного из игроков сет = 2)
         if (isMatchFinished(currenctScore)) {
             Player winner = getWinner(match, currenctScore);
@@ -130,6 +134,7 @@ public class MatchScoreService {
         score.setSecondPlayerGame(0);
     }
 
+    // BO3, поэтому ровно == 2
     private boolean isMatchFinished(Score score) {
         return score.getFirstPlayerSet() == SETS_TO_WIN || score.getSecondPlayerSet() == SETS_TO_WIN;
     }
@@ -145,8 +150,37 @@ public class MatchScoreService {
         return match.getSecondPlayer();
     }
 
-    private void resolveTieBrake(Score score) {
-        System.out.println("Tiebreak! Will do later.");
+    private void resolveTieBrake(Integer playerId, OngoingMatch match, Score score) {
+        score.setTieBreak(true);
+
+        if (firstPlayerScored(playerId, match)) {
+            score.setFirstPlayerTiebreakPoint(score.getFirstPlayerTiebreakPoint() + 1);
+        } else {
+            score.setSecondPlayerTiebreakPoint(score.getSecondPlayerTiebreakPoint() + 1);
+        }
+
+        if (score.getFirstPlayerTiebreakPoint() >= 7 && score.getFirstPlayerTiebreakPoint() - score.getSecondPlayerTiebreakPoint() >= 2) {
+            score.setFirstPlayerGame(score.getFirstPlayerGame() + 1);
+            score.setFirstPlayerSet(score.getFirstPlayerSet() + 1);
+            clearPoints(score);
+            clearTieBrakePoints(score);
+            clearGames(score);
+            score.setTieBreak(false);
+            return;
+        }
+        if (score.getSecondPlayerTiebreakPoint() >= 7 && score.getSecondPlayerTiebreakPoint() - score.getFirstPlayerTiebreakPoint() >= 2) {
+            score.setSecondPlayerGame(score.getSecondPlayerGame() + 1);
+            score.setSecondPlayerSet(score.getSecondPlayerSet() + 1);
+            clearPoints(score);
+            clearTieBrakePoints(score);
+            clearGames(score);
+            score.setTieBreak(false);
+        }
+    }
+
+    private void clearTieBrakePoints(Score score) {
+        score.setFirstPlayerTiebreakPoint(0);
+        score.setSecondPlayerTiebreakPoint(0);
     }
 
     private Point nextPoint(Point point) {
