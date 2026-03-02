@@ -12,9 +12,9 @@ import static org.mockito.Mockito.mock;
 
 public class MatchScoreServiceTest {
     private MatchScoreService matchScoreService;
+    private OngoingMatch match;
     private Player firstPlayer;
     private Player secondPlayer;
-    private OngoingMatch match;
 
     @BeforeEach
     void setup() {
@@ -65,7 +65,6 @@ public class MatchScoreServiceTest {
         Assertions.assertEquals(Point.FORTY, match.getScore().getSecondPlayerPoint());
     }
 
-    // for TDD strategy:
     @Test
     void tiebreakSituation() {
         for (int i = 0; i < 6; i++) {
@@ -89,5 +88,35 @@ public class MatchScoreServiceTest {
         Assertions.assertEquals(1, match.getScore().getFirstPlayerSet());
         Assertions.assertEquals(0, match.getScore().getFirstPlayerGame());
         Assertions.assertEquals(0, match.getScore().getSecondPlayerGame());
+    }
+
+    @Test
+    void tiebreakSituationDifferenceInPointsLessThan2() {
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 4; j++) {
+                matchScoreService.givePoint(firstPlayer.getId(), match);
+            }
+            for (int j = 0; j < 4; j++) {
+                matchScoreService.givePoint(secondPlayer.getId(), match);
+            }
+        }
+
+        for (int i = 0; i < 6; i++) {
+            matchScoreService.givePoint(firstPlayer.getId(), match);
+            matchScoreService.givePoint(secondPlayer.getId(), match);
+        }
+        matchScoreService.givePoint(firstPlayer.getId(), match);
+        Assertions.assertEquals(0, match.getScore().getFirstPlayerSet());
+        Assertions.assertEquals(6, match.getScore().getFirstPlayerGame());
+        Assertions.assertEquals(6, match.getScore().getSecondPlayerGame());
+        Assertions.assertEquals(7, match.getScore().getFirstPlayerTiebreakPoint());
+        Assertions.assertEquals(6, match.getScore().getSecondPlayerTiebreakPoint());
+
+        matchScoreService.givePoint(firstPlayer.getId(), match);
+        Assertions.assertEquals(1, match.getScore().getFirstPlayerSet());
+        Assertions.assertEquals(0, match.getScore().getFirstPlayerGame());
+        Assertions.assertEquals(0, match.getScore().getSecondPlayerGame());
+        Assertions.assertEquals(0, match.getScore().getFirstPlayerTiebreakPoint());
+        Assertions.assertEquals(0, match.getScore().getSecondPlayerTiebreakPoint());
     }
 }
