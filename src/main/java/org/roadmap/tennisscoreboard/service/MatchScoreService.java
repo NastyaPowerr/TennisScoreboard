@@ -1,9 +1,14 @@
 package org.roadmap.tennisscoreboard.service;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.roadmap.tennisscoreboard.domain.OngoingMatch;
 import org.roadmap.tennisscoreboard.domain.Point;
 import org.roadmap.tennisscoreboard.domain.Score;
+import org.roadmap.tennisscoreboard.domain.SetScoreInfo;
 import org.roadmap.tennisscoreboard.entity.Player;
+
+import java.util.List;
+import java.util.Map;
 
 public class MatchScoreService {
     private static final Integer SETS_TO_WIN = 2;
@@ -32,7 +37,16 @@ public class MatchScoreService {
 
         if (currenctScore.getFirstPlayerGame() >= GAMES_TO_WIN_SET &&
                 currenctScore.getFirstPlayerGame() - currenctScore.getSecondPlayerGame() >= 2) {
-            currenctScore.setFirstPlayerSet(currenctScore.getFirstPlayerSet() + 1);
+            int currentSetNumber = currenctScore.getFirstPlayerSet();
+            currenctScore.setFirstPlayerSet(currentSetNumber + 1);
+
+            Map<Integer, SetScoreInfo> setHistory = match.getSetsHistory();
+            SetScoreInfo setScore = new SetScoreInfo(
+                    currenctScore.getFirstPlayerGame(),
+                    currenctScore.getSecondPlayerGame()
+            );
+            setHistory.put(currentSetNumber, setScore);
+
             clearPoints(currenctScore);
             clearGames(currenctScore);
             return;
@@ -40,7 +54,16 @@ public class MatchScoreService {
 
         if (currenctScore.getSecondPlayerGame() >= GAMES_TO_WIN_SET &&
                 currenctScore.getSecondPlayerGame() - currenctScore.getFirstPlayerGame() >= 2) {
-            currenctScore.setSecondPlayerSet(currenctScore.getSecondPlayerSet() + 1);
+            int currentSetNumber = currenctScore.getSecondPlayerSet();
+            currenctScore.setSecondPlayerSet(currentSetNumber + 1);
+
+            Map<Integer, SetScoreInfo> setHistory = match.getSetsHistory();
+            SetScoreInfo setScore = new SetScoreInfo(
+                    currenctScore.getFirstPlayerGame(),
+                    currenctScore.getSecondPlayerGame()
+            );
+            setHistory.put(currentSetNumber, setScore);
+
             clearPoints(currenctScore);
             clearGames(currenctScore);
             return;
@@ -135,7 +158,7 @@ public class MatchScoreService {
     }
 
     // BO3, поэтому ровно == 2
-    private boolean isMatchFinished(Score score) {
+    public boolean isMatchFinished(Score score) {
         return score.getFirstPlayerSet() == SETS_TO_WIN || score.getSecondPlayerSet() == SETS_TO_WIN;
     }
 
@@ -143,7 +166,7 @@ public class MatchScoreService {
         return score.getFirstPlayerGame() == TIE_BREAK && score.getSecondPlayerGame() == TIE_BREAK;
     }
 
-    private Player getWinner(OngoingMatch match, Score score) {
+    public Player getWinner(OngoingMatch match, Score score) {
         if (score.getFirstPlayerSet() == SETS_TO_WIN) {
             return match.getFirstPlayer();
         }

@@ -7,11 +7,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.roadmap.tennisscoreboard.domain.OngoingMatch;
+import org.roadmap.tennisscoreboard.domain.SetScoreInfo;
 import org.roadmap.tennisscoreboard.dto.view.MatchView;
 import org.roadmap.tennisscoreboard.service.MatchScoreService;
 import org.roadmap.tennisscoreboard.service.MatchService;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
 
 @WebServlet("/match-score")
@@ -35,47 +37,17 @@ public class MatchScorePageServlet extends HttpServlet {
         System.out.println(match);
 
         MatchView matchView;
-        if (!match.getScore().isTieBreak()) {
-            matchView = new MatchView(
-                    match.getFirstPlayer(),
-                    match.getSecondPlayer(),
-                    null,
-                    match.getScore().getFirstPlayerPoint().toString(),
-                    match.getScore().getSecondPlayerPoint().toString(),
-                    match.getScore().getFirstPlayerGame(),
-                    match.getScore().getSecondPlayerGame(),
-                    match.getScore().getFirstPlayerSet(),
-                    match.getScore().getSecondPlayerSet(),
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0
-            );
+        if (!matchScoreService.isMatchFinished(match.getScore())) {
+            matchView = getMatchViewDependingOnTieBreak(match);
+            req.setAttribute("match", matchView);
+            req.setAttribute("uuid", matchId);
+            req.getRequestDispatcher("WEB-INF/match-score.jsp").forward(req, resp);
         } else {
-            matchView = new MatchView(
-                    match.getFirstPlayer(),
-                    match.getSecondPlayer(),
-                    null,
-                    String.valueOf(match.getScore().getFirstPlayerTiebreakPoint()),
-                    String.valueOf(match.getScore().getSecondPlayerTiebreakPoint()),
-                    match.getScore().getFirstPlayerGame(),
-                    match.getScore().getSecondPlayerGame(),
-                    match.getScore().getFirstPlayerSet(),
-                    match.getScore().getSecondPlayerSet(),
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0
-            );
+            matchView = getMatchViewDependingOnFinishedMatch(match);
+            req.setAttribute("match", matchView);
+            req.setAttribute("uuid", matchId);
+            req.getRequestDispatcher("WEB-INF/match-score-finished.jsp").forward(req, resp);
         }
-        req.setAttribute("match", matchView);
-        req.setAttribute("uuid", matchId);
-
-        req.getRequestDispatcher("WEB-INF/match-score.jsp").forward(req, resp);
     }
 
     @Override
@@ -98,4 +70,67 @@ public class MatchScorePageServlet extends HttpServlet {
         }
         resp.sendRedirect("match-score?uuid=" + uuid);
     }
+
+    private MatchView getMatchViewDependingOnFinishedMatch(OngoingMatch match) {
+        Map<Integer, SetScoreInfo> setsHistory = match.getSetsHistory();
+        return new MatchView(
+                match.getFirstPlayer(),
+                match.getSecondPlayer(),
+                matchScoreService.getWinner(match, match.getScore()),
+                null,
+                null,
+                0,
+                0,
+                match.getScore().getFirstPlayerSet(),
+                match.getScore().getSecondPlayerSet(),
+                setsHistory.get(0).getFirstPlayerGames(),
+                setsHistory.get(0).getSecondPlayerGames(),
+                setsHistory.get(1).getFirstPlayerGames(),
+                setsHistory.get(1).getSecondPlayerGames(),
+                // заглушка! добавить условие
+                0,
+                0
+        );
+    }
+
+    private static MatchView getMatchViewDependingOnTieBreak(OngoingMatch match) {
+        if (!match.getScore().isTieBreak()) {
+            return new MatchView(
+                    match.getFirstPlayer(),
+                    match.getSecondPlayer(),
+                    null,
+                    match.getScore().getFirstPlayerPoint().toString(),
+                    match.getScore().getSecondPlayerPoint().toString(),
+                    match.getScore().getFirstPlayerGame(),
+                    match.getScore().getSecondPlayerGame(),
+                    match.getScore().getFirstPlayerSet(),
+                    match.getScore().getSecondPlayerSet(),
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+            );
+        } else {
+            return new MatchView(
+                    match.getFirstPlayer(),
+                    match.getSecondPlayer(),
+                    null,
+                    String.valueOf(match.getScore().getFirstPlayerTiebreakPoint()),
+                    String.valueOf(match.getScore().getSecondPlayerTiebreakPoint()),
+                    match.getScore().getFirstPlayerGame(),
+                    match.getScore().getSecondPlayerGame(),
+                    match.getScore().getFirstPlayerSet(),
+                    match.getScore().getSecondPlayerSet(),
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+            );
+        }
+    }
+
 }
