@@ -2,11 +2,10 @@ package org.roadmap.tennisscoreboard.service;
 
 import org.roadmap.tennisscoreboard.domain.OngoingMatch;
 import org.roadmap.tennisscoreboard.dto.PlayerDto;
-import org.roadmap.tennisscoreboard.dto.response.FinishedMatchDto;
+import org.roadmap.tennisscoreboard.dto.FinishedMatchDto;
 import org.roadmap.tennisscoreboard.entity.Match;
 import org.roadmap.tennisscoreboard.entity.Player;
 import org.roadmap.tennisscoreboard.repository.MatchRepository;
-import org.roadmap.tennisscoreboard.repository.PlayerRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +15,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class MatchService {
     private final MatchRepository matchRepository;
-    private final PlayerRepository playerRepository;
     private final Map<UUID, OngoingMatch> matches;
 
-    public MatchService(MatchRepository matchRepository, PlayerRepository playerRepository) {
+    public MatchService(MatchRepository matchRepository) {
         this.matches = new ConcurrentHashMap<>();
         this.matchRepository = matchRepository;
-        this.playerRepository = playerRepository;
     }
 
     public UUID create(OngoingMatch match) {

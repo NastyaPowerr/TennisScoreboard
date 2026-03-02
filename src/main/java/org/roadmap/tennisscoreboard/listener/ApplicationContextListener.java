@@ -21,7 +21,7 @@ public class ApplicationContextListener implements ServletContextListener {
         ObjectMapper objectMapper = new ObjectMapper();
         PlayerRepository playerRepository = new PlayerRepository();
         MatchRepository matchRepository = new MatchRepository();
-        MatchService matchService = new MatchService(matchRepository, playerRepository);
+        MatchService matchService = new MatchService(matchRepository);
         MatchScoreService matchScoreService = new MatchScoreService(matchService);
         PlayerService playerService = new PlayerService(playerRepository);
 

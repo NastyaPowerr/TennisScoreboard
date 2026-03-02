@@ -6,9 +6,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.roadmap.tennisscoreboard.dto.response.FinishedMatchDto;
+import org.roadmap.tennisscoreboard.dto.FinishedMatchDto;
 import org.roadmap.tennisscoreboard.service.MatchService;
-import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,13 +15,11 @@ import java.util.List;
 @WebServlet("/matches")
 public class FinishedMatchesServlet extends HttpServlet {
     private MatchService matchService;
-    private ObjectMapper objectMapper;
 
     @Override
     public void init() {
         ServletContext context = getServletContext();
         this.matchService = (MatchService) context.getAttribute("matchService");
-        this.objectMapper = (ObjectMapper) context.getAttribute("objectMapper");
     }
 
     @Override

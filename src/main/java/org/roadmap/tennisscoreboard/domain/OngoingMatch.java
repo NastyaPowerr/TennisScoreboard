@@ -2,9 +2,7 @@ package org.roadmap.tennisscoreboard.domain;
 
 import org.roadmap.tennisscoreboard.entity.Player;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class OngoingMatch {
