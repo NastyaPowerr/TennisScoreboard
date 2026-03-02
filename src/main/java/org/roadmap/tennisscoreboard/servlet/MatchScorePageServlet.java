@@ -34,19 +34,44 @@ public class MatchScorePageServlet extends HttpServlet {
         OngoingMatch match = matchService.getById(UUID.fromString(matchId));
         System.out.println(match);
 
-        MatchView matchView = new MatchView(
-                match.getFirstPlayer(),
-                match.getSecondPlayer(),
-                null,
-                match.getScore(),
-                match.getScore().getFirstPlayerSet(),
-                match.getScore().getSecondPlayerSet(),
-                0,
-                0,
-                0,
-                0
-        );
-
+        MatchView matchView;
+        if (!match.getScore().isTieBreak()) {
+            matchView = new MatchView(
+                    match.getFirstPlayer(),
+                    match.getSecondPlayer(),
+                    null,
+                    match.getScore().getFirstPlayerPoint().toString(),
+                    match.getScore().getSecondPlayerPoint().toString(),
+                    match.getScore().getFirstPlayerGame(),
+                    match.getScore().getSecondPlayerGame(),
+                    match.getScore().getFirstPlayerSet(),
+                    match.getScore().getSecondPlayerSet(),
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+            );
+        } else {
+            matchView = new MatchView(
+                    match.getFirstPlayer(),
+                    match.getSecondPlayer(),
+                    null,
+                    String.valueOf(match.getScore().getFirstPlayerTiebreakPoint()),
+                    String.valueOf(match.getScore().getSecondPlayerTiebreakPoint()),
+                    match.getScore().getFirstPlayerGame(),
+                    match.getScore().getSecondPlayerGame(),
+                    match.getScore().getFirstPlayerSet(),
+                    match.getScore().getSecondPlayerSet(),
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+            );
+        }
         req.setAttribute("match", matchView);
         req.setAttribute("uuid", matchId);
 
