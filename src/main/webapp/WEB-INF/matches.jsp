@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html;charset=UTF-8"%>
+<%@ page language="java" contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <html>
 <head>
@@ -35,7 +35,7 @@
         <h1>Matches</h1>
         <div class="input-container">
             <label>
-                <input class="input-filter" placeholder="Filter by name" type="text" />
+                <input class="input-filter" placeholder="Filter by name" type="text"/>
             </label>
             <div>
                 <a href="#">
@@ -50,23 +50,23 @@
                 <th>Player Two</th>
                 <th>Winner</th>
             </tr>
-           <c:forEach items ="${matches}" var="match">
-            <tr>
-                <td>${match.firstPlayer().name()}</td>
-                <td>${match.secondPlayer().name()}</td>
-                <td>
-                    <span class="winner-name-td">${match.winner().name()}</span>
-                </td>
-            </tr>
-           </c:forEach>
+            <c:forEach items="${matches}" var="match">
+                <tr>
+                    <td>${match.firstPlayer().name()}</td>
+                    <td>${match.secondPlayer().name()}</td>
+                    <td>
+                        <span class="winner-name-td">${match.winner().name()}</span>
+                    </td>
+                </tr>
+            </c:forEach>
         </table>
 
         <div class="pagination">
-            <a class="prev" href="#"> < </a>
-            <a class="num-page current" href="#">1</a>
-            <a class="num-page" href="#">2</a>
-            <a class="num-page" href="#">3</a>
-            <a class="next" href="#"> > </a>
+            <a class="prev" href="${pageContext.request.contextPath}/matches?page=${pageNumber - 1}"> < </a>
+            <a class="num-page current" href="${pageContext.request.contextPath}/matches?page=${pageNumber}">${pageNumber}</a>
+            <a class="num-page" href="${pageContext.request.contextPath}/matches?page=${pageNumber + 1}">${pageNumber + 1}</a>
+            <a class="num-page" href="${pageContext.request.contextPath}/matches?page=${pageNumber + 2}">${pageNumber + 2}</a>
+            <a class="next" href="${pageContext.request.contextPath}/matches?page=${pageNumber + 1}"> > </a>
         </div>
     </div>
 </main>

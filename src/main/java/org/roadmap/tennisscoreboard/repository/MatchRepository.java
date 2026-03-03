@@ -3,6 +3,7 @@ package org.roadmap.tennisscoreboard.repository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.roadmap.tennisscoreboard.entity.Match;
 import org.roadmap.tennisscoreboard.util.HibernateSessionFactoryUtil;
 
@@ -27,5 +28,18 @@ public class MatchRepository {
     public List<Match> findAll() {
         Session session = sessionFactory.openSession();
         return session.createQuery("from " + Match.class.getName()).list();
+    }
+
+    public List<Match> findMatchesWithPagination(int pageSize, int offset) {
+        // postgresql:
+        // SELECT * FROM matches
+        // LIMIT pageSize - размер страницы
+        // OFFSET offset - сколько пропустить страниц
+        Session session = sessionFactory.openSession();
+        Query<Match> query = session.createQuery("from " + Match.class.getName());
+        query.setFirstResult(offset);
+        query.setMaxResults(pageSize);
+
+        return query.list();
     }
 }

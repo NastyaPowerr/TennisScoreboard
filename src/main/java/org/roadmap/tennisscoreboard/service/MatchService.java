@@ -32,6 +32,21 @@ public class MatchService {
         return matches.get(id);
     }
 
+    public FinishedMatchDto save(OngoingMatch match, Player winner) {
+        Match entity = new Match(match.getFirstPlayer(), match.getSecondPlayer(), winner);
+
+        Match savedEntity = matchRepository.save(entity);
+
+        PlayerDto firstPlayerDto = new PlayerDto(match.getFirstPlayer().getId(), match.getFirstPlayer().getName());
+        PlayerDto secondPlayerDto = new PlayerDto(match.getSecondPlayer().getId(), match.getSecondPlayer().getName());
+        return new FinishedMatchDto(
+                savedEntity.getId(),
+                firstPlayerDto,
+                secondPlayerDto,
+                new PlayerDto(winner.getId(), winner.getName())
+        );
+    }
+
     public List<FinishedMatchDto> getAll() {
         List<Match> matches = matchRepository.findAll();
         List<FinishedMatchDto> responseMatches = new ArrayList<>();
@@ -46,18 +61,18 @@ public class MatchService {
         return responseMatches;
     }
 
-    public FinishedMatchDto save(OngoingMatch match, Player winner) {
-        Match entity = new Match(match.getFirstPlayer(), match.getSecondPlayer(), winner);
+    public List<FinishedMatchDto> getMatches(int pageNumber, int pageSize) {
+        int offset = (pageNumber - 1) * pageSize;
+        List<Match> matches = matchRepository.findMatchesWithPagination(pageSize, offset);
+        List<FinishedMatchDto> responseMatches = new ArrayList<>();
+        for (Match match : matches) {
+            PlayerDto firstPlayer = new PlayerDto(match.getFirstPlayer().getId(), match.getFirstPlayer().getName());
+            PlayerDto secondPlayer = new PlayerDto(match.getSecondPlayer().getId(), match.getSecondPlayer().getName());
+            PlayerDto winner = new PlayerDto(match.getWinner().getId(), match.getWinner().getName());
 
-        Match savedEntity = matchRepository.save(entity);
-
-        PlayerDto firstPlayerDto = new PlayerDto(match.getFirstPlayer().getId(), match.getFirstPlayer().getName());
-        PlayerDto secondPlayerDto = new PlayerDto(match.getSecondPlayer().getId(), match.getSecondPlayer().getName());
-        return new FinishedMatchDto(
-                savedEntity.getId(),
-                firstPlayerDto,
-                secondPlayerDto,
-                new PlayerDto(winner.getId(), winner.getName())
-        );
+            FinishedMatchDto matchDto = new FinishedMatchDto(match.getId(), firstPlayer, secondPlayer, winner);
+            responseMatches.add(matchDto);
+        }
+        return responseMatches;
     }
 }

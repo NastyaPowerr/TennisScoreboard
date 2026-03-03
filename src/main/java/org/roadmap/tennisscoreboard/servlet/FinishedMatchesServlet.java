@@ -24,8 +24,13 @@ public class FinishedMatchesServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        List<FinishedMatchDto> matches = matchService.getAll();
+        String pageNumberString = req.getParameter("page");
+        int pageNumber = pageNumberString == null || pageNumberString.isEmpty() ? 1 : Integer.parseInt(pageNumberString);
+        int pageSize = 10;
+
+        List<FinishedMatchDto> matches = matchService.getMatches(pageNumber, pageSize);
         req.setAttribute("matches", matches);
+        req.setAttribute("pageNumber", pageNumber);
 
         req.getRequestDispatcher("WEB-INF/matches.jsp").forward(req, resp);
     }
