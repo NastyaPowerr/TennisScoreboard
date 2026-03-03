@@ -15,6 +15,7 @@ public class MatchScoreService {
     private static final Integer TIE_BREAK = 6;
     private static final Integer GAMES_TO_WIN_SET = 6;
     private final MatchService matchService;
+    private int setNumber = 0;
 
     public MatchScoreService(MatchService matchService) {
         this.matchService = matchService;
@@ -37,15 +38,15 @@ public class MatchScoreService {
 
         if (currenctScore.getFirstPlayerGame() >= GAMES_TO_WIN_SET &&
                 currenctScore.getFirstPlayerGame() - currenctScore.getSecondPlayerGame() >= 2) {
-            int currentSetNumber = currenctScore.getFirstPlayerSet();
-            currenctScore.setFirstPlayerSet(currentSetNumber + 1);
+            currenctScore.setFirstPlayerSet( currenctScore.getFirstPlayerSet() + 1);
 
             Map<Integer, SetScoreInfo> setHistory = match.getSetsHistory();
             SetScoreInfo setScore = new SetScoreInfo(
                     currenctScore.getFirstPlayerGame(),
                     currenctScore.getSecondPlayerGame()
             );
-            setHistory.put(currentSetNumber, setScore);
+            setHistory.put(setNumber, setScore);
+            setNumber++;
 
             clearPoints(currenctScore);
             clearGames(currenctScore);
@@ -54,15 +55,15 @@ public class MatchScoreService {
 
         if (currenctScore.getSecondPlayerGame() >= GAMES_TO_WIN_SET &&
                 currenctScore.getSecondPlayerGame() - currenctScore.getFirstPlayerGame() >= 2) {
-            int currentSetNumber = currenctScore.getSecondPlayerSet();
-            currenctScore.setSecondPlayerSet(currentSetNumber + 1);
+            currenctScore.setSecondPlayerSet(currenctScore.getSecondPlayerSet() + 1);
 
             Map<Integer, SetScoreInfo> setHistory = match.getSetsHistory();
             SetScoreInfo setScore = new SetScoreInfo(
                     currenctScore.getFirstPlayerGame(),
                     currenctScore.getSecondPlayerGame()
             );
-            setHistory.put(currentSetNumber, setScore);
+            setHistory.put(setNumber, setScore);
+            setNumber++;
 
             clearPoints(currenctScore);
             clearGames(currenctScore);

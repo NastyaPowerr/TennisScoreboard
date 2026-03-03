@@ -87,9 +87,8 @@ public class MatchScorePageServlet extends HttpServlet {
                 setsHistory.get(0).getSecondPlayerGames(),
                 setsHistory.get(1).getFirstPlayerGames(),
                 setsHistory.get(1).getSecondPlayerGames(),
-                // заглушка! добавить условие
-                0,
-                0
+                setsHistory.get(2) != null ? setsHistory.get(2).getFirstPlayerGames() : 0,
+                setsHistory.get(2) != null ? setsHistory.get(2).getSecondPlayerGames() : 0
         );
     }
 
