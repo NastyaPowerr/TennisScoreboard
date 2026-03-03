@@ -61,9 +61,15 @@ public class MatchService {
         return responseMatches;
     }
 
-    public List<FinishedMatchDto> getMatches(int pageNumber, int pageSize) {
+    public List<FinishedMatchDto> getMatches(int pageNumber, int pageSize, String filterName) {
+        List<Match> matches;
         int offset = (pageNumber - 1) * pageSize;
-        List<Match> matches = matchRepository.findMatchesWithPagination(pageSize, offset);
+        if (filterName == null) {
+            matches = matchRepository.findMatchesWithPagination(pageSize, offset);
+        } else {
+            matches = matchRepository.findMatchesWithPaginationAndPlayerName(pageSize, offset, filterName);
+        }
+
         List<FinishedMatchDto> responseMatches = new ArrayList<>();
         for (Match match : matches) {
             PlayerDto firstPlayer = new PlayerDto(match.getFirstPlayer().getId(), match.getFirstPlayer().getName());

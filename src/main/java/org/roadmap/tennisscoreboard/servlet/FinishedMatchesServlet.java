@@ -28,9 +28,13 @@ public class FinishedMatchesServlet extends HttpServlet {
         int pageNumber = pageNumberString == null || pageNumberString.isEmpty() ? 1 : Integer.parseInt(pageNumberString);
         int pageSize = 10;
 
-        List<FinishedMatchDto> matches = matchService.getMatches(pageNumber, pageSize);
+        String filterName = req.getParameter("filter_by_player_name");
+        System.out.println(filterName);
+
+        List<FinishedMatchDto> matches = matchService.getMatches(pageNumber, pageSize, filterName);
         req.setAttribute("matches", matches);
         req.setAttribute("pageNumber", pageNumber);
+        req.setAttribute("filterName", filterName);
 
         req.getRequestDispatcher("WEB-INF/matches.jsp").forward(req, resp);
     }

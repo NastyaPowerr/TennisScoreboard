@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<jsp:useBean id="matches" scope="request" type="java.util.List"/>
+<jsp:useBean id="pageNumber" scope="request" type="java.lang.Integer"/>
+<%--<jsp:useBean id="filterName" scope="request" type="java.lang.String"/>--%>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -34,11 +37,13 @@
     <div class="container">
         <h1>Matches</h1>
         <div class="input-container">
-            <label>
-                <input class="input-filter" placeholder="Filter by name" type="text"/>
-            </label>
+            <form method="get" action="${pageContext.request.contextPath}/matches">
+                <label>
+                    <input class="input-filter" name="filter_by_player_name" placeholder="Filter by name" type="text" value="${filterName}"/>
+                </label>
+            </form>
             <div>
-                <a href="#">
+                <a href="${pageContext.request.contextPath}/matches">
                     <button class="btn-filter">Reset Filter</button>
                 </a>
             </div>
