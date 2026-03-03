@@ -50,6 +50,11 @@ public class MatchScoreService {
 
             clearPoints(currenctScore);
             clearGames(currenctScore);
+
+            if (isMatchFinished(currenctScore)) {
+                Player winner = getWinner(match, currenctScore);
+                matchService.save(match, winner);
+            }
             return;
         }
 
@@ -67,6 +72,11 @@ public class MatchScoreService {
 
             clearPoints(currenctScore);
             clearGames(currenctScore);
+
+            if (isMatchFinished(currenctScore)) {
+                Player winner = getWinner(match, currenctScore);
+                matchService.save(match, winner);
+            }
             return;
         }
 
@@ -190,6 +200,11 @@ public class MatchScoreService {
             clearTieBrakePoints(score);
             clearGames(score);
             score.setTieBreak(false);
+            // temp:
+            if (isMatchFinished(score)) {
+                Player winner = getWinner(match, score);
+                matchService.save(match, winner);
+            }
             return;
         }
         if (score.getSecondPlayerTiebreakPoint() >= 7 && score.getSecondPlayerTiebreakPoint() - score.getFirstPlayerTiebreakPoint() >= 2) {
@@ -199,6 +214,12 @@ public class MatchScoreService {
             clearTieBrakePoints(score);
             clearGames(score);
             score.setTieBreak(false);
+        }
+
+        // temp:
+        if (isMatchFinished(score)) {
+            Player winner = getWinner(match, score);
+            matchService.save(match, winner);
         }
     }
 
