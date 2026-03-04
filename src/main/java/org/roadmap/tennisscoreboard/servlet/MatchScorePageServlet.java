@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.roadmap.tennisscoreboard.domain.OngoingMatch;
 import org.roadmap.tennisscoreboard.domain.SetScoreInfo;
+import org.roadmap.tennisscoreboard.dto.view.FinishedMatchView;
 import org.roadmap.tennisscoreboard.dto.view.MatchView;
 import org.roadmap.tennisscoreboard.service.MatchScoreService;
 import org.roadmap.tennisscoreboard.service.MatchService;
@@ -36,7 +37,7 @@ public class MatchScorePageServlet extends HttpServlet {
         OngoingMatch match = matchService.getById(UUID.fromString(matchId));
         System.out.println(match);
 
-        MatchView matchView;
+        Object matchView;
         if (!matchScoreService.isMatchFinished(match.getScore())) {
             matchView = getMatchViewDependingOnTieBreak(match);
             req.setAttribute("match", matchView);
@@ -71,18 +72,12 @@ public class MatchScorePageServlet extends HttpServlet {
         resp.sendRedirect("match-score?uuid=" + uuid);
     }
 
-    private MatchView getMatchViewDependingOnFinishedMatch(OngoingMatch match) {
+    private FinishedMatchView getMatchViewDependingOnFinishedMatch(OngoingMatch match) {
         Map<Integer, SetScoreInfo> setsHistory = match.getSetsHistory();
-        return new MatchView(
+        return new FinishedMatchView(
                 match.getFirstPlayer(),
                 match.getSecondPlayer(),
                 matchScoreService.getWinner(match, match.getScore()),
-                null,
-                null,
-                0,
-                0,
-                match.getScore().getFirstPlayerSet(),
-                match.getScore().getSecondPlayerSet(),
                 setsHistory.get(0).getFirstPlayerGames(),
                 setsHistory.get(0).getSecondPlayerGames(),
                 setsHistory.get(1).getFirstPlayerGames(),
@@ -97,37 +92,23 @@ public class MatchScorePageServlet extends HttpServlet {
             return new MatchView(
                     match.getFirstPlayer(),
                     match.getSecondPlayer(),
-                    null,
                     match.getScore().getFirstPlayerPoint().toString(),
                     match.getScore().getSecondPlayerPoint().toString(),
                     match.getScore().getFirstPlayerGame(),
                     match.getScore().getSecondPlayerGame(),
                     match.getScore().getFirstPlayerSet(),
-                    match.getScore().getSecondPlayerSet(),
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0
+                    match.getScore().getSecondPlayerSet()
             );
         } else {
             return new MatchView(
                     match.getFirstPlayer(),
                     match.getSecondPlayer(),
-                    null,
                     String.valueOf(match.getScore().getFirstPlayerTiebreakPoint()),
                     String.valueOf(match.getScore().getSecondPlayerTiebreakPoint()),
                     match.getScore().getFirstPlayerGame(),
                     match.getScore().getSecondPlayerGame(),
                     match.getScore().getFirstPlayerSet(),
-                    match.getScore().getSecondPlayerSet(),
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0
+                    match.getScore().getSecondPlayerSet()
             );
         }
     }

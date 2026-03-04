@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<jsp:useBean id="match" scope="request" type="org.roadmap.tennisscoreboard.dto.view.MatchView"/>
+<jsp:useBean id="match" scope="request" type="org.roadmap.tennisscoreboard.dto.view.FinishedMatchView"/>
 <html>
 <head>
     <meta charset="UTF-8">
