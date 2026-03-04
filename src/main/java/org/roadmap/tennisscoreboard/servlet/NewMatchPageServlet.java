@@ -10,22 +10,28 @@ import org.roadmap.tennisscoreboard.domain.OngoingMatch;
 import org.roadmap.tennisscoreboard.domain.Score;
 import org.roadmap.tennisscoreboard.dto.PlayerDto;
 import org.roadmap.tennisscoreboard.entity.Player;
+import org.roadmap.tennisscoreboard.exception.PlayerAlreadyExistsException;
 import org.roadmap.tennisscoreboard.service.MatchService;
 import org.roadmap.tennisscoreboard.service.PlayerService;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @WebServlet("/new-match")
 public class NewMatchPageServlet extends HttpServlet {
     private PlayerService playerService;
     private MatchService matchService;
+    private ObjectMapper objectMapper;
 
     @Override
     public void init() {
         ServletContext context = getServletContext();
         this.playerService = (PlayerService) context.getAttribute("playerService");
         this.matchService = (MatchService) context.getAttribute("matchService");
+        this.objectMapper = (ObjectMapper) context.getAttribute("objectMapper");
     }
 
     @Override
@@ -34,24 +40,27 @@ public class NewMatchPageServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String firstPlayerName = req.getParameter("firstPlayerName");
         String secondPlayerName = req.getParameter("secondPlayerName");
 
         System.out.println(firstPlayerName);
         System.out.println(secondPlayerName);
-        PlayerDto firstPlayer = playerService.create(new PlayerDto(null, firstPlayerName));
-        PlayerDto secondPlayer = playerService.create(new PlayerDto(null, secondPlayerName));
-
-        // экземпляр класса, содержащего айди игроков и текущий счёт (ТЗ)
-        OngoingMatch match = new OngoingMatch(
-                null,
-                new Player(firstPlayer.id(), firstPlayer.name()),
-                new Player(secondPlayer.id(), secondPlayer.name()),
-                new Score()
-        );
-        UUID uuid = matchService.create(match);
-
-        resp.sendRedirect("match-score?uuid=" + uuid);
+        try {
+            PlayerDto firstPlayer = playerService.create(new PlayerDto(null, firstPlayerName));
+            PlayerDto secondPlayer = playerService.create(new PlayerDto(null, secondPlayerName));
+            // экземпляр класса, содержащего айди игроков и текущий счёт (ТЗ)
+            OngoingMatch match = new OngoingMatch(
+                    null,
+                    new Player(firstPlayer.id(), firstPlayer.name()),
+                    new Player(secondPlayer.id(), secondPlayer.name()),
+                    new Score()
+            );
+            UUID uuid = matchService.create(match);
+            resp.sendRedirect("match-score?uuid=" + uuid);
+        } catch (PlayerAlreadyExistsException ex) {
+            req.setAttribute("error", ex.getMessage());
+            req.getRequestDispatcher("WEB-INF/new-match.jsp").forward(req, resp);
+        }
     }
 }

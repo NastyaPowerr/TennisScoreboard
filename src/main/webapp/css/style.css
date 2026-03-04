@@ -507,3 +507,9 @@ footer {
 .num-page.current {
     font-weight: bold;
 }
+
+.error-message {
+    font-size: 30px;
+    font-weight: bold;
+    color: darkred;
+}

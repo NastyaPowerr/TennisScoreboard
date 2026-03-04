@@ -36,6 +36,11 @@
             <div class="new-match-image"></div>
             <div class="form-container center">
                 <form method="post" action="${pageContext.request.contextPath}/new-match">
+                    <c:if test="${not empty error}">
+                        <div class="error-message">
+                            ${error}
+                        </div>
+                    </c:if>
                     <label class="label-player" for="firstPlayerName">Player one</label>
                     <input class="input-player" placeholder="Name" type="text" id = "firstPlayerName" name = "firstPlayerName" required title="Enter a name">
                     <label class="label-player" for="secondPlayerName">Player two</label>
