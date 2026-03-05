@@ -14,8 +14,8 @@ public class MatchRepositoryImpl implements MatchRepository {
             """;
     private static final String FIND_ALL_PAGINATION_WITH_FILTER = """
             SELECT matches FROM Match matches
-            WHERE matches.firstPlayer.name LIKE :name
-            OR matches.secondPlayer.name LIKE :name
+            WHERE upper(matches.firstPlayer.name) LIKE upper(:name)
+            OR upper(matches.secondPlayer.name) LIKE upper(:name)
             """;
     private static final String COUNT_ALL = """
             SELECT COUNT(*) from Match
