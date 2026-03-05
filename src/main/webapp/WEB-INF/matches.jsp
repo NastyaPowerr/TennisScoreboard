@@ -68,34 +68,34 @@
         </table>
 
         <div class="pagination">
+            <c:set var="filterParameter" value="${not empty filterName ? '&filter_by_player_name=' += filterName : ''}"/>
             <c:set var="prevPage" value="${pageContext.request.contextPath}/matches?page=${pageNumber - 1}"/>
             <c:set var="nextPage" value="${pageContext.request.contextPath}/matches?page=${pageNumber + 1}"/>
 
             <c:if test="${pageQuantity > 4}">
-                <a class="first" href="${pageContext.request.contextPath}/matches?page=1"> << </a>
-                <a class="last" href="${pageContext.request.contextPath}/matches?page=${pageQuantity}"> >> </a>
+                <a class="first" href="${pageContext.request.contextPath}/matches?page=1${filterParameter}"> << </a>
+                <a class="last" href="${pageContext.request.contextPath}/matches?page=${pageQuantity}${filterParameter}"> >> </a>
             </c:if>
 
             <c:if test="${pageNumber > 1}">
-                <a class="prev" href="${prevPage}"> < </a>
+                <a class="prev" href="${prevPage}${filterParameter}"> < </a>
             </c:if>
 
             <c:if test="${pageNumber - 1 >= 1}">
                 <a class="num-page"
-                   href="${pageContext.request.contextPath}/matches?page=${pageNumber - 1}">${pageNumber - 1}</a>
+                   href="${pageContext.request.contextPath}/matches?page=${pageNumber - 1}${filterParameter}">${pageNumber - 1}</a>
             </c:if>
 
-            <a class="num-page" href="${pageContext.request.contextPath}/matches?page=${pageNumber}">${pageNumber}</a>
+            <a class="num-page" href="${pageContext.request.contextPath}/matches?page=${pageNumber}${filterParameter}">${pageNumber}</a>
 
             <c:if test="${pageNumber + 1 <= pageQuantity}">
                 <a class="num-page"
-                   href="${pageContext.request.contextPath}/matches?page=${pageNumber + 1}">${pageNumber + 1}</a>
+                   href="${pageContext.request.contextPath}/matches?page=${pageNumber + 1}${filterParameter}">${pageNumber + 1}</a>
             </c:if>
 
             <c:if test="${pageNumber < pageQuantity}">
-                <a class="next" href="${nextPage}"> > </a>
+                <a class="next" href="${nextPage}${filterParameter}"> > </a>
             </c:if>
-
         </div>
     </div>
 </main>

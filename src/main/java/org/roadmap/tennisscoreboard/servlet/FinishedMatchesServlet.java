@@ -32,7 +32,7 @@ public class FinishedMatchesServlet extends HttpServlet {
         System.out.println(filterName);
 
         List<FinishedMatchDto> matches = matchService.getMatches(pageNumber, pageSize, filterName);
-        int pageQuantity = matchService.getTotalPages(pageSize);
+        int pageQuantity = matchService.getTotalPages(pageSize, filterName);
 
         req.setAttribute("matches", matches);
         req.setAttribute("pageNumber", pageNumber);

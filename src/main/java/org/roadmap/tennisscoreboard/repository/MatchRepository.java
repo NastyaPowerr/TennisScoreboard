@@ -10,4 +10,6 @@ public interface MatchRepository extends BaseRepository<Match> {
     List<Match> findAll(int pageSize, int offset, String filterName);
 
     long getCount();
+
+    long getCountWithFilter(String filterName);
 }

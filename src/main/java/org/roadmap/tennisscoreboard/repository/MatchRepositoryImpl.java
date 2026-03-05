@@ -13,12 +13,20 @@ public class MatchRepositoryImpl implements MatchRepository {
             FROM Match
             """;
     private static final String FIND_ALL_PAGINATION_WITH_FILTER = """
-            SELECT matches FROM Match matches
+            SELECT matches
+            FROM Match matches
             WHERE upper(matches.firstPlayer.name) LIKE upper(:name)
             OR upper(matches.secondPlayer.name) LIKE upper(:name)
             """;
     private static final String COUNT_ALL = """
-            SELECT COUNT(*) from Match
+            SELECT COUNT(*)
+            FROM Match
+            """;
+    private static final String COUNT_ALL_WITH_FILTER = """
+            SELECT COUNT(*)
+            FROM Match matches
+            WHERE upper(matches.firstPlayer.name) LIKE upper(:name)
+            OR upper(matches.secondPlayer.name) LIKE upper(:name)
             """;
 
     public MatchRepositoryImpl() {
@@ -47,6 +55,15 @@ public class MatchRepositoryImpl implements MatchRepository {
     public long getCount() {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery(COUNT_ALL, Long.class)
+                .list()
+                .get(0);
+    }
+
+    @Override
+    public long getCountWithFilter(String filterName) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery(COUNT_ALL_WITH_FILTER, Long.class)
+                .setParameter("name", "%" + filterName + "%")
                 .list()
                 .get(0);
     }
