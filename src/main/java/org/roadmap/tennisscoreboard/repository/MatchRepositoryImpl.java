@@ -17,6 +17,9 @@ public class MatchRepositoryImpl implements MatchRepository {
             WHERE matches.firstPlayer.name LIKE :name
             OR matches.secondPlayer.name LIKE :name
             """;
+    private static final String COUNT_ALL = """
+            SELECT COUNT(*) from Match
+            """;
 
     public MatchRepositoryImpl() {
         this.sessionFactory = HibernateSessionFactoryUtil.getSessionFactory();
@@ -38,6 +41,14 @@ public class MatchRepositoryImpl implements MatchRepository {
                 .setFirstResult(offset)
                 .setMaxResults(pageSize)
                 .list();
+    }
+
+    @Override
+    public long getCount() {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery(COUNT_ALL, Long.class)
+                .list()
+                .get(0);
     }
 
     public List<Match> findMatchesWithPagination(int pageSize, int offset) {

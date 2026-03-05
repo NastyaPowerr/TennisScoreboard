@@ -39,7 +39,8 @@
         <div class="input-container">
             <form method="get" action="${pageContext.request.contextPath}/matches">
                 <label>
-                    <input class="input-filter" name="filter_by_player_name" placeholder="Filter by name" type="text" value="${filterName}"/>
+                    <input class="input-filter" name="filter_by_player_name" placeholder="Filter by name" type="text"
+                           value="${filterName}"/>
                 </label>
             </form>
             <div>
@@ -67,11 +68,34 @@
         </table>
 
         <div class="pagination">
-            <a class="prev" href="${pageContext.request.contextPath}/matches?page=${pageNumber - 1}"> < </a>
-            <a class="num-page current" href="${pageContext.request.contextPath}/matches?page=${pageNumber}">${pageNumber}</a>
-            <a class="num-page" href="${pageContext.request.contextPath}/matches?page=${pageNumber + 1}">${pageNumber + 1}</a>
-            <a class="num-page" href="${pageContext.request.contextPath}/matches?page=${pageNumber + 2}">${pageNumber + 2}</a>
-            <a class="next" href="${pageContext.request.contextPath}/matches?page=${pageNumber + 1}"> > </a>
+            <c:set var="prevPage" value="${pageContext.request.contextPath}/matches?page=${pageNumber - 1}"/>
+            <c:set var="nextPage" value="${pageContext.request.contextPath}/matches?page=${pageNumber + 1}"/>
+
+            <c:if test="${pageQuantity > 4}">
+                <a class="first" href="${pageContext.request.contextPath}/matches?page=1"> << </a>
+                <a class="last" href="${pageContext.request.contextPath}/matches?page=${pageQuantity}"> >> </a>
+            </c:if>
+
+            <c:if test="${pageNumber > 1}">
+                <a class="prev" href="${prevPage}"> < </a>
+            </c:if>
+
+            <c:if test="${pageNumber - 1 >= 1}">
+                <a class="num-page"
+                   href="${pageContext.request.contextPath}/matches?page=${pageNumber - 1}">${pageNumber - 1}</a>
+            </c:if>
+
+            <a class="num-page" href="${pageContext.request.contextPath}/matches?page=${pageNumber}">${pageNumber}</a>
+
+            <c:if test="${pageNumber + 1 <= pageQuantity}">
+                <a class="num-page"
+                   href="${pageContext.request.contextPath}/matches?page=${pageNumber + 1}">${pageNumber + 1}</a>
+            </c:if>
+
+            <c:if test="${pageNumber < pageQuantity}">
+                <a class="next" href="${nextPage}"> > </a>
+            </c:if>
+
         </div>
     </div>
 </main>

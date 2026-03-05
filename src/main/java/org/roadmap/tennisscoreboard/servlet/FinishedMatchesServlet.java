@@ -26,14 +26,17 @@ public class FinishedMatchesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String pageNumberString = req.getParameter("page");
         int pageNumber = pageNumberString == null || pageNumberString.isEmpty() ? 1 : Integer.parseInt(pageNumberString);
-        int pageSize = 10;
+        int pageSize = 2;
 
         String filterName = req.getParameter("filter_by_player_name");
         System.out.println(filterName);
 
         List<FinishedMatchDto> matches = matchService.getMatches(pageNumber, pageSize, filterName);
+        int pageQuantity = matchService.getTotalPages(pageSize);
+
         req.setAttribute("matches", matches);
         req.setAttribute("pageNumber", pageNumber);
+        req.setAttribute("pageQuantity", pageQuantity);
         req.setAttribute("filterName", filterName);
 
         req.getRequestDispatcher("WEB-INF/matches.jsp").forward(req, resp);

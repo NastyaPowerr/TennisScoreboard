@@ -8,4 +8,6 @@ public interface MatchRepository extends BaseRepository<Match> {
     Match save(Match entity);
 
     List<Match> findAll(int pageSize, int offset, String filterName);
+
+    long getCount();
 }

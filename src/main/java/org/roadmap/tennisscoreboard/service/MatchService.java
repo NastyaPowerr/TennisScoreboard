@@ -67,4 +67,10 @@ public class MatchService {
         }
         return responseMatches;
     }
+
+    public int getTotalPages(int pageSize) {
+        long matchesCount = matchRepositoryImpl.getCount();
+
+        return (int) Math.ceil((double) matchesCount / pageSize);
+    }
 }
