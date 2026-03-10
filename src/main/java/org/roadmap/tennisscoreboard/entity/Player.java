@@ -29,19 +29,10 @@ public class Player {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    // TEMP: only for testing
     @Override
     public String toString() {
         return "PlayerEntity{" +

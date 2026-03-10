@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.roadmap.tennisscoreboard.domain.OngoingMatch;
-import org.roadmap.tennisscoreboard.domain.Score;
 import org.roadmap.tennisscoreboard.dto.PlayerDto;
 import org.roadmap.tennisscoreboard.entity.Player;
 import org.roadmap.tennisscoreboard.exception.PlayerAlreadyExistsException;
@@ -16,8 +15,6 @@ import org.roadmap.tennisscoreboard.service.PlayerService;
 import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 @WebServlet("/new-match")
@@ -51,10 +48,8 @@ public class NewMatchPageServlet extends HttpServlet {
             PlayerDto secondPlayer = playerService.create(new PlayerDto(null, secondPlayerName));
             // экземпляр класса, содержащего айди игроков и текущий счёт (ТЗ)
             OngoingMatch match = new OngoingMatch(
-                    null,
                     new Player(firstPlayer.id(), firstPlayer.name()),
-                    new Player(secondPlayer.id(), secondPlayer.name()),
-                    new Score()
+                    new Player(secondPlayer.id(), secondPlayer.name())
             );
             UUID uuid = matchService.create(match);
             resp.sendRedirect("match-score?uuid=" + uuid);

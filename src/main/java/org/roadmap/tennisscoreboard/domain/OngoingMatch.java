@@ -6,26 +6,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class OngoingMatch {
-    private Integer id;
+    private final Score scoreModel;
+    private final Map<Integer, SetScoreInfo> setsHistory;
     private Player firstPlayer;
     private Player secondPlayer;
-    private Score score;
-    private Map<Integer, SetScoreInfo> setsHistory;
+    private boolean tiebreak;
+    private boolean finished;
 
-    public OngoingMatch(Integer id, Player firstPlayer, Player secondPlayer, Score score) {
-        this.id = id;
+    public OngoingMatch(Player firstPlayer, Player secondPlayer) {
         this.firstPlayer = firstPlayer;
         this.secondPlayer = secondPlayer;
-        this.score = score;
+        this.scoreModel = new Score();
         this.setsHistory = new HashMap<>();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+        this.tiebreak = false;
+        this.finished = false;
     }
 
     public Player getFirstPlayer() {
@@ -44,29 +38,37 @@ public class OngoingMatch {
         this.secondPlayer = secondPlayer;
     }
 
-    public Score getScore() {
-        return score;
-    }
-
-    public void setScore(Score score) {
-        this.score = score;
-    }
-
     public Map<Integer, SetScoreInfo> getSetsHistory() {
         return setsHistory;
     }
 
-    public void setSetsHistory(Map<Integer, SetScoreInfo> setsHistory) {
-        this.setsHistory = setsHistory;
+    public Score getScoreModel() {
+        return scoreModel;
+    }
+
+    public boolean isTiebreak() {
+        return tiebreak;
+    }
+
+    public void setTiebreak(boolean tiebreak) {
+        this.tiebreak = tiebreak;
+    }
+
+    public boolean isFinished() {
+        return finished;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
     }
 
     @Override
     public String toString() {
         return "OngoingMatch{" +
-                "id=" + id +
                 ", firstPlayer=" + firstPlayer +
                 ", secondPlayer=" + secondPlayer +
-                ", score=" + score +
+                ", score=" + scoreModel +
+                ", tiebreak=" + tiebreak +
                 '}';
     }
 }

@@ -13,15 +13,21 @@ public enum Point {
         this.value = value;
     }
 
-    public boolean equalTo(Point point) {
-        return this.value == point.value;
-    }
-
     @Override
     public String toString() {
         if (this == AD) {
             return "AD";
         }
         return String.valueOf(value);
+    }
+
+    public Point next() {
+        return switch (this) {
+            case ZERO -> FIFTEEN;
+            case FIFTEEN -> THIRTY;
+            case THIRTY -> FORTY;
+            case FORTY -> AD;
+            default -> throw new IllegalStateException("Couldn't go further than AD.");
+        };
     }
 }
