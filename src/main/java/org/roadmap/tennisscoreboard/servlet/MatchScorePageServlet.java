@@ -48,6 +48,7 @@ public class MatchScorePageServlet extends HttpServlet {
             req.setAttribute("match", matchView);
             req.setAttribute("uuid", matchId);
             req.getRequestDispatcher("WEB-INF/match-score-finished.jsp").forward(req, resp);
+            matchService.delete(UUID.fromString(matchId));
         }
     }
 
@@ -55,20 +56,8 @@ public class MatchScorePageServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String uuid = req.getParameter("uuid");
         UUID matchId = UUID.fromString(uuid);
-
         Integer playerId = Integer.valueOf(req.getParameter("playerId"));
-
-        OngoingMatch match = matchService.getById(matchId);
-        System.out.println(match);
-
-        Integer firstPlayerId = match.getFirstPlayer().getId();
-        Integer secondPlayerId = match.getSecondPlayer().getId();
-        if (playerId.equals(firstPlayerId)) {
-            matchScoreService.givePoint(firstPlayerId, match);
-        }
-        if (playerId.equals(secondPlayerId)) {
-            matchScoreService.givePoint(secondPlayerId, match);
-        }
+        matchScoreService.givePoint(playerId, matchId);
         resp.sendRedirect("match-score?uuid=" + uuid);
     }
 

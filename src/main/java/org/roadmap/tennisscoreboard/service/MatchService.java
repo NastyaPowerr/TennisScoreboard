@@ -32,6 +32,10 @@ public class MatchService {
         return matches.get(id);
     }
 
+    public void delete(UUID id) {
+        matches.remove(id);
+    }
+
     public FinishedMatchDto save(OngoingMatch match, Player winner) {
         Match entity = new Match(match.getFirstPlayer(), match.getSecondPlayer(), winner);
 

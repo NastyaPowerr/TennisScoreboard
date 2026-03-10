@@ -1,5 +1,6 @@
 package org.roadmap.tennisscoreboard.service;
 
+import org.hibernate.ObjectNotFoundException;
 import org.roadmap.tennisscoreboard.domain.OngoingMatch;
 import org.roadmap.tennisscoreboard.domain.PlayerScore;
 import org.roadmap.tennisscoreboard.domain.SetScoreInfo;
@@ -9,6 +10,7 @@ import org.roadmap.tennisscoreboard.domain.strategy.TiebreakScoringStrategy;
 import org.roadmap.tennisscoreboard.entity.Player;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public class MatchScoreService {
     private static final int GAMES_TO_START_TIEBREAK = 6;
@@ -18,7 +20,11 @@ public class MatchScoreService {
         this.matchService = matchService;
     }
 
-    public void givePoint(Integer playerId, OngoingMatch match) {
+    public void givePoint(Integer playerId, UUID matchId) {
+        OngoingMatch match = matchService.getById(matchId);
+        if (match == null || match.isFinished()) {
+            throw new ObjectNotFoundException("Match with $s id not found.", matchId);
+        }
         PlayerScore scoringPlayer = getPlayerScore(playerId, match);
         PlayerScore opponent = match.getScoreModel().getOpponentPlayerScore(scoringPlayer);
 
@@ -63,11 +69,8 @@ public class MatchScoreService {
             if (winner.isEmpty()) {
                 throw new IllegalStateException("Cannot have a won match without a winner.");
             }
-            // сохраняем в бд, удаляем из in-memory хранилища
             match.setFinished(true);
             matchService.save(match, winner.get());
-            System.out.println("Match is finished.");
-            return;
         }
     }
 
