@@ -10,9 +10,8 @@ import org.roadmap.tennisscoreboard.domain.OngoingMatch;
 import org.roadmap.tennisscoreboard.dto.PlayerDto;
 import org.roadmap.tennisscoreboard.entity.Player;
 import org.roadmap.tennisscoreboard.exception.PlayerAlreadyExistsException;
-import org.roadmap.tennisscoreboard.service.MatchService;
+import org.roadmap.tennisscoreboard.service.OngoingMatchService;
 import org.roadmap.tennisscoreboard.service.PlayerService;
-import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -20,15 +19,13 @@ import java.util.UUID;
 @WebServlet("/new-match")
 public class NewMatchPageServlet extends HttpServlet {
     private PlayerService playerService;
-    private MatchService matchService;
-    private ObjectMapper objectMapper;
+    private OngoingMatchService ongoingMatchService;
 
     @Override
     public void init() {
         ServletContext context = getServletContext();
         this.playerService = (PlayerService) context.getAttribute("playerService");
-        this.matchService = (MatchService) context.getAttribute("matchService");
-        this.objectMapper = (ObjectMapper) context.getAttribute("objectMapper");
+        this.ongoingMatchService = (OngoingMatchService) context.getAttribute("ongoingMatchService");
     }
 
     @Override
@@ -51,7 +48,7 @@ public class NewMatchPageServlet extends HttpServlet {
                     new Player(firstPlayer.id(), firstPlayer.name()),
                     new Player(secondPlayer.id(), secondPlayer.name())
             );
-            UUID uuid = matchService.create(match);
+            UUID uuid = ongoingMatchService.create(match);
             resp.sendRedirect("match-score?uuid=" + uuid);
         } catch (PlayerAlreadyExistsException ex) {
             req.setAttribute("error", ex.getMessage());

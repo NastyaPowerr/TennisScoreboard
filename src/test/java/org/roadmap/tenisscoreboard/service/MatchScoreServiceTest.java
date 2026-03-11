@@ -7,21 +7,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.roadmap.tennisscoreboard.domain.OngoingMatch;
 import org.roadmap.tennisscoreboard.domain.Point;
-import org.roadmap.tennisscoreboard.entity.Match;
 import org.roadmap.tennisscoreboard.entity.Player;
-import org.roadmap.tennisscoreboard.repository.MatchRepositoryImpl;
+import org.roadmap.tennisscoreboard.service.FinishedMatchesPersistenceService;
 import org.roadmap.tennisscoreboard.service.MatchScoreService;
-import org.roadmap.tennisscoreboard.service.MatchService;
+import org.roadmap.tennisscoreboard.service.OngoingMatchService;
 
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class MatchScoreServiceTest {
     private MatchScoreService matchScoreService;
-    private MatchService matchService;
+    private OngoingMatchService ongoingMatchService;
     private OngoingMatch match;
     private UUID matchId;
     private Player firstPlayer;
@@ -29,31 +26,23 @@ public class MatchScoreServiceTest {
 
     @BeforeEach
     void setup() {
-        MatchRepositoryImpl mockRepository = mock(MatchRepositoryImpl.class);
-        matchService = new MatchService(mockRepository);
-        Match savedMatch = new Match(
-                1,
-                firstPlayer,
-                secondPlayer,
-                firstPlayer
-        );
-        when(mockRepository.save(any(Match.class))).thenReturn(savedMatch);
+        ongoingMatchService = new OngoingMatchService();
 
-        matchScoreService = new MatchScoreService(matchService);
+        FinishedMatchesPersistenceService finishedMatchesService = mock(FinishedMatchesPersistenceService.class);
+        matchScoreService = new MatchScoreService(ongoingMatchService, finishedMatchesService);
+
         firstPlayer = new Player(1, "TestNameA");
         secondPlayer = new Player(2, "TestNameB");
         match = new OngoingMatch(
                 firstPlayer,
                 secondPlayer
         );
-        matchId = matchService.create(match);
-
-
+        matchId = ongoingMatchService.create(match);
     }
 
     @AfterEach
     void deleteMatch() {
-        matchService.delete(matchId);
+        ongoingMatchService.delete(matchId);
     }
 
     @Test
@@ -257,7 +246,7 @@ public class MatchScoreServiceTest {
                 matchScoreService.givePoint(firstPlayer.getId(), matchId);
             }
         }
-        Assertions.assertTrue(matchService.getById(matchId).isFinished());
+        Assertions.assertTrue(ongoingMatchService.getById(matchId).isFinished());
     }
 
     @Test

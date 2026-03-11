@@ -7,8 +7,9 @@ import jakarta.servlet.annotation.WebListener;
 import org.roadmap.tennisscoreboard.H2DatabaseViewer;
 import org.roadmap.tennisscoreboard.repository.MatchRepositoryImpl;
 import org.roadmap.tennisscoreboard.repository.PlayerRepositoryImpl;
+import org.roadmap.tennisscoreboard.service.FinishedMatchesPersistenceService;
 import org.roadmap.tennisscoreboard.service.MatchScoreService;
-import org.roadmap.tennisscoreboard.service.MatchService;
+import org.roadmap.tennisscoreboard.service.OngoingMatchService;
 import org.roadmap.tennisscoreboard.service.PlayerService;
 import tools.jackson.databind.ObjectMapper;
 
@@ -21,8 +22,9 @@ public class ApplicationContextListener implements ServletContextListener {
         ObjectMapper objectMapper = new ObjectMapper();
         PlayerRepositoryImpl playerRepositoryImpl = new PlayerRepositoryImpl();
         MatchRepositoryImpl matchRepositoryImpl = new MatchRepositoryImpl();
-        MatchService matchService = new MatchService(matchRepositoryImpl);
-        MatchScoreService matchScoreService = new MatchScoreService(matchService);
+        FinishedMatchesPersistenceService finishedMatchesPersistenceService = new FinishedMatchesPersistenceService(matchRepositoryImpl);
+        OngoingMatchService ongoingMatchService = new OngoingMatchService();
+        MatchScoreService matchScoreService = new MatchScoreService(ongoingMatchService, finishedMatchesPersistenceService);
         PlayerService playerService = new PlayerService(playerRepositoryImpl);
 
         ServletContext context = sce.getServletContext();
@@ -30,7 +32,8 @@ public class ApplicationContextListener implements ServletContextListener {
         context.setAttribute("objectMapper", objectMapper);
         context.setAttribute("playerRepository", playerRepositoryImpl);
         context.setAttribute("matchRepository", matchRepositoryImpl);
-        context.setAttribute("matchService", matchService);
+        context.setAttribute("finishedMatchesPersistenceService", finishedMatchesPersistenceService);
+        context.setAttribute("ongoingMatchService", ongoingMatchService);
         context.setAttribute("playerService", playerService);
         context.setAttribute("matchScoreService", matchScoreService);
     }

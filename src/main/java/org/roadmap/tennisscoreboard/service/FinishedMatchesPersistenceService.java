@@ -1,45 +1,26 @@
 package org.roadmap.tennisscoreboard.service;
 
 import org.roadmap.tennisscoreboard.domain.OngoingMatch;
-import org.roadmap.tennisscoreboard.dto.PlayerDto;
 import org.roadmap.tennisscoreboard.dto.FinishedMatchDto;
+import org.roadmap.tennisscoreboard.dto.PlayerDto;
 import org.roadmap.tennisscoreboard.entity.Match;
 import org.roadmap.tennisscoreboard.entity.Player;
-import org.roadmap.tennisscoreboard.repository.MatchRepositoryImpl;
+import org.roadmap.tennisscoreboard.repository.MatchRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
-public class MatchService {
-    private final MatchRepositoryImpl matchRepositoryImpl;
-    private final Map<UUID, OngoingMatch> matches;
+public class FinishedMatchesPersistenceService {
+    private final MatchRepository matchRepository;
 
-    public MatchService(MatchRepositoryImpl matchRepositoryImpl) {
-        this.matches = new ConcurrentHashMap<>();
-        this.matchRepositoryImpl = matchRepositoryImpl;
-    }
-
-    public UUID create(OngoingMatch match) {
-        UUID uuid = UUID.randomUUID();
-        matches.put(uuid, match);
-        return uuid;
-    }
-
-    public OngoingMatch getById(UUID id) {
-        return matches.get(id);
-    }
-
-    public void delete(UUID id) {
-        matches.remove(id);
+    public FinishedMatchesPersistenceService(MatchRepository matchRepository) {
+        this.matchRepository = matchRepository;
     }
 
     public FinishedMatchDto save(OngoingMatch match, Player winner) {
         Match entity = new Match(match.getFirstPlayer(), match.getSecondPlayer(), winner);
 
-        Match savedEntity = matchRepositoryImpl.save(entity);
+        Match savedEntity = matchRepository.save(entity);
 
         PlayerDto firstPlayerDto = new PlayerDto(match.getFirstPlayer().getId(), match.getFirstPlayer().getName());
         PlayerDto secondPlayerDto = new PlayerDto(match.getSecondPlayer().getId(), match.getSecondPlayer().getName());
@@ -55,9 +36,9 @@ public class MatchService {
         List<Match> matches;
         int offset = (pageNumber - 1) * pageSize;
         if (filterName == null) {
-            matches = matchRepositoryImpl.findMatchesWithPagination(pageSize, offset);
+            matches = matchRepository.findMatchesWithPagination(pageSize, offset);
         } else {
-            matches = matchRepositoryImpl.findAll(pageSize, offset, filterName);
+            matches = matchRepository.findAll(pageSize, offset, filterName);
         }
 
         List<FinishedMatchDto> responseMatches = new ArrayList<>();
@@ -74,11 +55,11 @@ public class MatchService {
 
     public int getTotalPages(int pageSize, String filterName) {
         if (filterName == null) {
-            long matchesCount = matchRepositoryImpl.getCount();
+            long matchesCount = matchRepository.getCount();
 
             return (int) Math.ceil((double) matchesCount / pageSize);
         } else {
-            long matchesCount = matchRepositoryImpl.getCountWithFilter(filterName);
+            long matchesCount = matchRepository.getCountWithFilter(filterName);
 
             return (int) Math.ceil((double) matchesCount / pageSize);
         }

@@ -11,7 +11,7 @@ import org.roadmap.tennisscoreboard.domain.SetScoreInfo;
 import org.roadmap.tennisscoreboard.dto.view.FinishedMatchView;
 import org.roadmap.tennisscoreboard.dto.view.MatchView;
 import org.roadmap.tennisscoreboard.service.MatchScoreService;
-import org.roadmap.tennisscoreboard.service.MatchService;
+import org.roadmap.tennisscoreboard.service.OngoingMatchService;
 
 import java.io.IOException;
 import java.util.Map;
@@ -19,23 +19,20 @@ import java.util.UUID;
 
 @WebServlet("/match-score")
 public class MatchScorePageServlet extends HttpServlet {
-    private MatchService matchService;
+    private OngoingMatchService ongoingMatchService;
     private MatchScoreService matchScoreService;
 
     @Override
     public void init() {
         ServletContext context = getServletContext();
-        this.matchService = (MatchService) context.getAttribute("matchService");
+        this.ongoingMatchService = (OngoingMatchService) context.getAttribute("ongoingMatchService");
         this.matchScoreService = (MatchScoreService) context.getAttribute("matchScoreService");
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String matchId = req.getParameter("uuid");
-        System.out.println(matchId);
-
-        OngoingMatch match = matchService.getById(UUID.fromString(matchId));
-        System.out.println(match);
+        OngoingMatch match = ongoingMatchService.getById(UUID.fromString(matchId));
 
         Object matchView;
         if (!match.isFinished()) {
@@ -48,12 +45,12 @@ public class MatchScorePageServlet extends HttpServlet {
             req.setAttribute("match", matchView);
             req.setAttribute("uuid", matchId);
             req.getRequestDispatcher("WEB-INF/match-score-finished.jsp").forward(req, resp);
-            matchService.delete(UUID.fromString(matchId));
+            ongoingMatchService.delete(UUID.fromString(matchId));
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String uuid = req.getParameter("uuid");
         UUID matchId = UUID.fromString(uuid);
         Integer playerId = Integer.valueOf(req.getParameter("playerId"));

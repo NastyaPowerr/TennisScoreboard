@@ -14,14 +14,19 @@ import java.util.UUID;
 
 public class MatchScoreService {
     private static final int GAMES_TO_START_TIEBREAK = 6;
-    private final MatchService matchService;
+    private final OngoingMatchService ongoingMatchService;
+    private final FinishedMatchesPersistenceService finishedMatchesService;
 
-    public MatchScoreService(MatchService matchService) {
-        this.matchService = matchService;
+    public MatchScoreService(
+            OngoingMatchService ongoingMatchService,
+            FinishedMatchesPersistenceService finishedMatchesService
+    ) {
+        this.ongoingMatchService = ongoingMatchService;
+        this.finishedMatchesService = finishedMatchesService;
     }
 
     public void givePoint(Integer playerId, UUID matchId) {
-        OngoingMatch match = matchService.getById(matchId);
+        OngoingMatch match = ongoingMatchService.getById(matchId);
         if (match == null || match.isFinished()) {
             throw new ObjectNotFoundException("Match with $s id not found.", matchId);
         }
@@ -70,7 +75,7 @@ public class MatchScoreService {
                 throw new IllegalStateException("Cannot have a won match without a winner.");
             }
             match.setFinished(true);
-            matchService.save(match, winner.get());
+            finishedMatchesService.save(match, winner.get());
         }
     }
 

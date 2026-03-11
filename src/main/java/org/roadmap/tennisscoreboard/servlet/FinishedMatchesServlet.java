@@ -7,19 +7,19 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.roadmap.tennisscoreboard.dto.FinishedMatchDto;
-import org.roadmap.tennisscoreboard.service.MatchService;
+import org.roadmap.tennisscoreboard.service.FinishedMatchesPersistenceService;
 
 import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/matches")
 public class FinishedMatchesServlet extends HttpServlet {
-    private MatchService matchService;
+    private FinishedMatchesPersistenceService finishedMatchesService;
 
     @Override
     public void init() {
         ServletContext context = getServletContext();
-        this.matchService = (MatchService) context.getAttribute("matchService");
+        this.finishedMatchesService = (FinishedMatchesPersistenceService) context.getAttribute("finishedMatchesPersistenceService");
     }
 
     @Override
@@ -29,10 +29,9 @@ public class FinishedMatchesServlet extends HttpServlet {
         int pageSize = 2;
 
         String filterName = req.getParameter("filter_by_player_name");
-        System.out.println(filterName);
 
-        List<FinishedMatchDto> matches = matchService.getMatches(pageNumber, pageSize, filterName);
-        int pageQuantity = matchService.getTotalPages(pageSize, filterName);
+        List<FinishedMatchDto> matches = finishedMatchesService.getMatches(pageNumber, pageSize, filterName);
+        int pageQuantity = finishedMatchesService.getTotalPages(pageSize, filterName);
 
         req.setAttribute("matches", matches);
         req.setAttribute("pageNumber", pageNumber);

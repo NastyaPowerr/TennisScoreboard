@@ -12,4 +12,6 @@ public interface MatchRepository extends BaseRepository<Match> {
     long getCount();
 
     long getCountWithFilter(String filterName);
+
+    List<Match> findMatchesWithPagination(int pageSize, int offset);
 }

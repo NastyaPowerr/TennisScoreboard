@@ -68,6 +68,7 @@ public class MatchRepositoryImpl implements MatchRepository {
                 .get(0);
     }
 
+    @Override
     public List<Match> findMatchesWithPagination(int pageSize, int offset) {
         Session session = sessionFactory.getCurrentSession();
         return session
