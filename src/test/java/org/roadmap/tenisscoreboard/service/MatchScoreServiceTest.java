@@ -246,7 +246,7 @@ public class MatchScoreServiceTest {
                 matchScoreService.givePoint(firstPlayer.getId(), matchId);
             }
         }
-        Assertions.assertTrue(ongoingMatchService.getById(matchId).isFinished());
+        Assertions.assertTrue(ongoingMatchService.getById(matchId).get().isFinished());
     }
 
     @Test

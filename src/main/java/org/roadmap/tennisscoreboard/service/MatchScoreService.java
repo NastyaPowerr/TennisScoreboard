@@ -9,6 +9,7 @@ import org.roadmap.tennisscoreboard.domain.strategy.TennisScoringStrategy;
 import org.roadmap.tennisscoreboard.domain.strategy.TiebreakScoringStrategy;
 import org.roadmap.tennisscoreboard.entity.Player;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,10 +27,12 @@ public class MatchScoreService {
     }
 
     public void givePoint(Integer playerId, UUID matchId) {
-        OngoingMatch match = ongoingMatchService.getById(matchId);
-        if (match == null || match.isFinished()) {
-            throw new ObjectNotFoundException("Match with $s id not found.", matchId);
-        }
+        OngoingMatch match = ongoingMatchService.getById(matchId)
+                .orElseThrow(() -> new NoSuchElementException(
+                        String.format(
+                                "Match with id %s not found.",
+                                matchId
+                        )));
         PlayerScore scoringPlayer = getPlayerScore(playerId, match);
         PlayerScore opponent = match.getScoreModel().getOpponentPlayerScore(scoringPlayer);
 
@@ -90,14 +93,15 @@ public class MatchScoreService {
     }
 
     private PlayerScore getPlayerScore(Integer playerId, OngoingMatch match) {
-        PlayerScore playerScore;
+        PlayerScore playerScore = null;
         if (match.getFirstPlayer().getId().equals(playerId)) {
             playerScore = match.getScoreModel().getFirstPlayerScore();
-        } else {
+        }
+        if (match.getSecondPlayer().getId().equals(playerId)) {
             playerScore = match.getScoreModel().getSecondPlayerScore();
         }
         if (playerScore == null) {
-            throw new RuntimeException("It isn't supposed to happen!");
+            throw new NoSuchElementException("Player with that id is not in that match.");
         }
         return playerScore;
     }

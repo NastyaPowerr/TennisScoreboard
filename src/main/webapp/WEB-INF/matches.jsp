@@ -36,6 +36,11 @@
 <main>
     <div class="container">
         <h1>Matches</h1>
+        <c:if test="${not empty error}">
+            <div class="error-message">
+                    ${error}
+            </div>
+        </c:if>
         <div class="input-container">
             <form method="get" action="${pageContext.request.contextPath}/matches">
                 <label>

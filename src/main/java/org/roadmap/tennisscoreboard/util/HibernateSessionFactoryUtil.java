@@ -6,7 +6,7 @@ import org.hibernate.cfg.Configuration;
 import org.roadmap.tennisscoreboard.entity.Match;
 import org.roadmap.tennisscoreboard.entity.Player;
 
-public class HibernateSessionFactoryUtil {
+public final class HibernateSessionFactoryUtil {
     private static SessionFactory sessionFactory;
 
     private HibernateSessionFactoryUtil() {}

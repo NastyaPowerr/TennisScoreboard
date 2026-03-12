@@ -3,6 +3,7 @@ package org.roadmap.tennisscoreboard.service;
 import org.roadmap.tennisscoreboard.domain.OngoingMatch;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,8 +20,8 @@ public class OngoingMatchService {
         return uuid;
     }
 
-    public OngoingMatch getById(UUID id) {
-        return matches.get(id);
+    public Optional<OngoingMatch> getById(UUID id) {
+        return Optional.ofNullable(matches.get(id));
     }
 
     public void delete(UUID id) {
