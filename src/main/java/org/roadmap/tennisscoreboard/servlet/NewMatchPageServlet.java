@@ -43,6 +43,7 @@ public class NewMatchPageServlet extends HttpServlet {
 
         if (firstPlayerName.equals(secondPlayerName)) {
             req.setAttribute("error", ExceptionMessages.PLAYERS_THE_SAME_NAME);
+            resp.setStatus(HttpServletResponse.SC_CONFLICT);
             req.getRequestDispatcher("WEB-INF/new-match.jsp").forward(req, resp);
             return;
         }

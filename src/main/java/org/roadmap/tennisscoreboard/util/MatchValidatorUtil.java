@@ -1,6 +1,7 @@
 package org.roadmap.tennisscoreboard.util;
 
 import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
+import org.roadmap.tennisscoreboard.exception.InvalidMatchIdException;
 import org.roadmap.tennisscoreboard.exception.PageValidationException;
 import org.roadmap.tennisscoreboard.exception.ValidationException;
 
@@ -39,7 +40,7 @@ public final class MatchValidatorUtil {
         try {
             UUID.fromString(uuid);
         } catch (IllegalArgumentException ex) {
-            throw new ValidationException(
+            throw new InvalidMatchIdException(
                     String.format(
                             ExceptionMessages.INVALID_MATCH_ID_FORMAT,
                             uuid

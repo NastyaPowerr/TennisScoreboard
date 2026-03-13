@@ -25,4 +25,6 @@ public final class ExceptionMessages {
 
     public static final String WRONG_USE_OF_NEXT = "Should not call .next() on Point.AD";
     public static final String COULD_NOT_GET_OPPONENT = "Couldn't get an opponent player.";
+
+    public static final String INTERNAL_ERROR = "Internal error. Please try later.";
 }
