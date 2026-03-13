@@ -34,12 +34,17 @@ public class NewMatchPageServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String firstPlayerName = req.getParameter("firstPlayerName");
         String secondPlayerName = req.getParameter("secondPlayerName");
         MatchValidatorUtil.validateName(firstPlayerName);
         MatchValidatorUtil.validateName(secondPlayerName);
 
+        if (firstPlayerName.equals(secondPlayerName)) {
+            req.setAttribute("error", "Players must have different names.");
+            req.getRequestDispatcher("WEB-INF/new-match.jsp").forward(req, resp);
+            return;
+        }
         PlayerDto firstPlayer = playerService.create(new PlayerDto(null, firstPlayerName));
         PlayerDto secondPlayer = playerService.create(new PlayerDto(null, secondPlayerName));
 
