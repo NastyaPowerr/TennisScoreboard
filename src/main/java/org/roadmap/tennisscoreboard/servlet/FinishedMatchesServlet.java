@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.roadmap.tennisscoreboard.dto.FinishedMatchDto;
+import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
 import org.roadmap.tennisscoreboard.exception.PageValidationException;
 import org.roadmap.tennisscoreboard.service.FinishedMatchesPersistenceService;
 import org.roadmap.tennisscoreboard.util.MatchValidatorUtil;
@@ -36,7 +37,7 @@ public class FinishedMatchesServlet extends HttpServlet {
         } catch (PageValidationException ex) {
             pageNumber = 1;
             if (pageNumberString != null && !pageNumberString.trim().isEmpty()) {
-                errorMessage = "Invalid page formation. Showing page 1.";
+                errorMessage = ExceptionMessages.INVALID_PAGE_SHOW_PAGE_ONE;
             }
         }
         String filterName = req.getParameter("filter_by_player_name");

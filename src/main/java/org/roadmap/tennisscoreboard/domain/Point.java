@@ -1,5 +1,7 @@
 package org.roadmap.tennisscoreboard.domain;
 
+import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
+
 public enum Point {
     ZERO(0),
     FIFTEEN(15),
@@ -27,7 +29,7 @@ public enum Point {
             case FIFTEEN -> THIRTY;
             case THIRTY -> FORTY;
             case FORTY -> AD;
-            default -> throw new IllegalStateException("Couldn't go further than AD.");
+            default -> throw new IllegalStateException(ExceptionMessages.WRONG_USE_OF_NEXT);
         };
     }
 }

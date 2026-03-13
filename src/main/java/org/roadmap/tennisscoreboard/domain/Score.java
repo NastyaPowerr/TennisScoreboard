@@ -1,6 +1,7 @@
 package org.roadmap.tennisscoreboard.domain;
 
 import org.roadmap.tennisscoreboard.entity.Player;
+import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
 
 import java.util.Optional;
 
@@ -29,7 +30,7 @@ public class Score {
         if (player.equals(secondPlayerScore)) {
             return firstPlayerScore;
         }
-        throw new IllegalStateException("Couldn't get an opponent player.");
+        throw new IllegalStateException(ExceptionMessages.COULD_NOT_GET_OPPONENT);
     }
 
     public Optional<Player> getWinner(Player firstPlayer, Player secondPlayer) {

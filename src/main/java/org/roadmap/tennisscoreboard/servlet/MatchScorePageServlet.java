@@ -10,6 +10,7 @@ import org.roadmap.tennisscoreboard.domain.OngoingMatch;
 import org.roadmap.tennisscoreboard.domain.SetScoreInfo;
 import org.roadmap.tennisscoreboard.dto.view.FinishedMatchView;
 import org.roadmap.tennisscoreboard.dto.view.MatchView;
+import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
 import org.roadmap.tennisscoreboard.service.MatchScoreService;
 import org.roadmap.tennisscoreboard.service.OngoingMatchService;
 import org.roadmap.tennisscoreboard.util.MatchValidatorUtil;
@@ -38,7 +39,7 @@ public class MatchScorePageServlet extends HttpServlet {
         OngoingMatch match = ongoingMatchService.getById(UUID.fromString(matchId))
                 .orElseThrow(() -> new NoSuchElementException(
                         String.format(
-                                "Match with id %s not found.",
+                                ExceptionMessages.MATCH_NOT_FOUND,
                                 matchId
                         )));
 

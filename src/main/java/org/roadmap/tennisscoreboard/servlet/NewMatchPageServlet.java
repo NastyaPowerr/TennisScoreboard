@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.roadmap.tennisscoreboard.domain.OngoingMatch;
 import org.roadmap.tennisscoreboard.dto.PlayerDto;
 import org.roadmap.tennisscoreboard.entity.Player;
+import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
 import org.roadmap.tennisscoreboard.service.OngoingMatchService;
 import org.roadmap.tennisscoreboard.service.PlayerService;
 import org.roadmap.tennisscoreboard.util.MatchValidatorUtil;
@@ -41,7 +42,7 @@ public class NewMatchPageServlet extends HttpServlet {
         MatchValidatorUtil.validateName(secondPlayerName);
 
         if (firstPlayerName.equals(secondPlayerName)) {
-            req.setAttribute("error", "Players must have different names.");
+            req.setAttribute("error", ExceptionMessages.PLAYERS_THE_SAME_NAME);
             req.getRequestDispatcher("WEB-INF/new-match.jsp").forward(req, resp);
             return;
         }

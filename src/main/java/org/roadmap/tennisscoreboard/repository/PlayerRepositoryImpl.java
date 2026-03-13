@@ -4,6 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import org.roadmap.tennisscoreboard.entity.Player;
+import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
 import org.roadmap.tennisscoreboard.exception.PlayerAlreadyExistsException;
 import org.roadmap.tennisscoreboard.util.HibernateSessionFactoryUtil;
 
@@ -22,7 +23,10 @@ public class PlayerRepositoryImpl implements PlayerRepository {
             return player;
         } catch (ConstraintViolationException ex) {
             throw new PlayerAlreadyExistsException(
-                    String.format("Player with name %s already exists.", player.getName())
+                    String.format(
+                            ExceptionMessages.PLAYER_ALREADY_EXISTS,
+                            player.getName()
+                    )
             );
         }
     }

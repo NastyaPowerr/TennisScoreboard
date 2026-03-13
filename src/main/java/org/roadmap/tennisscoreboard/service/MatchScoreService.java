@@ -1,6 +1,5 @@
 package org.roadmap.tennisscoreboard.service;
 
-import org.hibernate.ObjectNotFoundException;
 import org.roadmap.tennisscoreboard.domain.OngoingMatch;
 import org.roadmap.tennisscoreboard.domain.PlayerScore;
 import org.roadmap.tennisscoreboard.domain.SetScoreInfo;
@@ -8,6 +7,7 @@ import org.roadmap.tennisscoreboard.domain.strategy.DefaultScoringStrategy;
 import org.roadmap.tennisscoreboard.domain.strategy.TennisScoringStrategy;
 import org.roadmap.tennisscoreboard.domain.strategy.TiebreakScoringStrategy;
 import org.roadmap.tennisscoreboard.entity.Player;
+import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -30,7 +30,7 @@ public class MatchScoreService {
         OngoingMatch match = ongoingMatchService.getById(matchId)
                 .orElseThrow(() -> new NoSuchElementException(
                         String.format(
-                                "Match with id %s not found.",
+                                ExceptionMessages.MATCH_NOT_FOUND,
                                 matchId
                         )));
         PlayerScore scoringPlayer = getPlayerScore(playerId, match);
@@ -75,7 +75,7 @@ public class MatchScoreService {
         if (scoringStrategy.isMatchWon(scoringPlayer, opponent)) {
             Optional<Player> winner = match.getScoreModel().getWinner(match.getFirstPlayer(), match.getSecondPlayer());
             if (winner.isEmpty()) {
-                throw new IllegalStateException("Cannot have a won match without a winner.");
+                throw new IllegalStateException(ExceptionMessages.MISSING_WINNER);
             }
             match.setFinished(true);
             finishedMatchesService.save(match, winner.get());
@@ -101,7 +101,7 @@ public class MatchScoreService {
             playerScore = match.getScoreModel().getSecondPlayerScore();
         }
         if (playerScore == null) {
-            throw new NoSuchElementException("Player with that id is not in that match.");
+            throw new NoSuchElementException(ExceptionMessages.PLAYER_NOT_IN_MATCH);
         }
         return playerScore;
     }

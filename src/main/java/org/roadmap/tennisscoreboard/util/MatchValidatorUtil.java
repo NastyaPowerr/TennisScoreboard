@@ -1,5 +1,6 @@
 package org.roadmap.tennisscoreboard.util;
 
+import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
 import org.roadmap.tennisscoreboard.exception.PageValidationException;
 import org.roadmap.tennisscoreboard.exception.ValidationException;
 
@@ -15,32 +16,32 @@ public final class MatchValidatorUtil {
 
     public static void validateName(String name) {
         if (name == null || name.trim().isEmpty()) {
-            throw new ValidationException("Name is required.");
+            throw new ValidationException(ExceptionMessages.MISSING_NAME);
         }
         if (name.length() < MIN_NAME_LENGTH || name.length() > MAX_NAME_LENGTH) {
             throw new ValidationException(
                     String.format(
-                            "Name length must be between %s and %s characters.",
+                            ExceptionMessages.INVALID_NAME_LENGTH,
                             MIN_NAME_LENGTH,
                             MAX_NAME_LENGTH
                     ));
         }
         if (!name.matches(NAME_PATTERN)) {
             // TODO: расширить паттерн для имени
-            throw new ValidationException("Name must contain only these: letters.");
+            throw new ValidationException(ExceptionMessages.INVALID_NAME_PATTERN);
         }
     }
 
     public static void validateUUID(String uuid) {
         if (uuid == null || uuid.trim().isEmpty()) {
-            throw new ValidationException("Id is required.");
+            throw new ValidationException(ExceptionMessages.MISSING_ID);
         }
         try {
             UUID.fromString(uuid);
         } catch (IllegalArgumentException ex) {
             throw new ValidationException(
                     String.format(
-                            "Invalid match Id format: %s.",
+                            ExceptionMessages.INVALID_MATCH_ID_FORMAT,
                             uuid
                     ));
         }
@@ -48,14 +49,14 @@ public final class MatchValidatorUtil {
 
     public static void validatePlayerId(String playerIdString) {
         if (playerIdString == null || playerIdString.trim().isEmpty()) {
-            throw new ValidationException("Id is required.");
+            throw new ValidationException(ExceptionMessages.MISSING_ID);
         }
         try {
             Integer.valueOf(playerIdString);
         } catch (NumberFormatException ex) {
             throw new ValidationException(
                     String.format(
-                            "Invalid player id: %s.",
+                            ExceptionMessages.INVALID_PLAYER_ID_FORMAT,
                             playerIdString
                     ));
         }
@@ -63,15 +64,15 @@ public final class MatchValidatorUtil {
 
     public static void validatePage(String pageNumberString) {
         if (pageNumberString == null || pageNumberString.trim().isEmpty()) {
-            throw new PageValidationException("Page field is empty.");
+            throw new PageValidationException(ExceptionMessages.MISSING_PAGE);
         }
         try {
             int pageNumber = Integer.parseInt(pageNumberString);
             if (pageNumber < 1) {
-                throw new PageValidationException("Page should be positive.");
+                throw new PageValidationException(ExceptionMessages.INVALID_PAGE_MIN);
             }
         } catch (NumberFormatException ex) {
-            throw new PageValidationException("Invalid page format.");
+            throw new PageValidationException(ExceptionMessages.INVALID_PAGE_FORMAT);
         }
     }
 }
