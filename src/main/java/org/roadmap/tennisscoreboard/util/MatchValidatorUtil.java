@@ -1,5 +1,6 @@
 package org.roadmap.tennisscoreboard.util;
 
+import org.roadmap.tennisscoreboard.exception.PageValidationException;
 import org.roadmap.tennisscoreboard.exception.ValidationException;
 
 import java.util.UUID;
@@ -62,15 +63,15 @@ public final class MatchValidatorUtil {
 
     public static void validatePage(String pageNumberString) {
         if (pageNumberString == null || pageNumberString.trim().isEmpty()) {
-            throw new ValidationException("");
+            throw new PageValidationException("Page field is empty.");
         }
         try {
             int pageNumber = Integer.parseInt(pageNumberString);
             if (pageNumber < 1) {
-                throw new ValidationException("Page should be positive.");
+                throw new PageValidationException("Page should be positive.");
             }
         } catch (NumberFormatException ex) {
-            throw new ValidationException("Invalid page format.");
+            throw new PageValidationException("Invalid page format.");
         }
     }
 }

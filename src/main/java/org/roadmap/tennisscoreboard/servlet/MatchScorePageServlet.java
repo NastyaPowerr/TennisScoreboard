@@ -10,7 +10,6 @@ import org.roadmap.tennisscoreboard.domain.OngoingMatch;
 import org.roadmap.tennisscoreboard.domain.SetScoreInfo;
 import org.roadmap.tennisscoreboard.dto.view.FinishedMatchView;
 import org.roadmap.tennisscoreboard.dto.view.MatchView;
-import org.roadmap.tennisscoreboard.exception.ValidationException;
 import org.roadmap.tennisscoreboard.service.MatchScoreService;
 import org.roadmap.tennisscoreboard.service.OngoingMatchService;
 import org.roadmap.tennisscoreboard.util.MatchValidatorUtil;
@@ -35,51 +34,41 @@ public class MatchScorePageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String matchId = req.getParameter("uuid");
-        try {
-            MatchValidatorUtil.validateUUID(matchId);
-            OngoingMatch match = ongoingMatchService.getById(UUID.fromString(matchId))
-                    .orElseThrow(() -> new NoSuchElementException(
-                            String.format(
-                                    "Match with id %s not found.",
-                                    matchId
-                            )));
+        MatchValidatorUtil.validateUUID(matchId);
+        OngoingMatch match = ongoingMatchService.getById(UUID.fromString(matchId))
+                .orElseThrow(() -> new NoSuchElementException(
+                        String.format(
+                                "Match with id %s not found.",
+                                matchId
+                        )));
 
-            Object matchView;
-            if (!match.isFinished()) {
-                matchView = getMatchViewDependingOnTieBreak(match);
-                req.setAttribute("match", matchView);
-                req.setAttribute("uuid", matchId);
-                req.getRequestDispatcher("WEB-INF/match-score.jsp").forward(req, resp);
-            } else {
-                matchView = getMatchViewDependingOnFinishedMatch(match);
-                req.setAttribute("match", matchView);
-                req.setAttribute("uuid", matchId);
-                req.getRequestDispatcher("WEB-INF/match-score-finished.jsp").forward(req, resp);
-                ongoingMatchService.delete(UUID.fromString(matchId));
-            }
-        } catch (ValidationException | NoSuchElementException ex) {
-            req.setAttribute("error", ex.getMessage());
-            req.getRequestDispatcher("WEB-INF/error-404.jsp").forward(req, resp);
+        Object matchView;
+        if (!match.isFinished()) {
+            matchView = getMatchViewDependingOnTieBreak(match);
+            req.setAttribute("match", matchView);
+            req.setAttribute("uuid", matchId);
+            req.getRequestDispatcher("WEB-INF/match-score.jsp").forward(req, resp);
+        } else {
+            matchView = getMatchViewDependingOnFinishedMatch(match);
+            req.setAttribute("match", matchView);
+            req.setAttribute("uuid", matchId);
+            req.getRequestDispatcher("WEB-INF/match-score-finished.jsp").forward(req, resp);
+            ongoingMatchService.delete(UUID.fromString(matchId));
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        try {
-            String uuid = req.getParameter("uuid");
-            MatchValidatorUtil.validateUUID(uuid);
-            UUID matchId = UUID.fromString(uuid);
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String uuid = req.getParameter("uuid");
+        MatchValidatorUtil.validateUUID(uuid);
+        UUID matchId = UUID.fromString(uuid);
 
-            String playerIdString = req.getParameter("playerId");
-            MatchValidatorUtil.validatePlayerId(playerIdString);
-            Integer playerId = Integer.valueOf(playerIdString);
+        String playerIdString = req.getParameter("playerId");
+        MatchValidatorUtil.validatePlayerId(playerIdString);
+        Integer playerId = Integer.valueOf(playerIdString);
 
-            matchScoreService.givePoint(playerId, matchId);
-            resp.sendRedirect("match-score?uuid=" + uuid);
-        } catch (ValidationException | NoSuchElementException ex) {
-            req.setAttribute("error", ex.getMessage());
-            req.getRequestDispatcher("WEB-INF/error-404.jsp").forward(req, resp);
-        }
+        matchScoreService.givePoint(playerId, matchId);
+        resp.sendRedirect("match-score?uuid=" + uuid);
     }
 
     private FinishedMatchView getMatchViewDependingOnFinishedMatch(OngoingMatch match) {
