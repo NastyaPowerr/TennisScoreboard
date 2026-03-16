@@ -3,24 +3,16 @@ package org.roadmap.tennisscoreboard.domain;
 import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
 
 public enum Point {
-    ZERO(0),
-    FIFTEEN(15),
-    THIRTY(30),
-    FORTY(40),
-    AD(100);
+    ZERO("0"),
+    FIFTEEN("15"),
+    THIRTY("30"),
+    FORTY("40"),
+    AD("AD");
 
-    private final int value;
+    private final String value;
 
-    Point(int value) {
+    Point(String value) {
         this.value = value;
-    }
-
-    @Override
-    public String toString() {
-        if (this == AD) {
-            return "AD";
-        }
-        return String.valueOf(value);
     }
 
     public Point next() {
@@ -31,5 +23,10 @@ public enum Point {
             case FORTY -> AD;
             default -> throw new IllegalStateException(ExceptionMessages.WRONG_USE_OF_NEXT);
         };
+    }
+
+    @Override
+    public String toString() {
+        return value;
     }
 }

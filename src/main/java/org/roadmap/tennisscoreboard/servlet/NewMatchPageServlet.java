@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.roadmap.tennisscoreboard.domain.OngoingMatch;
 import org.roadmap.tennisscoreboard.dto.PlayerDto;
-import org.roadmap.tennisscoreboard.entity.Player;
 import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
 import org.roadmap.tennisscoreboard.service.OngoingMatchService;
 import org.roadmap.tennisscoreboard.service.PlayerService;
@@ -51,8 +50,8 @@ public class NewMatchPageServlet extends HttpServlet {
         PlayerDto secondPlayer = playerService.create(new PlayerDto(null, secondPlayerName));
 
         OngoingMatch match = new OngoingMatch(
-                new Player(firstPlayer.id(), firstPlayer.name()),
-                new Player(secondPlayer.id(), secondPlayer.name())
+                firstPlayer,
+                secondPlayer
         );
         UUID uuid = ongoingMatchService.create(match);
         resp.sendRedirect("match-score?uuid=" + uuid);

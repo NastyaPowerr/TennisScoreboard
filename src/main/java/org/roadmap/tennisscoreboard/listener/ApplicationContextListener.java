@@ -22,9 +22,15 @@ public class ApplicationContextListener implements ServletContextListener {
         ObjectMapper objectMapper = new ObjectMapper();
         PlayerRepositoryImpl playerRepositoryImpl = new PlayerRepositoryImpl();
         MatchRepositoryImpl matchRepositoryImpl = new MatchRepositoryImpl();
-        FinishedMatchesPersistenceService finishedMatchesPersistenceService = new FinishedMatchesPersistenceService(matchRepositoryImpl);
+        FinishedMatchesPersistenceService finishedMatchesPersistenceService = new FinishedMatchesPersistenceService(
+                matchRepositoryImpl,
+                playerRepositoryImpl
+        );
         OngoingMatchService ongoingMatchService = new OngoingMatchService();
-        MatchScoreService matchScoreService = new MatchScoreService(ongoingMatchService, finishedMatchesPersistenceService);
+        MatchScoreService matchScoreService = new MatchScoreService(
+                ongoingMatchService,
+                finishedMatchesPersistenceService
+        );
         PlayerService playerService = new PlayerService(playerRepositoryImpl);
 
         ServletContext context = sce.getServletContext();

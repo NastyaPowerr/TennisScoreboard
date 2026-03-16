@@ -1,6 +1,11 @@
 package org.roadmap.tennisscoreboard.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
 public class PlayerScore {
+    @Setter
     private Point playerPoint;
     private int playerGame;
     private int playerSet;
@@ -13,28 +18,8 @@ public class PlayerScore {
         this.tiebreakPoints = 0;
     }
 
-    public Point getPlayerPoint() {
-        return playerPoint;
-    }
-
-    public int getPlayerGame() {
-        return playerGame;
-    }
-
-    public int getPlayerSet() {
-        return playerSet;
-    }
-
-    public int getTiebreakPoints() {
-        return tiebreakPoints;
-    }
-
     public void incrementPoint() {
         this.playerPoint = playerPoint.next();
-    }
-
-    public void setPlayerPoint(Point point) {
-        this.playerPoint = point;
     }
 
     public void incrementGame() {
@@ -59,15 +44,5 @@ public class PlayerScore {
 
     public void clearTiebreakPoints() {
         this.tiebreakPoints = 0;
-    }
-
-    @Override
-    public String toString() {
-        return "PlayerScore{" +
-                "playerPoint=" + playerPoint +
-                ", playerGame=" + playerGame +
-                ", playerSet=" + playerSet +
-                ", tiebreakPoints=" + tiebreakPoints +
-                '}';
     }
 }

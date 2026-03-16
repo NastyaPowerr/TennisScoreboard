@@ -6,7 +6,8 @@ import org.roadmap.tennisscoreboard.domain.SetScoreInfo;
 import org.roadmap.tennisscoreboard.domain.strategy.DefaultScoringStrategy;
 import org.roadmap.tennisscoreboard.domain.strategy.TennisScoringStrategy;
 import org.roadmap.tennisscoreboard.domain.strategy.TiebreakScoringStrategy;
-import org.roadmap.tennisscoreboard.entity.Player;
+import org.roadmap.tennisscoreboard.dto.FinishedMatchDto;
+import org.roadmap.tennisscoreboard.dto.PlayerDto;
 import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
 
 import java.util.NoSuchElementException;
@@ -73,12 +74,18 @@ public class MatchScoreService {
         }
 
         if (scoringStrategy.isMatchWon(scoringPlayer, opponent)) {
-            Optional<Player> winner = match.getScoreModel().getWinner(match.getFirstPlayer(), match.getSecondPlayer());
+            Optional<PlayerDto> winner = match.getScoreModel().getWinner(match.getFirstPlayer(), match.getSecondPlayer());
             if (winner.isEmpty()) {
                 throw new IllegalStateException(ExceptionMessages.MISSING_WINNER);
             }
             match.setFinished(true);
-            finishedMatchesService.save(match, winner.get());
+            FinishedMatchDto finishedMatch = new FinishedMatchDto(
+                    null,
+                    match.getFirstPlayer(),
+                    match.getSecondPlayer(),
+                    winner.get()
+            );
+            finishedMatchesService.save(finishedMatch);
         }
     }
 
@@ -94,10 +101,10 @@ public class MatchScoreService {
 
     private PlayerScore getPlayerScore(Integer playerId, OngoingMatch match) {
         PlayerScore playerScore = null;
-        if (match.getFirstPlayer().getId().equals(playerId)) {
+        if (match.getFirstPlayer().id().equals(playerId)) {
             playerScore = match.getScoreModel().getFirstPlayerScore();
         }
-        if (match.getSecondPlayer().getId().equals(playerId)) {
+        if (match.getSecondPlayer().id().equals(playerId)) {
             playerScore = match.getScoreModel().getSecondPlayerScore();
         }
         if (playerScore == null) {

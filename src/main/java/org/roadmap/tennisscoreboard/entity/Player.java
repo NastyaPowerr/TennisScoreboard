@@ -6,9 +6,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "players")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,19 +23,7 @@ public class Player {
     @Column(name = "name", unique = true, nullable = false, updatable = false)
     private String name;
 
-    public Player() {
-    }
-
-    public Player(Integer id, String name) {
-        this.id = id;
+    public Player(String name) {
         this.name = name;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
     }
 }

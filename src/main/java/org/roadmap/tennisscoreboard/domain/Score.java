@@ -1,10 +1,12 @@
 package org.roadmap.tennisscoreboard.domain;
 
-import org.roadmap.tennisscoreboard.entity.Player;
+import lombok.Getter;
+import org.roadmap.tennisscoreboard.dto.PlayerDto;
 import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
 
 import java.util.Optional;
 
+@Getter
 public class Score {
     private static final int SETS_TO_WIN = 2;
     private final PlayerScore firstPlayerScore;
@@ -13,14 +15,6 @@ public class Score {
     public Score() {
         this.firstPlayerScore = new PlayerScore();
         this.secondPlayerScore = new PlayerScore();
-    }
-
-    public PlayerScore getFirstPlayerScore() {
-        return firstPlayerScore;
-    }
-
-    public PlayerScore getSecondPlayerScore() {
-        return secondPlayerScore;
     }
 
     public PlayerScore getOpponentPlayerScore(PlayerScore player) {
@@ -33,7 +27,7 @@ public class Score {
         throw new IllegalStateException(ExceptionMessages.COULD_NOT_GET_OPPONENT);
     }
 
-    public Optional<Player> getWinner(Player firstPlayer, Player secondPlayer) {
+    public Optional<PlayerDto> getWinner(PlayerDto firstPlayer, PlayerDto secondPlayer) {
         if (firstPlayerScore.getPlayerSet() >= SETS_TO_WIN) {
             return Optional.of(firstPlayer);
         }
@@ -41,10 +35,5 @@ public class Score {
             return Optional.of(secondPlayer);
         }
         return Optional.empty();
-    }
-
-    @Override
-    public String toString() {
-        return firstPlayerScore + ", " +  secondPlayerScore;
     }
 }

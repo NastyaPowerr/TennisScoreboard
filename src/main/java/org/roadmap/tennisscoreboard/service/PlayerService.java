@@ -12,7 +12,7 @@ public class PlayerService {
     }
 
     public PlayerDto create(PlayerDto player) {
-        Player entity = new Player(null, player.name());
+        Player entity = new Player(player.name());
         Player savedPlayer = playerRepositoryImpl.save(entity);
         return new PlayerDto(
                 savedPlayer.getId(),

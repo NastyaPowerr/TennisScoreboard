@@ -1,11 +1,11 @@
 package org.roadmap.tennisscoreboard.dto.view;
 
-import org.roadmap.tennisscoreboard.entity.Player;
+import org.roadmap.tennisscoreboard.dto.PlayerDto;
 
 public record FinishedMatchView(
-        Player firstPlayer,
-        Player secondPlayer,
-        Player winner,
+        PlayerDto firstPlayer,
+        PlayerDto secondPlayer,
+        PlayerDto winner,
         int firstPlayerFirstSet,
         int secondPlayerFirstSet,
         int firstPlayerSecondSet,
