@@ -10,7 +10,7 @@ import org.roadmap.tennisscoreboard.dto.FinishedMatchDto;
 import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
 import org.roadmap.tennisscoreboard.exception.PageValidationException;
 import org.roadmap.tennisscoreboard.service.FinishedMatchesPersistenceService;
-import org.roadmap.tennisscoreboard.util.MatchValidatorUtil;
+import org.roadmap.tennisscoreboard.util.MatchValidator;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,7 +32,7 @@ public class FinishedMatchesServlet extends HttpServlet {
         int pageNumber;
         String errorMessage = "";
         try {
-            MatchValidatorUtil.validatePage(pageNumberString);
+            MatchValidator.validatePage(pageNumberString);
             pageNumber = Integer.parseInt(pageNumberString);
         } catch (PageValidationException ex) {
             pageNumber = 1;

@@ -11,7 +11,7 @@ import org.roadmap.tennisscoreboard.dto.PlayerDto;
 import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
 import org.roadmap.tennisscoreboard.service.OngoingMatchService;
 import org.roadmap.tennisscoreboard.service.PlayerService;
-import org.roadmap.tennisscoreboard.util.MatchValidatorUtil;
+import org.roadmap.tennisscoreboard.util.MatchValidator;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -37,8 +37,8 @@ public class NewMatchPageServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String firstPlayerName = req.getParameter("firstPlayerName");
         String secondPlayerName = req.getParameter("secondPlayerName");
-        MatchValidatorUtil.validateName(firstPlayerName);
-        MatchValidatorUtil.validateName(secondPlayerName);
+        MatchValidator.validateName(firstPlayerName);
+        MatchValidator.validateName(secondPlayerName);
 
         if (firstPlayerName.equals(secondPlayerName)) {
             req.setAttribute("error", ExceptionMessages.PLAYERS_THE_SAME_NAME);

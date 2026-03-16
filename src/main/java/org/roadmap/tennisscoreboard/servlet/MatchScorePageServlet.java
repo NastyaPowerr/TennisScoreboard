@@ -13,7 +13,7 @@ import org.roadmap.tennisscoreboard.dto.view.MatchView;
 import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
 import org.roadmap.tennisscoreboard.service.MatchScoreService;
 import org.roadmap.tennisscoreboard.service.OngoingMatchService;
-import org.roadmap.tennisscoreboard.util.MatchValidatorUtil;
+import org.roadmap.tennisscoreboard.util.MatchValidator;
 
 import java.io.IOException;
 import java.util.Map;
@@ -35,7 +35,7 @@ public class MatchScorePageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String matchId = req.getParameter("uuid");
-        MatchValidatorUtil.validateUUID(matchId);
+        MatchValidator.validateUUID(matchId);
         OngoingMatch match = ongoingMatchService.getById(UUID.fromString(matchId))
                 .orElseThrow(() -> new NoSuchElementException(
                         String.format(
@@ -61,11 +61,11 @@ public class MatchScorePageServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String uuid = req.getParameter("uuid");
-        MatchValidatorUtil.validateUUID(uuid);
+        MatchValidator.validateUUID(uuid);
         UUID matchId = UUID.fromString(uuid);
 
         String playerIdString = req.getParameter("playerId");
-        MatchValidatorUtil.validatePlayerId(playerIdString);
+        MatchValidator.validatePlayerId(playerIdString);
         Integer playerId = Integer.valueOf(playerIdString);
 
         matchScoreService.givePoint(playerId, matchId);

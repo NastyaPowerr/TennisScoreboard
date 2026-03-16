@@ -7,18 +7,18 @@ import org.roadmap.tennisscoreboard.exception.ValidationException;
 
 import java.util.UUID;
 
-public final class MatchValidatorUtil {
+public final class MatchValidator {
     private static final int MIN_NAME_LENGTH = 2;
     private static final int MAX_NAME_LENGTH = 100;
-    private static final String NAME_PATTERN = "^[A-Za-z]+";
+    private static final String NAME_COMMON_PATTERN = "^[A-Za-zА-Яа-я-'.]+$";
+    private static final String NAME_LETTER_PATTERN = ".*[A-Za-zА-Яа-я].*";
 
-    private MatchValidatorUtil() {
+    private MatchValidator() {
     }
 
     public static void validateName(String name) {
-        if (name == null || name.trim().isEmpty()) {
-            throw new ValidationException(ExceptionMessages.MISSING_NAME);
-        }
+        checkForNullOrEmpty(name, ExceptionMessages.MISSING_NAME);
+        name = name.trim();
         if (name.length() < MIN_NAME_LENGTH || name.length() > MAX_NAME_LENGTH) {
             throw new ValidationException(
                     String.format(
@@ -27,16 +27,17 @@ public final class MatchValidatorUtil {
                             MAX_NAME_LENGTH
                     ));
         }
-        if (!name.matches(NAME_PATTERN)) {
-            // TODO: расширить паттерн для имени
+        if (!name.matches(NAME_COMMON_PATTERN)) {
             throw new ValidationException(ExceptionMessages.INVALID_NAME_PATTERN);
+        }
+
+        if (!name.matches(NAME_LETTER_PATTERN)) {
+            throw new ValidationException(ExceptionMessages.NAME_MUST_CONTAIN_LETTERS);
         }
     }
 
     public static void validateUUID(String uuid) {
-        if (uuid == null || uuid.trim().isEmpty()) {
-            throw new ValidationException(ExceptionMessages.MISSING_ID);
-        }
+        checkForNullOrEmpty(uuid, ExceptionMessages.MISSING_ID);
         try {
             UUID.fromString(uuid);
         } catch (IllegalArgumentException ex) {
@@ -49,9 +50,7 @@ public final class MatchValidatorUtil {
     }
 
     public static void validatePlayerId(String playerIdString) {
-        if (playerIdString == null || playerIdString.trim().isEmpty()) {
-            throw new ValidationException(ExceptionMessages.MISSING_ID);
-        }
+        checkForNullOrEmpty(playerIdString, ExceptionMessages.MISSING_ID);
         try {
             Integer.valueOf(playerIdString);
         } catch (NumberFormatException ex) {
@@ -74,6 +73,12 @@ public final class MatchValidatorUtil {
             }
         } catch (NumberFormatException ex) {
             throw new PageValidationException(ExceptionMessages.INVALID_PAGE_FORMAT);
+        }
+    }
+
+    private static void checkForNullOrEmpty(String name, String errorMessage) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new ValidationException(errorMessage);
         }
     }
 }

@@ -9,10 +9,11 @@ public final class ExceptionMessages {
             "Page is bigger than the total amount of pages. Showing last available page";
     public static final String MATCH_NOT_FOUND = "Match with id %s not found.";
     public static final String PLAYERS_THE_SAME_NAME = "Players must have different names.";
-
     public static final String MISSING_NAME = "Name is required.";
     public static final String INVALID_NAME_LENGTH = "Name length must be between %s and %s characters.";
-    public static final String INVALID_NAME_PATTERN = "Name must contain only these: letters.";
+    public static final String INVALID_NAME_PATTERN =
+            "Name must contain only: English and Russian letters, comas, dots, apostrophes.";
+    public static final String NAME_MUST_CONTAIN_LETTERS = "Name must contain English or Russian letters.";
     public static final String MISSING_ID = "Id is required.";
     public static final String INVALID_MATCH_ID_FORMAT = "Invalid match id format: %s.";
     public static final String INVALID_PLAYER_ID_FORMAT = "Invalid player id: %s.";
