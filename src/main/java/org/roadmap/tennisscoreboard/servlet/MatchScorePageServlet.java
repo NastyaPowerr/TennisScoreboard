@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-@WebServlet("/match-score")
+@WebServlet(PagePaths.MATCH_SCORE_PAGE)
 public class MatchScorePageServlet extends HttpServlet {
     private OngoingMatchService ongoingMatchService;
     private MatchScoreService matchScoreService;
@@ -48,12 +48,12 @@ public class MatchScorePageServlet extends HttpServlet {
             matchView = getMatchViewDependingOnTieBreak(match);
             req.setAttribute("match", matchView);
             req.setAttribute("uuid", matchId);
-            req.getRequestDispatcher("WEB-INF/match-score.jsp").forward(req, resp);
+            req.getRequestDispatcher(PagePaths.MATCH_SCORE_PAGE_JSP).forward(req, resp);
         } else {
             matchView = getMatchViewDependingOnFinishedMatch(match);
             req.setAttribute("match", matchView);
             req.setAttribute("uuid", matchId);
-            req.getRequestDispatcher("WEB-INF/match-score-finished.jsp").forward(req, resp);
+            req.getRequestDispatcher(PagePaths.MATCH_SCORE_PAGE_FINISHED_JSP).forward(req, resp);
             ongoingMatchService.delete(UUID.fromString(matchId));
         }
     }
@@ -69,7 +69,7 @@ public class MatchScorePageServlet extends HttpServlet {
         Integer playerId = Integer.valueOf(playerIdString);
 
         matchScoreService.givePoint(playerId, matchId);
-        resp.sendRedirect("match-score?uuid=" + uuid);
+        resp.sendRedirect(req.getContextPath() + PagePaths.MATCH_SCORE_PAGE + "?uuid=" + uuid);
     }
 
     private FinishedMatchView getMatchViewDependingOnFinishedMatch(OngoingMatch match) {

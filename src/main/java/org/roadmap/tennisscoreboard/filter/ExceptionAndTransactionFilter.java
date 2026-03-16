@@ -16,6 +16,7 @@ import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
 import org.roadmap.tennisscoreboard.exception.InvalidMatchIdException;
 import org.roadmap.tennisscoreboard.exception.PlayerAlreadyExistsException;
 import org.roadmap.tennisscoreboard.exception.ValidationException;
+import org.roadmap.tennisscoreboard.servlet.PagePaths;
 import org.roadmap.tennisscoreboard.util.HibernateSessionFactoryUtil;
 
 import java.io.IOException;
@@ -44,7 +45,7 @@ public class ExceptionAndTransactionFilter implements Filter {
         } catch (InvalidMatchIdException | NoSuchElementException ex) {
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
             req.setAttribute("error", ex.getMessage());
-            req.getRequestDispatcher("WEB-INF/error-404.jsp").forward(req, resp);
+            req.getRequestDispatcher(PagePaths.PAGE_404_JSP).forward(req, resp);
         } catch (ValidationException ex) {
             String path = "WEB-INF" + req.getServletPath() + ".jsp";
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -53,11 +54,11 @@ public class ExceptionAndTransactionFilter implements Filter {
         } catch (PlayerAlreadyExistsException ex) {
             resp.setStatus(HttpServletResponse.SC_CONFLICT);
             req.setAttribute("error", ex.getMessage());
-            req.getRequestDispatcher("WEB-INF/new-match.jsp").forward(req, resp);
+            req.getRequestDispatcher(PagePaths.NEW_MATCH_JSP).forward(req, resp);
         } catch (Exception ex) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             req.setAttribute("error", ExceptionMessages.INTERNAL_ERROR);
-            req.getRequestDispatcher("WEB-INF/error-500.jsp").forward(req, resp);
+            req.getRequestDispatcher(PagePaths.PAGE_500_JSP).forward(req, resp);
         } finally {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();

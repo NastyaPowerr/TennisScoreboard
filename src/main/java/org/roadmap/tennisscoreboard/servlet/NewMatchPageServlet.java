@@ -16,7 +16,7 @@ import org.roadmap.tennisscoreboard.util.MatchValidator;
 import java.io.IOException;
 import java.util.UUID;
 
-@WebServlet("/new-match")
+@WebServlet(PagePaths.NEW_MATCH)
 public class NewMatchPageServlet extends HttpServlet {
     private PlayerService playerService;
     private OngoingMatchService ongoingMatchService;
@@ -30,7 +30,7 @@ public class NewMatchPageServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("WEB-INF/new-match.jsp").forward(req, resp);
+        req.getRequestDispatcher(PagePaths.NEW_MATCH_JSP).forward(req, resp);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class NewMatchPageServlet extends HttpServlet {
         if (firstPlayerName.equals(secondPlayerName)) {
             req.setAttribute("error", ExceptionMessages.PLAYERS_THE_SAME_NAME);
             resp.setStatus(HttpServletResponse.SC_CONFLICT);
-            req.getRequestDispatcher("WEB-INF/new-match.jsp").forward(req, resp);
+            req.getRequestDispatcher(PagePaths.NEW_MATCH_JSP).forward(req, resp);
             return;
         }
         PlayerDto firstPlayer = playerService.create(new PlayerDto(null, firstPlayerName));
@@ -54,6 +54,6 @@ public class NewMatchPageServlet extends HttpServlet {
                 secondPlayer
         );
         UUID uuid = ongoingMatchService.create(match);
-        resp.sendRedirect("match-score?uuid=" + uuid);
+        resp.sendRedirect(req.getContextPath() + PagePaths.MATCH_SCORE_PAGE + "?uuid=" + uuid);
     }
 }

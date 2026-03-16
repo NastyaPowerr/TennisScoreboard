@@ -8,11 +8,11 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet("")
+@WebServlet(PagePaths.MAIN_PAGE)
 public class MainPageServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("WEB-INF/index.jsp").forward(req, resp);
+        req.getRequestDispatcher(PagePaths.MAIN_PAGE_JSP).forward(req, resp);
     }
 }

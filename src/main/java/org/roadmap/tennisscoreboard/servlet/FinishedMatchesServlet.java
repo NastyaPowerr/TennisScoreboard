@@ -15,7 +15,7 @@ import org.roadmap.tennisscoreboard.util.MatchValidator;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/matches")
+@WebServlet(PagePaths.MATCHES_PAGE)
 public class FinishedMatchesServlet extends HttpServlet {
     private FinishedMatchesPersistenceService finishedMatchesService;
     private static final int PAGE_SIZE = 2;
@@ -55,6 +55,6 @@ public class FinishedMatchesServlet extends HttpServlet {
         req.setAttribute("filterName", filterName);
         req.setAttribute("error", errorMessage);
 
-        req.getRequestDispatcher("WEB-INF/matches.jsp").forward(req, resp);
+        req.getRequestDispatcher(PagePaths.MATCHES_PAGE_JSP).forward(req, resp);
     }
 }
