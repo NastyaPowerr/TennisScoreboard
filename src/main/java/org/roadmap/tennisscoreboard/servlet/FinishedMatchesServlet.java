@@ -43,7 +43,7 @@ public class FinishedMatchesServlet extends HttpServlet {
         String filterName = req.getParameter("filter_by_player_name");
         int pageQuantity = finishedMatchesService.getTotalPages(PAGE_SIZE, filterName);
 
-        if (pageNumber > pageQuantity) {
+        if (pageQuantity != 0 && pageNumber > pageQuantity) {
             pageNumber = pageQuantity;
             errorMessage = ExceptionMessages.PAGE_NOT_EXIST_SHOW_LAST_PAGE;
         }
