@@ -37,13 +37,18 @@ public class FinishedMatchesServlet extends HttpServlet {
         } catch (PageValidationException ex) {
             pageNumber = 1;
             if (pageNumberString != null && !pageNumberString.trim().isEmpty()) {
-                errorMessage = ExceptionMessages.INVALID_PAGE_SHOW_PAGE_ONE;
+                errorMessage = ExceptionMessages.INVALID_PAGE_SHOW_FIRST_PAGE;
             }
         }
         String filterName = req.getParameter("filter_by_player_name");
-        List<FinishedMatchDto> matches = finishedMatchesService.getMatches(pageNumber, PAGE_SIZE, filterName);
         int pageQuantity = finishedMatchesService.getTotalPages(PAGE_SIZE, filterName);
 
+        if (pageNumber > pageQuantity) {
+            pageNumber = pageQuantity;
+            errorMessage = ExceptionMessages.PAGE_NOT_EXIST_SHOW_LAST_PAGE;
+        }
+
+        List<FinishedMatchDto> matches = finishedMatchesService.getMatches(pageNumber, PAGE_SIZE, filterName);
         req.setAttribute("matches", matches);
         req.setAttribute("pageNumber", pageNumber);
         req.setAttribute("pageQuantity", pageQuantity);

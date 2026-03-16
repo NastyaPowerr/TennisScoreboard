@@ -77,11 +77,6 @@
             <c:set var="prevPage" value="${pageContext.request.contextPath}/matches?page=${pageNumber - 1}"/>
             <c:set var="nextPage" value="${pageContext.request.contextPath}/matches?page=${pageNumber + 1}"/>
 
-            <c:if test="${pageQuantity > 4}">
-                <a class="first" href="${pageContext.request.contextPath}/matches?page=1${filterParameter}"> << </a>
-                <a class="last" href="${pageContext.request.contextPath}/matches?page=${pageQuantity}${filterParameter}"> >> </a>
-            </c:if>
-
             <c:if test="${pageNumber > 1}">
                 <a class="prev" href="${prevPage}${filterParameter}"> < </a>
             </c:if>

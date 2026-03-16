@@ -487,12 +487,6 @@ footer {
     color: #000;
 }
 
-.first, .last {
-    text-decoration: none;
-    font-size: 26px;
-    color: #000;
-}
-
 .next {
     margin-left: 20px;
 }
