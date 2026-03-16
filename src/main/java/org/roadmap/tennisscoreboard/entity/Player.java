@@ -12,9 +12,10 @@ import jakarta.persistence.Table;
 public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false)
     private Integer id;
 
-    @Column(name = "name", unique = true, nullable = false)
+    @Column(name = "name", unique = true, nullable = false, updatable = false)
     private String name;
 
     public Player() {
@@ -31,13 +32,5 @@ public class Player {
 
     public String getName() {
         return name;
-    }
-
-    @Override
-    public String toString() {
-        return "PlayerEntity{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
     }
 }

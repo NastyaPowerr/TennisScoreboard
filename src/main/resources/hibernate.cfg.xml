@@ -6,7 +6,7 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.connection.driver_class">org.h2.Driver</property>
-        <property name="hibernate.connection.url">jdbc:h2:mem:tennis;INIT=RUNSCRIPT FROM 'classpath:init.sql'</property>
+        <property name="hibernate.connection.url">jdbc:h2:mem:tennis</property>
         <property name="hibernate.connection.username">test</property>
         <property name="hibernate.connection.password">123</property>
         <property name="dialect">org.hibernate.dialect.H2Dialect</property>
@@ -15,5 +15,9 @@
         <property name="hibernate.show_sql">true</property>
 
         <property name="hibernate.current_session_context_class">thread</property>
+
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <mapping class="org.roadmap.tennisscoreboard.entity.Player"/>
+        <mapping class="org.roadmap.tennisscoreboard.entity.Match"/>
     </session-factory>
 </hibernate-configuration>

@@ -1,6 +1,8 @@
 package org.roadmap.tennisscoreboard.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,28 +15,22 @@ import jakarta.persistence.Table;
 public class Match {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "player1")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "player1", nullable = false, updatable = false)
     private Player firstPlayer;
 
-    @ManyToOne
-    @JoinColumn(name = "player2")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "player2", nullable = false, updatable = false)
     private Player secondPlayer;
 
-    @ManyToOne
-    @JoinColumn(name = "winner")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "winner", nullable = false, updatable = false)
     private Player winner;
 
     public Match() {
-    }
-
-    public Match(Integer id, Player firstPlayer, Player secondPlayer, Player winner) {
-        this.id = id;
-        this.firstPlayer = firstPlayer;
-        this.secondPlayer = secondPlayer;
-        this.winner = winner;
     }
 
     public Match(Player firstPlayer, Player secondPlayer, Player winner) {
