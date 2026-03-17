@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.roadmap.tennisscoreboard.domain.OngoingMatch;
 import org.roadmap.tennisscoreboard.domain.Point;
-import org.roadmap.tennisscoreboard.entity.Player;
+import org.roadmap.tennisscoreboard.dto.PlayerDto;
 import org.roadmap.tennisscoreboard.service.FinishedMatchesPersistenceService;
 import org.roadmap.tennisscoreboard.service.MatchScoreService;
 import org.roadmap.tennisscoreboard.service.OngoingMatchService;
@@ -21,8 +21,8 @@ public class MatchScoreServiceTest {
     private OngoingMatchService ongoingMatchService;
     private OngoingMatch match;
     private UUID matchId;
-    private Player firstPlayer;
-    private Player secondPlayer;
+    private PlayerDto firstPlayer;
+    private PlayerDto secondPlayer;
 
     @BeforeEach
     void setup() {
@@ -31,8 +31,8 @@ public class MatchScoreServiceTest {
         FinishedMatchesPersistenceService finishedMatchesService = mock(FinishedMatchesPersistenceService.class);
         matchScoreService = new MatchScoreService(ongoingMatchService, finishedMatchesService);
 
-        firstPlayer = new Player(1, "TestNameA");
-        secondPlayer = new Player(2, "TestNameB");
+        firstPlayer = new PlayerDto(1, "TestNameA");
+        secondPlayer = new PlayerDto(2, "TestNameB");
         match = new OngoingMatch(
                 firstPlayer,
                 secondPlayer
@@ -47,7 +47,7 @@ public class MatchScoreServiceTest {
 
     @Test
     void givenZeroPoints_whenPlayerScores_thenPointIncrements() {
-        matchScoreService.givePoint(firstPlayer.getId(), matchId);
+        matchScoreService.givePoint(firstPlayer.id(), matchId);
 
         Assertions.assertEquals(Point.FIFTEEN, match.getScoreModel().getFirstPlayerScore().getPlayerPoint());
     }
@@ -55,7 +55,7 @@ public class MatchScoreServiceTest {
     @Test
     void givenFortyPoints_whenPlayerScores_thenPlayerWinGame() {
         for (int i = 0; i < 4; i++) {
-            matchScoreService.givePoint(firstPlayer.getId(), matchId);
+            matchScoreService.givePoint(firstPlayer.id(), matchId);
         }
         Assertions.assertEquals(Point.ZERO, match.getScoreModel().getFirstPlayerScore().getPlayerPoint());
         Assertions.assertEquals(1, match.getScoreModel().getFirstPlayerScore().getPlayerGame());
@@ -64,11 +64,11 @@ public class MatchScoreServiceTest {
     @Test
     void givenFortyFortyPoints_whenPlayerScores_thenPlayerGetAdvantage() {
         for (int i = 0; i < 3; i++) {
-            matchScoreService.givePoint(firstPlayer.getId(), matchId);
-            matchScoreService.givePoint(secondPlayer.getId(), matchId);
+            matchScoreService.givePoint(firstPlayer.id(), matchId);
+            matchScoreService.givePoint(secondPlayer.id(), matchId);
         }
 
-        matchScoreService.givePoint(firstPlayer.getId(), matchId);
+        matchScoreService.givePoint(firstPlayer.id(), matchId);
         Assertions.assertEquals(Point.AD, match.getScoreModel().getFirstPlayerScore().getPlayerPoint());
 
         Assertions.assertEquals(0, match.getScoreModel().getFirstPlayerScore().getPlayerGame());
@@ -78,8 +78,8 @@ public class MatchScoreServiceTest {
     @Test
     void givenFortyFortyPoints_whenFirstPlayerScoresAndSecondPlayerScoresEvenly_thenGameNotEnd() {
         for (int i = 0; i < 12; i++) {
-            matchScoreService.givePoint(firstPlayer.getId(), matchId);
-            matchScoreService.givePoint(secondPlayer.getId(), matchId);
+            matchScoreService.givePoint(firstPlayer.id(), matchId);
+            matchScoreService.givePoint(secondPlayer.id(), matchId);
         }
 
         Assertions.assertEquals(0, match.getScoreModel().getFirstPlayerScore().getPlayerGame());
@@ -89,11 +89,11 @@ public class MatchScoreServiceTest {
     @Test
     void givenFortyFortyPoints_whenPlayerScoresTwiceInARow_thenPlayerWinGame() {
         for (int i = 0; i < 3; i++) {
-            matchScoreService.givePoint(firstPlayer.getId(), matchId);
-            matchScoreService.givePoint(secondPlayer.getId(), matchId);
+            matchScoreService.givePoint(firstPlayer.id(), matchId);
+            matchScoreService.givePoint(secondPlayer.id(), matchId);
         }
         for (int i = 0; i < 2; i++) {
-            matchScoreService.givePoint(firstPlayer.getId(), matchId);
+            matchScoreService.givePoint(firstPlayer.id(), matchId);
         }
         Assertions.assertEquals(1, match.getScoreModel().getFirstPlayerScore().getPlayerGame());
     }
@@ -101,13 +101,13 @@ public class MatchScoreServiceTest {
     @Test
     void givenAdvantagePoint_whenOpponentPlayerScores_thenPlayerLoseAdvantagePoint() {
         for (int i = 0; i < 3; i++) {
-            matchScoreService.givePoint(firstPlayer.getId(), matchId);
-            matchScoreService.givePoint(secondPlayer.getId(), matchId);
+            matchScoreService.givePoint(firstPlayer.id(), matchId);
+            matchScoreService.givePoint(secondPlayer.id(), matchId);
         }
-        matchScoreService.givePoint(firstPlayer.getId(), matchId);
+        matchScoreService.givePoint(firstPlayer.id(), matchId);
         Assertions.assertEquals(Point.AD, match.getScoreModel().getFirstPlayerScore().getPlayerPoint());
 
-        matchScoreService.givePoint(secondPlayer.getId(), matchId);
+        matchScoreService.givePoint(secondPlayer.id(), matchId);
         Assertions.assertEquals(Point.FORTY, match.getScoreModel().getFirstPlayerScore().getPlayerPoint());
     }
 
@@ -115,13 +115,13 @@ public class MatchScoreServiceTest {
     void givenTieBreak_whenPlayerScores_thenPointBecomeOne() {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 4; j++) {
-                matchScoreService.givePoint(firstPlayer.getId(), matchId);
+                matchScoreService.givePoint(firstPlayer.id(), matchId);
             }
             for (int j = 0; j < 4; j++) {
-                matchScoreService.givePoint(secondPlayer.getId(), matchId);
+                matchScoreService.givePoint(secondPlayer.id(), matchId);
             }
         }
-        matchScoreService.givePoint(firstPlayer.getId(), matchId);
+        matchScoreService.givePoint(firstPlayer.id(), matchId);
         Assertions.assertEquals(1, match.getScoreModel().getFirstPlayerScore().getTiebreakPoints());
     }
 
@@ -129,16 +129,16 @@ public class MatchScoreServiceTest {
     void givenTiebreak_whenFirstPlayerScoresAndSecondPlayerScoresEvenly_thenGameNotEnd() {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 4; j++) {
-                matchScoreService.givePoint(firstPlayer.getId(), matchId);
+                matchScoreService.givePoint(firstPlayer.id(), matchId);
             }
             for (int j = 0; j < 4; j++) {
-                matchScoreService.givePoint(secondPlayer.getId(), matchId);
+                matchScoreService.givePoint(secondPlayer.id(), matchId);
             }
         }
 
         for (int i = 0; i < 12; i++) {
-            matchScoreService.givePoint(firstPlayer.getId(), matchId);
-            matchScoreService.givePoint(secondPlayer.getId(), matchId);
+            matchScoreService.givePoint(firstPlayer.id(), matchId);
+            matchScoreService.givePoint(secondPlayer.id(), matchId);
         }
 
         Assertions.assertEquals(6, match.getScoreModel().getFirstPlayerScore().getPlayerGame());
@@ -149,14 +149,14 @@ public class MatchScoreServiceTest {
     void givenTiebreak_whenPlayerScoresSevenTimes_thenPlayerWinSet() {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 4; j++) {
-                matchScoreService.givePoint(firstPlayer.getId(), matchId);
+                matchScoreService.givePoint(firstPlayer.id(), matchId);
             }
             for (int j = 0; j < 4; j++) {
-                matchScoreService.givePoint(secondPlayer.getId(), matchId);
+                matchScoreService.givePoint(secondPlayer.id(), matchId);
             }
         }
         for (int i = 0; i < 7; i++) {
-            matchScoreService.givePoint(firstPlayer.getId(), matchId);
+            matchScoreService.givePoint(firstPlayer.id(), matchId);
         }
         Assertions.assertEquals(1, match.getScoreModel().getFirstPlayerScore().getPlayerSet());
         Assertions.assertEquals(0, match.getScoreModel().getFirstPlayerScore().getPlayerGame());
@@ -167,18 +167,18 @@ public class MatchScoreServiceTest {
     void givenTiebreakPointsSevenSeven_whenPlayerScoresTwiceInARow_thenPlayerWinSet() {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 4; j++) {
-                matchScoreService.givePoint(firstPlayer.getId(), matchId);
+                matchScoreService.givePoint(firstPlayer.id(), matchId);
             }
             for (int j = 0; j < 4; j++) {
-                matchScoreService.givePoint(secondPlayer.getId(), matchId);
+                matchScoreService.givePoint(secondPlayer.id(), matchId);
             }
         }
         for (int i = 0; i < 7; i++) {
-            matchScoreService.givePoint(firstPlayer.getId(), matchId);
-            matchScoreService.givePoint(secondPlayer.getId(), matchId);
+            matchScoreService.givePoint(firstPlayer.id(), matchId);
+            matchScoreService.givePoint(secondPlayer.id(), matchId);
         }
         for (int i = 0; i < 2; i++) {
-            matchScoreService.givePoint(firstPlayer.getId(), matchId);
+            matchScoreService.givePoint(firstPlayer.id(), matchId);
         }
         Assertions.assertEquals(1, match.getScoreModel().getFirstPlayerScore().getPlayerSet());
     }
@@ -187,11 +187,11 @@ public class MatchScoreServiceTest {
     void givenFiveGames_whenPlayerWinGame_thenPlayerWinSet() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 4; j++) {
-                matchScoreService.givePoint(firstPlayer.getId(), matchId);
+                matchScoreService.givePoint(firstPlayer.id(), matchId);
             }
         }
         for (int j = 0; j < 4; j++) {
-            matchScoreService.givePoint(firstPlayer.getId(), matchId);
+            matchScoreService.givePoint(firstPlayer.id(), matchId);
         }
         Assertions.assertEquals(1, match.getScoreModel().getFirstPlayerScore().getPlayerSet());
     }
@@ -200,14 +200,14 @@ public class MatchScoreServiceTest {
     void givenFiveFiveGames_whenPlayerWinGame_thenSetNotEnd() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 4; j++) {
-                matchScoreService.givePoint(firstPlayer.getId(), matchId);
+                matchScoreService.givePoint(firstPlayer.id(), matchId);
             }
             for (int j = 0; j < 4; j++) {
-                matchScoreService.givePoint(secondPlayer.getId(), matchId);
+                matchScoreService.givePoint(secondPlayer.id(), matchId);
             }
         }
         for (int j = 0; j < 4; j++) {
-            matchScoreService.givePoint(firstPlayer.getId(), matchId);
+            matchScoreService.givePoint(firstPlayer.id(), matchId);
         }
         Assertions.assertEquals(0, match.getScoreModel().getFirstPlayerScore().getPlayerSet());
         Assertions.assertNotEquals(0, match.getScoreModel().getFirstPlayerScore().getPlayerGame());
@@ -217,14 +217,14 @@ public class MatchScoreServiceTest {
     void givenFiveFiveGames_whenPlayerWinGameTwiceInARow_thenPlayerWinSet() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 4; j++) {
-                matchScoreService.givePoint(firstPlayer.getId(), matchId);
+                matchScoreService.givePoint(firstPlayer.id(), matchId);
             }
             for (int j = 0; j < 4; j++) {
-                matchScoreService.givePoint(secondPlayer.getId(), matchId);
+                matchScoreService.givePoint(secondPlayer.id(), matchId);
             }
         }
         for (int j = 0; j < 8; j++) {
-            matchScoreService.givePoint(firstPlayer.getId(), matchId);
+            matchScoreService.givePoint(firstPlayer.id(), matchId);
         }
         Assertions.assertEquals(1, match.getScoreModel().getFirstPlayerScore().getPlayerSet());
     }
@@ -233,17 +233,17 @@ public class MatchScoreServiceTest {
     void givenOneOneSet_whenPlayerWinSet_thenMatchEnd() {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 4; j++) {
-                matchScoreService.givePoint(firstPlayer.getId(), matchId);
+                matchScoreService.givePoint(firstPlayer.id(), matchId);
             }
         }
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 4; j++) {
-                matchScoreService.givePoint(secondPlayer.getId(), matchId);
+                matchScoreService.givePoint(secondPlayer.id(), matchId);
             }
         }
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 4; j++) {
-                matchScoreService.givePoint(firstPlayer.getId(), matchId);
+                matchScoreService.givePoint(firstPlayer.id(), matchId);
             }
         }
         Assertions.assertTrue(ongoingMatchService.getById(matchId).get().isFinished());
@@ -253,17 +253,17 @@ public class MatchScoreServiceTest {
     void givenFinishedMatch_whenPlayerScores_thenNothingChange() {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 4; j++) {
-                matchScoreService.givePoint(firstPlayer.getId(), matchId);
+                matchScoreService.givePoint(firstPlayer.id(), matchId);
             }
         }
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 4; j++) {
-                matchScoreService.givePoint(secondPlayer.getId(), matchId);
+                matchScoreService.givePoint(secondPlayer.id(), matchId);
             }
         }
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 4; j++) {
-                matchScoreService.givePoint(firstPlayer.getId(), matchId);
+                matchScoreService.givePoint(firstPlayer.id(), matchId);
             }
         }
         Point firstPlayerPoint = match.getScoreModel().getFirstPlayerScore().getPlayerPoint();
@@ -272,7 +272,7 @@ public class MatchScoreServiceTest {
         // это должен делать сервлет, но это юнит тест, так что вручную вызываю удаление
         ongoingMatchService.delete(matchId);
 
-        Assertions.assertThrows(NoSuchElementException.class, () -> matchScoreService.givePoint(firstPlayer.getId(), matchId));
+        Assertions.assertThrows(NoSuchElementException.class, () -> matchScoreService.givePoint(firstPlayer.id(), matchId));
 
         Assertions.assertEquals(firstPlayerPoint, match.getScoreModel().getFirstPlayerScore().getPlayerPoint());
         Assertions.assertEquals(secondPlayerPoint, match.getScoreModel().getSecondPlayerScore().getPlayerPoint());
