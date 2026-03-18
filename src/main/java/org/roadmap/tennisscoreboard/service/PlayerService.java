@@ -19,12 +19,4 @@ public class PlayerService {
                 savedPlayer.getName()
         );
     }
-
-    public PlayerDto getById(Integer id) {
-        Player savedPlayer = playerRepositoryImpl.findById(id);
-        return new PlayerDto(
-                savedPlayer.getId(),
-                savedPlayer.getName()
-        );
-    }
 }
