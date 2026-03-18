@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 @WebServlet(PagePaths.NEW_MATCH)
-public class NewMatchPageServlet extends HttpServlet {
+public class NewMatchServlet extends HttpServlet {
     private PlayerService playerService;
     private OngoingMatchService ongoingMatchService;
 

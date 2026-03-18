@@ -21,7 +21,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @WebServlet(PagePaths.MATCH_SCORE_PAGE)
-public class MatchScorePageServlet extends HttpServlet {
+public class MatchScoreServlet extends HttpServlet {
     private OngoingMatchService ongoingMatchService;
     private MatchScoreService matchScoreService;
 
