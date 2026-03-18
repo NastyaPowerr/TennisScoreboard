@@ -34,20 +34,22 @@ public class MatchScoreService {
                                 ExceptionMessages.MATCH_NOT_FOUND,
                                 matchId
                         )));
+        PlayerScore firstPlayerScore = match.getScoreModel().getFirstPlayerScore();
+        PlayerScore secondPlayerScore = match.getScoreModel().getSecondPlayerScore();
+
         PlayerScore scoringPlayer = getPlayerScore(playerId, match);
         PlayerScore opponent = match.getScoreModel().getOpponentPlayerScore(scoringPlayer);
 
+        int firstPlayerSetBefore = firstPlayerScore.getPlayerSet();
+        int secondPlayerSetBefore = secondPlayerScore.getPlayerSet();
+        int firstPlayerGameBefore = firstPlayerScore.getPlayerGame();
+        int secondPlayerGameBefore = secondPlayerScore.getPlayerGame();
+
         TennisScoringStrategy scoringStrategy = getScoringStrategy(match);
-
-        int firstPlayerSetBefore = scoringPlayer.getPlayerSet();
-        int secondPlayerSetBefore = opponent.getPlayerSet();
-        int firstPlayerGameBefore = scoringPlayer.getPlayerGame();
-        int secondPlayerGameBefore = opponent.getPlayerGame();
-
         scoringStrategy.pointWon(scoringPlayer, opponent);
 
-        int firstPlayerSetAfter = scoringPlayer.getPlayerSet();
-        int secondPlayerSetAfter = opponent.getPlayerSet();
+        int firstPlayerSetAfter = firstPlayerScore.getPlayerSet();
+        int secondPlayerSetAfter = secondPlayerScore.getPlayerSet();
 
         if (firstPlayerSetBefore < firstPlayerSetAfter) {
             match.setTiebreak(false);
@@ -100,16 +102,12 @@ public class MatchScoreService {
     }
 
     private PlayerScore getPlayerScore(Integer playerId, OngoingMatch match) {
-        PlayerScore playerScore = null;
         if (match.getFirstPlayer().id().equals(playerId)) {
-            playerScore = match.getScoreModel().getFirstPlayerScore();
+            return match.getScoreModel().getFirstPlayerScore();
         }
         if (match.getSecondPlayer().id().equals(playerId)) {
-            playerScore = match.getScoreModel().getSecondPlayerScore();
+            return match.getScoreModel().getSecondPlayerScore();
         }
-        if (playerScore == null) {
-            throw new NoSuchElementException(ExceptionMessages.PLAYER_NOT_IN_MATCH);
-        }
-        return playerScore;
+        throw new NoSuchElementException(ExceptionMessages.PLAYER_NOT_IN_MATCH);
     }
 }
