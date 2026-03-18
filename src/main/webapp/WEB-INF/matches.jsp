@@ -1,8 +1,7 @@
-<%@ page language="java" contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ page language="java" contentType="text/html;charset=UTF-8" %>
 <jsp:useBean id="matches" scope="request" type="java.util.List"/>
 <jsp:useBean id="pageNumber" scope="request" type="java.lang.Integer"/>
-<%--<jsp:useBean id="filterName" scope="request" type="java.lang.String"/>--%>
 <html>
 <head>
     <meta charset="UTF-8">

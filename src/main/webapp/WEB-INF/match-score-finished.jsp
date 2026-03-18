@@ -1,5 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:useBean id="match" scope="request" type="org.roadmap.tennisscoreboard.dto.view.FinishedMatchView"/>
 <html>
 <head>

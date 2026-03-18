@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ page language="java" contentType="text/html;charset=UTF-8"%>
 <jsp:useBean id="match" scope="request" type="org.roadmap.tennisscoreboard.dto.view.MatchView"/>
 <html>
