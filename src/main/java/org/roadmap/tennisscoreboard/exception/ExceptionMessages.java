@@ -12,7 +12,7 @@ public final class ExceptionMessages {
     public static final String MISSING_NAME = "Name is required.";
     public static final String INVALID_NAME_LENGTH = "Name length must be between %s and %s characters.";
     public static final String INVALID_NAME_PATTERN =
-            "Name must contain only: English and Russian letters, comas, dots, apostrophes.";
+            "Name can contain only: English and Russian letters, dots, space, apostrophes.";
     public static final String NAME_MUST_CONTAIN_LETTERS = "Name must contain English or Russian letters.";
     public static final String MISSING_ID = "Id is required.";
     public static final String INVALID_MATCH_ID_FORMAT = "Invalid match id format: %s.";

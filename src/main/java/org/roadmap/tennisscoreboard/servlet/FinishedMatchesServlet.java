@@ -18,7 +18,7 @@ import java.util.List;
 @WebServlet(PagePaths.MATCHES_PAGE)
 public class FinishedMatchesServlet extends HttpServlet {
     private FinishedMatchesPersistenceService finishedMatchesService;
-    private static final int PAGE_SIZE = 2;
+    private static final int PAGE_SIZE = 5;
 
     @Override
     public void init() {

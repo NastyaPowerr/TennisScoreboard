@@ -9,8 +9,8 @@ import java.util.UUID;
 
 public final class MatchValidator {
     private static final int MIN_NAME_LENGTH = 2;
-    private static final int MAX_NAME_LENGTH = 100;
-    private static final String NAME_COMMON_PATTERN = "^[A-Za-zА-Яа-я-'.]+$";
+    private static final int MAX_NAME_LENGTH = 20;
+    private static final String NAME_COMMON_PATTERN = "^[A-Za-zА-Яа-я-'. ]+$";
     private static final String NAME_LETTER_PATTERN = ".*[A-Za-zА-Яа-я].*";
 
     private MatchValidator() {
