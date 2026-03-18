@@ -3,6 +3,7 @@ package org.roadmap.tennisscoreboard.filter;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
@@ -17,7 +18,6 @@ import org.roadmap.tennisscoreboard.exception.InvalidMatchIdException;
 import org.roadmap.tennisscoreboard.exception.PlayerAlreadyExistsException;
 import org.roadmap.tennisscoreboard.exception.ValidationException;
 import org.roadmap.tennisscoreboard.servlet.PagePaths;
-import org.roadmap.tennisscoreboard.util.HibernateSessionFactoryUtil;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
@@ -28,7 +28,8 @@ public class ExceptionAndTransactionFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) {
-        this.sessionFactory = HibernateSessionFactoryUtil.getSessionFactory();
+        ServletContext context = filterConfig.getServletContext();
+        this.sessionFactory = (SessionFactory) context.getAttribute("sessionFactory");
     }
 
     @Override

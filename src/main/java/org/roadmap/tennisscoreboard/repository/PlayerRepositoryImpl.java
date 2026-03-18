@@ -6,13 +6,12 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.roadmap.tennisscoreboard.entity.Player;
 import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
 import org.roadmap.tennisscoreboard.exception.PlayerAlreadyExistsException;
-import org.roadmap.tennisscoreboard.util.HibernateSessionFactoryUtil;
 
 public class PlayerRepositoryImpl implements PlayerRepository {
     private final SessionFactory sessionFactory;
 
-    public PlayerRepositoryImpl() {
-        this.sessionFactory = HibernateSessionFactoryUtil.getSessionFactory();
+    public PlayerRepositoryImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     @Override

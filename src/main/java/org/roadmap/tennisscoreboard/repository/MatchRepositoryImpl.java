@@ -3,7 +3,6 @@ package org.roadmap.tennisscoreboard.repository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.roadmap.tennisscoreboard.entity.Match;
-import org.roadmap.tennisscoreboard.util.HibernateSessionFactoryUtil;
 
 import java.util.List;
 
@@ -29,8 +28,8 @@ public class MatchRepositoryImpl implements MatchRepository {
             OR upper(matches.secondPlayer.name) LIKE upper(:name)
             """;
 
-    public MatchRepositoryImpl() {
-        this.sessionFactory = HibernateSessionFactoryUtil.getSessionFactory();
+    public MatchRepositoryImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
