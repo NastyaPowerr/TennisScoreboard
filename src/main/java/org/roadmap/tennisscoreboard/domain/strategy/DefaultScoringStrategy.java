@@ -3,10 +3,8 @@ package org.roadmap.tennisscoreboard.domain.strategy;
 import org.roadmap.tennisscoreboard.domain.PlayerScore;
 import org.roadmap.tennisscoreboard.domain.Point;
 
-public class DefaultScoringStrategy implements TennisScoringStrategy {
+public class DefaultScoringStrategy extends TennisScoringStrategy {
     private static final int GAMES_TO_WIN_SET = 6;
-    private static final int DIFF_TO_WIN = 2;
-    private static final int SETS_TO_WIN = 2;
 
     @Override
     public void pointWon(PlayerScore scoringPlayer, PlayerScore opponent) {
@@ -48,11 +46,7 @@ public class DefaultScoringStrategy implements TennisScoringStrategy {
 
     @Override
     public boolean isSetWon(PlayerScore scoringPlayer, PlayerScore opponent) {
-        return scoringPlayer.getPlayerGame() >= GAMES_TO_WIN_SET && scoringPlayer.getPlayerGame() - opponent.getPlayerGame() >= DIFF_TO_WIN;
-    }
-
-    @Override
-    public boolean isMatchWon(PlayerScore scoringPlayer, PlayerScore opponent) {
-        return scoringPlayer.getPlayerSet() >= SETS_TO_WIN;
+        return scoringPlayer.getPlayerGame() >= GAMES_TO_WIN_SET &&
+                scoringPlayer.getPlayerGame() - opponent.getPlayerGame() >= DIFF_TO_WIN;
     }
 }

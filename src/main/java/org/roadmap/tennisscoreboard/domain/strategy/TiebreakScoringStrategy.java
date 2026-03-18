@@ -2,11 +2,9 @@ package org.roadmap.tennisscoreboard.domain.strategy;
 
 import org.roadmap.tennisscoreboard.domain.PlayerScore;
 
-public class TiebreakScoringStrategy implements TennisScoringStrategy {
-    private static final int MIN_TIEBREAKPOINTS_TO_WIN_GAME = 7;
-    private static final int GAMES_TO_WIN_SET = 7;
-    private static final int DIFF_TO_WIN = 2;
-    private static final int SETS_TO_WIN = 2;
+public class TiebreakScoringStrategy extends TennisScoringStrategy {
+    private static final int MIN_TIEBREAK_POINTS_TO_WIN_GAME = 7;
+    private static final int TIEBREAK_GAMES_TO_WIN_SET = 7;
 
     @Override
     public void pointWon(PlayerScore scoringPlayer, PlayerScore opponent) {
@@ -27,16 +25,12 @@ public class TiebreakScoringStrategy implements TennisScoringStrategy {
 
     @Override
     public boolean isGameWon(PlayerScore scoringPlayer, PlayerScore opponent) {
-        return scoringPlayer.getTiebreakPoints() >= MIN_TIEBREAKPOINTS_TO_WIN_GAME && scoringPlayer.getTiebreakPoints() - opponent.getTiebreakPoints() >= DIFF_TO_WIN;
+        return scoringPlayer.getTiebreakPoints() >= MIN_TIEBREAK_POINTS_TO_WIN_GAME &&
+                scoringPlayer.getTiebreakPoints() - opponent.getTiebreakPoints() >= DIFF_TO_WIN;
     }
 
     @Override
     public boolean isSetWon(PlayerScore scoringPlayer, PlayerScore opponent) {
-        return scoringPlayer.getPlayerGame() >= GAMES_TO_WIN_SET;
-    }
-
-    @Override
-    public boolean isMatchWon(PlayerScore scoringPlayer, PlayerScore opponent) {
-        return scoringPlayer.getPlayerSet() >= SETS_TO_WIN;
+        return scoringPlayer.getPlayerGame() >= TIEBREAK_GAMES_TO_WIN_SET;
     }
 }

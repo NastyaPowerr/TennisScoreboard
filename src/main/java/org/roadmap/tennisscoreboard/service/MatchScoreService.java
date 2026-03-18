@@ -73,7 +73,7 @@ public class MatchScoreService {
             match.setTiebreak(true);
         }
 
-        if (scoringStrategy.isMatchWon(scoringPlayer, opponent)) {
+        if (scoringStrategy.isMatchWon(scoringPlayer)) {
             Optional<PlayerDto> winner = match.getScoreModel().getWinner(match.getFirstPlayer(), match.getSecondPlayer());
             if (winner.isEmpty()) {
                 throw new IllegalStateException(ExceptionMessages.MISSING_WINNER);

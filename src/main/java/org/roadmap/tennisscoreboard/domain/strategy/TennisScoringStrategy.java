@@ -2,12 +2,17 @@ package org.roadmap.tennisscoreboard.domain.strategy;
 
 import org.roadmap.tennisscoreboard.domain.PlayerScore;
 
-public interface TennisScoringStrategy {
-    void pointWon(PlayerScore scoringPlayer, PlayerScore opponent);
+public abstract class TennisScoringStrategy {
+    protected static final int SETS_TO_WIN = 2;
+    protected static final int DIFF_TO_WIN = 2;
 
-    boolean isGameWon(PlayerScore scoringPlayer, PlayerScore opponent);
+    public abstract void pointWon(PlayerScore scoringPlayer, PlayerScore opponent);
 
-    boolean isSetWon(PlayerScore scoringPlayer, PlayerScore opponent);
+    public abstract boolean isGameWon(PlayerScore scoringPlayer, PlayerScore opponent);
 
-    boolean isMatchWon(PlayerScore scoringPlayer, PlayerScore opponent);
+    public abstract boolean isSetWon(PlayerScore scoringPlayer, PlayerScore opponent);
+
+    public boolean isMatchWon(PlayerScore scoringPlayer) {
+        return scoringPlayer.getPlayerSet() >= SETS_TO_WIN;
+    }
 }
