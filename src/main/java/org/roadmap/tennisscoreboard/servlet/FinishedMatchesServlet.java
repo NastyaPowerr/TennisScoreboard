@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.roadmap.tennisscoreboard.dto.FinishedMatchDto;
+import org.roadmap.tennisscoreboard.dto.PageParams;
 import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
 import org.roadmap.tennisscoreboard.exception.PageValidationException;
 import org.roadmap.tennisscoreboard.service.FinishedMatchesPersistenceService;
@@ -17,8 +18,8 @@ import java.util.List;
 
 @WebServlet(PagePaths.MATCHES_PAGE)
 public class FinishedMatchesServlet extends HttpServlet {
-    private FinishedMatchesPersistenceService finishedMatchesService;
     private static final int PAGE_SIZE = 5;
+    private FinishedMatchesPersistenceService finishedMatchesService;
 
     @Override
     public void init() {
@@ -29,32 +30,35 @@ public class FinishedMatchesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String pageNumberString = req.getParameter("page");
-        int pageNumber;
+        String filterName = req.getParameter("filter_by_player_name");
+
+        PageParams pageParams = validateAndExtractPageParams(pageNumberString, filterName);
+        List<FinishedMatchDto> matches = finishedMatchesService.getMatches(pageParams.pageNumber(), PAGE_SIZE, filterName);
+
+        req.setAttribute("matches", matches);
+        req.setAttribute("pageParams", pageParams);
+
+        req.getRequestDispatcher(PagePaths.MATCHES_PAGE_JSP).forward(req, resp);
+    }
+
+    private PageParams validateAndExtractPageParams(String pageNumberString, String filterName) {
+        int pageNumber = 1;
         String errorMessage = "";
         try {
             MatchValidator.validatePage(pageNumberString);
             pageNumber = Integer.parseInt(pageNumberString);
         } catch (PageValidationException ex) {
-            pageNumber = 1;
             if (pageNumberString != null && !pageNumberString.trim().isEmpty()) {
                 errorMessage = ExceptionMessages.INVALID_PAGE_SHOW_FIRST_PAGE;
             }
         }
-        String filterName = req.getParameter("filter_by_player_name");
-        int pageQuantity = finishedMatchesService.getTotalPages(PAGE_SIZE, filterName);
 
+        int pageQuantity = finishedMatchesService.getTotalPages(PAGE_SIZE, filterName);
         if (pageQuantity != 0 && pageNumber > pageQuantity) {
             pageNumber = pageQuantity;
             errorMessage = ExceptionMessages.PAGE_NOT_EXIST_SHOW_LAST_PAGE;
         }
 
-        List<FinishedMatchDto> matches = finishedMatchesService.getMatches(pageNumber, PAGE_SIZE, filterName);
-        req.setAttribute("matches", matches);
-        req.setAttribute("pageNumber", pageNumber);
-        req.setAttribute("pageQuantity", pageQuantity);
-        req.setAttribute("filterName", filterName);
-        req.setAttribute("error", errorMessage);
-
-        req.getRequestDispatcher(PagePaths.MATCHES_PAGE_JSP).forward(req, resp);
+        return new PageParams(pageNumber, pageQuantity, filterName, errorMessage);
     }
 }

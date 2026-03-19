@@ -53,7 +53,7 @@ public class NewMatchServlet extends HttpServlet {
                 firstPlayer,
                 secondPlayer
         );
-        UUID uuid = ongoingMatchService.create(match);
-        resp.sendRedirect(req.getContextPath() + PagePaths.MATCH_SCORE_PAGE + "?uuid=" + uuid);
+        UUID matchId = ongoingMatchService.create(match);
+        resp.sendRedirect(req.getContextPath() + PagePaths.MATCH_SCORE_PAGE + "?uuid=" + matchId);
     }
 }

@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ page language="java" contentType="text/html;charset=UTF-8" %>
 <jsp:useBean id="matches" scope="request" type="java.util.List"/>
-<jsp:useBean id="pageNumber" scope="request" type="java.lang.Integer"/>
+<jsp:useBean id="pageParams" scope="request" type="org.roadmap.tennisscoreboard.dto.PageParams"/>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -35,16 +35,16 @@
 <main>
     <div class="container">
         <h1>Matches</h1>
-        <c:if test="${not empty error}">
+        <c:if test="${not empty pageParams.errorMessage()}">
             <div class="error-message">
-                    ${error}
+                    ${pageParams.errorMessage()}
             </div>
         </c:if>
         <div class="input-container">
             <form method="get" action="${pageContext.request.contextPath}/matches">
                 <label>
                     <input class="input-filter" name="filter_by_player_name" placeholder="Filter by name" type="text"
-                           value="${filterName}"/>
+                           value="${pageParams.filterName()}"/>
                 </label>
             </form>
             <div>
@@ -72,27 +72,31 @@
         </table>
 
         <div class="pagination">
-            <c:set var="filterParameter" value="${not empty filterName ? '&filter_by_player_name=' += filterName : ''}"/>
-            <c:set var="prevPage" value="${pageContext.request.contextPath}/matches?page=${pageNumber - 1}"/>
-            <c:set var="nextPage" value="${pageContext.request.contextPath}/matches?page=${pageNumber + 1}"/>
+            <c:set var="filterParameter"
+                   value="${not empty pageParams.filterName() ? '&filter_by_player_name=' += pageParams.filterName() : ''}"/>
+            <c:set var="prevPage"
+                   value="${pageContext.request.contextPath}/matches?page=${pageParams.pageNumber() - 1}"/>
+            <c:set var="nextPage"
+                   value="${pageContext.request.contextPath}/matches?page=${pageParams.pageNumber() + 1}"/>
 
-            <c:if test="${pageNumber > 1}">
+            <c:if test="${pageParams.pageNumber() > 1}">
                 <a class="prev" href="${prevPage}${filterParameter}"> < </a>
             </c:if>
 
-            <c:if test="${pageNumber - 1 >= 1}">
+            <c:if test="${pageParams.pageNumber() - 1 >= 1}">
                 <a class="num-page"
-                   href="${pageContext.request.contextPath}/matches?page=${pageNumber - 1}${filterParameter}">${pageNumber - 1}</a>
+                   href="${pageContext.request.contextPath}/matches?page=${pageParams.pageNumber() - 1}${filterParameter}">${pageParams.pageNumber() - 1}</a>
             </c:if>
 
-            <a class="num-page" href="${pageContext.request.contextPath}/matches?page=${pageNumber}${filterParameter}">${pageNumber}</a>
+            <a class="num-page"
+               href="${pageContext.request.contextPath}/matches?page=${pageParams.pageNumber()}${filterParameter}">${pageParams.pageNumber()}</a>
 
-            <c:if test="${pageNumber + 1 <= pageQuantity}">
+            <c:if test="${pageParams.pageNumber() + 1 <= pageParams.pageQuantity()}">
                 <a class="num-page"
-                   href="${pageContext.request.contextPath}/matches?page=${pageNumber + 1}${filterParameter}">${pageNumber + 1}</a>
+                   href="${pageContext.request.contextPath}/matches?page=${pageParams.pageNumber() + 1}${filterParameter}">${pageParams.pageNumber() + 1}</a>
             </c:if>
 
-            <c:if test="${pageNumber < pageQuantity}">
+            <c:if test="${pageParams.pageNumber() < pageParams.pageQuantity()}">
                 <a class="next" href="${nextPage}${filterParameter}"> > </a>
             </c:if>
         </div>

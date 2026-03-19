@@ -58,7 +58,7 @@
                             WINNER
                         </c:if>
                         <form method="post" action="${pageContext.request.contextPath}/match-score">
-                            <input type="hidden" name="uuid" value="${uuid}"/>
+                            <input type="hidden" name="uuid" value="${match.id()}"/>
                             <input type="hidden" name="playerId" value=${match.firstPlayer().id}>
                         </form>
                     </td>
@@ -73,7 +73,7 @@
                             WINNER
                         </c:if>
                         <form method="post" action="${pageContext.request.contextPath}/match-score">
-                            <input type="hidden" name="uuid" value="${uuid}"/>
+                            <input type="hidden" name="uuid" value="${match.id()}"/>
                             <input type="hidden" name="playerId" value=${match.secondPlayer().id}>
                         </form>
                     </td>

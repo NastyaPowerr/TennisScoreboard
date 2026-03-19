@@ -4,7 +4,7 @@ public final class ExceptionMessages {
     private ExceptionMessages() {
     }
 
-    public static final String INVALID_PAGE_SHOW_FIRST_PAGE = "Invalid page formation. Showing page 1.";
+    public static final String INVALID_PAGE_SHOW_FIRST_PAGE = "Invalid page format. Showing page 1.";
     public static final String PAGE_NOT_EXIST_SHOW_LAST_PAGE =
             "Page is bigger than the total amount of pages. Showing last available page";
     public static final String MATCH_NOT_FOUND = "Match with id %s not found.";
