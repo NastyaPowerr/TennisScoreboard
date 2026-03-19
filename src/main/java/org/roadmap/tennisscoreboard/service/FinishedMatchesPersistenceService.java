@@ -1,6 +1,5 @@
 package org.roadmap.tennisscoreboard.service;
 
-import org.roadmap.tennisscoreboard.domain.OngoingMatch;
 import org.roadmap.tennisscoreboard.dto.FinishedMatchDto;
 import org.roadmap.tennisscoreboard.dto.PlayerDto;
 import org.roadmap.tennisscoreboard.entity.Match;
@@ -54,14 +53,12 @@ public class FinishedMatchesPersistenceService {
     }
 
     public int getTotalPages(int pageSize, String filterName) {
+        long matchesCount;
         if (filterName == null) {
-            long matchesCount = matchRepository.getCount();
-
-            return (int) Math.ceil((double) matchesCount / pageSize);
+            matchesCount = matchRepository.getCount();
         } else {
-            long matchesCount = matchRepository.getCountWithFilter(filterName);
-
-            return (int) Math.ceil((double) matchesCount / pageSize);
+            matchesCount = matchRepository.getCountWithFilter(filterName);
         }
+        return (int) Math.ceil((double) matchesCount / pageSize);
     }
 }

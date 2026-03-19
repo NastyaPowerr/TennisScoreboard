@@ -51,44 +51,55 @@ public class MatchScoreService {
         int firstPlayerSetAfter = firstPlayerScore.getPlayerSet();
         int secondPlayerSetAfter = secondPlayerScore.getPlayerSet();
 
-        if (firstPlayerSetBefore < firstPlayerSetAfter) {
+        if (playerWonSet(firstPlayerSetBefore, firstPlayerSetAfter)) {
             match.setTiebreak(false);
-            int setNumber = match.getSetsHistory().size();
-            SetScoreInfo scoreInfo = new SetScoreInfo(
-                    firstPlayerGameBefore + 1,
-                    secondPlayerGameBefore
-            );
-            match.getSetsHistory().put(setNumber, scoreInfo);
+            putScoreInfo(match, firstPlayerGameBefore + 1, secondPlayerGameBefore);
         } else {
-            if (secondPlayerSetBefore < secondPlayerSetAfter) {
+            if (playerWonSet(secondPlayerSetBefore, secondPlayerSetAfter)) {
                 match.setTiebreak(false);
-                int setNumber = match.getSetsHistory().size();
-                SetScoreInfo scoreInfo = new SetScoreInfo(
-                        firstPlayerGameBefore,
-                        secondPlayerGameBefore + 1
-                );
-                match.getSetsHistory().put(setNumber, scoreInfo);
+                putScoreInfo(match, firstPlayerGameBefore, secondPlayerGameBefore + 1);
             }
         }
+        checkTiebreakStart(scoringPlayer, opponent, match);
 
+        if (scoringStrategy.isMatchWon(scoringPlayer)) {
+            saveMatch(match);
+        }
+    }
+
+
+    private static boolean playerWonSet(int playerSetBefore, int playerSetAfter) {
+        return playerSetBefore < playerSetAfter;
+    }
+
+    private static void putScoreInfo(OngoingMatch match, int firstPlayerGame, int secondPlayerGame) {
+        int setNumber = match.getSetsHistory().size();
+        SetScoreInfo scoreInfo = new SetScoreInfo(
+                firstPlayerGame,
+                secondPlayerGame
+        );
+        match.getSetsHistory().put(setNumber, scoreInfo);
+    }
+
+    private static void checkTiebreakStart(PlayerScore scoringPlayer, PlayerScore opponent, OngoingMatch match) {
         if (scoringPlayer.getPlayerGame() == GAMES_TO_START_TIEBREAK && opponent.getPlayerGame() == GAMES_TO_START_TIEBREAK) {
             match.setTiebreak(true);
         }
+    }
 
-        if (scoringStrategy.isMatchWon(scoringPlayer)) {
-            Optional<PlayerDto> winner = match.getScoreModel().getWinner(match.getFirstPlayer(), match.getSecondPlayer());
-            if (winner.isEmpty()) {
-                throw new IllegalStateException(ExceptionMessages.MISSING_WINNER);
-            }
-            match.setFinished(true);
-            FinishedMatchDto finishedMatch = new FinishedMatchDto(
-                    null,
-                    match.getFirstPlayer(),
-                    match.getSecondPlayer(),
-                    winner.get()
-            );
-            finishedMatchesService.save(finishedMatch);
+    private void saveMatch(OngoingMatch match) {
+        Optional<PlayerDto> winner = match.getScoreModel().getWinner(match.getFirstPlayer(), match.getSecondPlayer());
+        if (winner.isEmpty()) {
+            throw new IllegalStateException(ExceptionMessages.MISSING_WINNER);
         }
+        match.setFinished(true);
+        FinishedMatchDto finishedMatch = new FinishedMatchDto(
+                null,
+                match.getFirstPlayer(),
+                match.getSecondPlayer(),
+                winner.get()
+        );
+        finishedMatchesService.save(finishedMatch);
     }
 
     private static TennisScoringStrategy getScoringStrategy(OngoingMatch match) {
