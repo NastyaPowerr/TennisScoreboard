@@ -5,7 +5,6 @@ import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
 import org.hibernate.SessionFactory;
-import org.roadmap.tennisscoreboard.H2DatabaseViewer;
 import org.roadmap.tennisscoreboard.repository.MatchRepositoryImpl;
 import org.roadmap.tennisscoreboard.repository.PlayerRepositoryImpl;
 import org.roadmap.tennisscoreboard.service.FinishedMatchesPersistenceService;
@@ -21,8 +20,6 @@ public class ApplicationContextListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        H2DatabaseViewer.start();
-
         sessionFactory = HibernateSessionFactory.createSessionFactory();
         ObjectMapper objectMapper = new ObjectMapper();
         PlayerRepositoryImpl playerRepositoryImpl = new PlayerRepositoryImpl(sessionFactory);
