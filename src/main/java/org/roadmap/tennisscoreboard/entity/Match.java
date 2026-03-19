@@ -15,7 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "matches",
+@Table(name = "tennis_matches",
         check = @CheckConstraint(
                 name = "winner_can_be_only_player_in_match",
                 constraint = "winner IN (player1, player2)"
