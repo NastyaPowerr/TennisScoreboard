@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tennis Scoreboard | Page Not Found </title>
+    <title>Tennis Scoreboard | Internal Error </title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -35,6 +35,17 @@
             <c:if test="${not empty error}">
                 <div class="error-message">
                         ${error}
+                </div>
+            </c:if>
+        </div>
+
+        <div>
+            <c:if test="${empty error}">
+                <div class="big-error-message">
+                    500
+                </div>
+                <div class="error-message">
+                    Internal error. Please try later.
                 </div>
             </c:if>
         </div>
