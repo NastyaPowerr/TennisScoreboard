@@ -12,7 +12,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
 import org.roadmap.tennisscoreboard.exception.InvalidMatchIdException;
 import org.roadmap.tennisscoreboard.exception.PlayerAlreadyExistsException;
@@ -37,11 +36,12 @@ public class ExceptionAndTransactionFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
 
-        Transaction transaction = null;
-        try (Session session = sessionFactory.getCurrentSession()) {
-            transaction = session.beginTransaction();
+        Session session = null;
+        try {
+            session = sessionFactory.getCurrentSession();
+            session.beginTransaction();
             filterChain.doFilter(servletRequest, servletResponse);
-            transaction.commit();
+            session.getTransaction().commit();
         } catch (InvalidMatchIdException | NoSuchElementException ex) {
             sendNotFoundError(ex, resp, req);
         } catch (ValidationException ex) {
@@ -51,8 +51,11 @@ public class ExceptionAndTransactionFilter implements Filter {
         } catch (Exception ex) {
             sendInternalError(resp, req);
         } finally {
-            if (transaction != null && transaction.isActive()) {
-                transaction.rollback();
+            if (session != null && session.isOpen()) {
+                if (session.getTransaction() != null && session.getTransaction().isActive()) {
+                    session.getTransaction().rollback();
+                }
+                session.close();
             }
         }
     }
@@ -70,7 +73,7 @@ public class ExceptionAndTransactionFilter implements Filter {
     }
 
     private static void sendBadRequestError(ValidationException ex, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String path = "WEB-INF" + req.getServletPath() + ".jsp";
+        String path = PagePaths.WEB_INF_JSP + req.getServletPath() + ".jsp";
         resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         req.setAttribute("error", ex.getMessage());
         req.getRequestDispatcher(path).forward(req, resp);
