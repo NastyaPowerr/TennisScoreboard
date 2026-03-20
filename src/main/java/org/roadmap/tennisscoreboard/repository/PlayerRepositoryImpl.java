@@ -7,7 +7,13 @@ import org.roadmap.tennisscoreboard.entity.Player;
 import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
 import org.roadmap.tennisscoreboard.exception.PlayerAlreadyExistsException;
 
+import java.util.Optional;
+
 public class PlayerRepositoryImpl implements PlayerRepository {
+    private static final String FIND_BY_NAME = """
+            FROM Player
+            WHERE name =:name
+            """;
     private final SessionFactory sessionFactory;
 
     public PlayerRepositoryImpl(SessionFactory sessionFactory) {
@@ -31,8 +37,18 @@ public class PlayerRepositoryImpl implements PlayerRepository {
     }
 
     @Override
-    public Player findById(Integer id) {
+    public Optional<Player> findById(Integer id) {
         Session session = sessionFactory.getCurrentSession();
-        return session.find(Player.class, id);
+        return Optional.ofNullable(session.find(Player.class, id));
+    }
+
+    @Override
+    public Optional<Player> findByName(String name) {
+        Session session = sessionFactory.getCurrentSession();
+        return Optional.ofNullable(
+                session.createQuery(FIND_BY_NAME, Player.class)
+                        .setParameter("name", name)
+                        .uniqueResult()
+        );
     }
 }

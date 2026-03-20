@@ -46,8 +46,8 @@ public class NewMatchServlet extends HttpServlet {
             req.getRequestDispatcher(PagePaths.NEW_MATCH_JSP).forward(req, resp);
             return;
         }
-        PlayerDto firstPlayer = playerService.create(new PlayerDto(null, firstPlayerName));
-        PlayerDto secondPlayer = playerService.create(new PlayerDto(null, secondPlayerName));
+        PlayerDto firstPlayer = playerService.findOrCreate(new PlayerDto(null, firstPlayerName));
+        PlayerDto secondPlayer = playerService.findOrCreate(new PlayerDto(null, secondPlayerName));
 
         OngoingMatch match = new OngoingMatch(
                 firstPlayer,

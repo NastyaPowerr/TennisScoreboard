@@ -19,7 +19,7 @@ public final class HibernateSessionFactory {
                     .applySettings(configuration.getProperties());
             return configuration.buildSessionFactory(builder.build());
         } catch (Exception ex) {
-            throw new RuntimeException("Couldn't create session factory: " + ex.getMessage());
+            throw new RuntimeException("Couldn't findOrCreate session factory: " + ex.getMessage());
         }
     }
 }

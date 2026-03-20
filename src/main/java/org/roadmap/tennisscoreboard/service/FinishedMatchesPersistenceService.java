@@ -4,11 +4,13 @@ import org.roadmap.tennisscoreboard.dto.FinishedMatchDto;
 import org.roadmap.tennisscoreboard.dto.PlayerDto;
 import org.roadmap.tennisscoreboard.entity.Match;
 import org.roadmap.tennisscoreboard.entity.Player;
+import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
 import org.roadmap.tennisscoreboard.repository.MatchRepository;
 import org.roadmap.tennisscoreboard.repository.PlayerRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class FinishedMatchesPersistenceService {
     private final MatchRepository matchRepository;
@@ -20,9 +22,9 @@ public class FinishedMatchesPersistenceService {
     }
 
     public void save(FinishedMatchDto finishedMatchDto) {
-        Player firstPlayer = playerRepository.findById(finishedMatchDto.firstPlayer().id());
-        Player secondPlayer = playerRepository.findById(finishedMatchDto.secondPlayer().id());
-        Player winner = playerRepository.findById(finishedMatchDto.winner().id());
+        Player firstPlayer = getPlayerOrThrow(finishedMatchDto.firstPlayer());
+        Player secondPlayer = getPlayerOrThrow(finishedMatchDto.secondPlayer());
+        Player winner = getPlayerOrThrow(finishedMatchDto.winner());
         Match entity = new Match(
                 firstPlayer,
                 secondPlayer,
@@ -63,5 +65,10 @@ public class FinishedMatchesPersistenceService {
             matchesCount = matchRepository.getCountWithFilter(filterName);
         }
         return (int) Math.ceil((double) matchesCount / pageSize);
+    }
+
+    private Player getPlayerOrThrow(PlayerDto playerDto) {
+        return playerRepository.findById(playerDto.id())
+                .orElseThrow(() -> new NoSuchElementException(ExceptionMessages.PLAYER_NOT_FOUND + playerDto.id()));
     }
 }

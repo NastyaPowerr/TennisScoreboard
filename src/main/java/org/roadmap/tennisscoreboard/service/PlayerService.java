@@ -11,12 +11,12 @@ public class PlayerService {
         this.playerRepositoryImpl = playerRepositoryImpl;
     }
 
-    public PlayerDto create(PlayerDto player) {
-        Player entity = new Player(player.name());
-        Player savedPlayer = playerRepositoryImpl.save(entity);
+    public PlayerDto findOrCreate(PlayerDto playerDto) {
+        Player player = playerRepositoryImpl.findByName(playerDto.name())
+                .orElseGet(() -> playerRepositoryImpl.save(new Player(playerDto.name())));
         return new PlayerDto(
-                savedPlayer.getId(),
-                savedPlayer.getName()
+                player.getId(),
+                player.getName()
         );
     }
 }

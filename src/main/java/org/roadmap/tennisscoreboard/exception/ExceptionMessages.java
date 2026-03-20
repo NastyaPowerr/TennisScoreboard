@@ -25,6 +25,7 @@ public final class ExceptionMessages {
 
     public static final String MISSING_WINNER = "Cannot have a won match without a winner.";
     public static final String PLAYER_NOT_IN_MATCH = "Player with that id is not in that match.";
+    public static final String PLAYER_NOT_FOUND = "Player with id %s not found.";
 
     public static final String WRONG_USE_OF_NEXT = "Should not call .next() on Point.AD";
     public static final String COULD_NOT_GET_OPPONENT = "Couldn't get an opponent player.";
