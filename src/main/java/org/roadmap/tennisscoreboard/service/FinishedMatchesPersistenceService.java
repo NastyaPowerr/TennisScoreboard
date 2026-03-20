@@ -39,7 +39,10 @@ public class FinishedMatchesPersistenceService {
         } else {
             matches = matchRepository.findAll(pageSize, offset, filterName);
         }
+        return mapToFinishedMatchDto(matches);
+    }
 
+    private static List<FinishedMatchDto> mapToFinishedMatchDto(List<Match> matches) {
         List<FinishedMatchDto> responseMatches = new ArrayList<>();
         for (Match match : matches) {
             PlayerDto firstPlayer = new PlayerDto(match.getFirstPlayer().getId(), match.getFirstPlayer().getName());

@@ -14,6 +14,7 @@ import org.roadmap.tennisscoreboard.service.FinishedMatchesPersistenceService;
 import org.roadmap.tennisscoreboard.util.MatchValidator;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 @WebServlet(PagePaths.MATCHES_PAGE)
@@ -37,7 +38,6 @@ public class FinishedMatchesServlet extends HttpServlet {
 
         req.setAttribute("matches", matches);
         req.setAttribute("pageParams", pageParams);
-
         req.getRequestDispatcher(PagePaths.MATCHES_PAGE_JSP).forward(req, resp);
     }
 

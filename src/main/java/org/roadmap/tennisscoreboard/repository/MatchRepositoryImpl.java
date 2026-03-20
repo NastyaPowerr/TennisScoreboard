@@ -10,12 +10,14 @@ public class MatchRepositoryImpl implements MatchRepository {
     private final SessionFactory sessionFactory;
     private static final String FIND_ALL_PAGINATION = """
             FROM Match
+            ORDER BY id DESC
             """;
     private static final String FIND_ALL_PAGINATION_WITH_FILTER = """
             SELECT matches
             FROM Match matches
             WHERE upper(matches.firstPlayer.name) LIKE upper(:name)
             OR upper(matches.secondPlayer.name) LIKE upper(:name)
+            ORDER BY id DESC
             """;
     private static final String COUNT_ALL = """
             SELECT COUNT(*)
