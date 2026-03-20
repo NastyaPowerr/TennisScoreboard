@@ -37,10 +37,15 @@ public class NewMatchServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String firstPlayerName = req.getParameter("firstPlayerName");
         String secondPlayerName = req.getParameter("secondPlayerName");
+
         MatchValidator.validateName(firstPlayerName);
         MatchValidator.validateName(secondPlayerName);
 
+        firstPlayerName = firstPlayerName.replaceAll("\\s+", " ").trim();
+        secondPlayerName = secondPlayerName.replaceAll("\\s+", " ").trim();
+
         if (firstPlayerName.equals(secondPlayerName)) {
+            System.out.println("hallo");
             req.setAttribute("error", ExceptionMessages.PLAYERS_THE_SAME_NAME);
             resp.setStatus(HttpServletResponse.SC_CONFLICT);
             req.getRequestDispatcher(PagePaths.NEW_MATCH_JSP).forward(req, resp);

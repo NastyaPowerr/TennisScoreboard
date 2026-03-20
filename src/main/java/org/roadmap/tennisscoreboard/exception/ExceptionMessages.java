@@ -14,6 +14,7 @@ public final class ExceptionMessages {
     public static final String INVALID_NAME_PATTERN =
             "Name can contain only: English and Russian letters, dots, space, apostrophes.";
     public static final String NAME_MUST_CONTAIN_LETTERS = "Name must contain English or Russian letters.";
+    public static final String NAME_MUST_NOT_START_WITH_SPACE = "Name cannot start with space.";
     public static final String MISSING_ID = "Id is required.";
     public static final String INVALID_MATCH_ID_FORMAT = "Invalid match id format: %s.";
     public static final String INVALID_PLAYER_ID_FORMAT = "Invalid player id: %s.";

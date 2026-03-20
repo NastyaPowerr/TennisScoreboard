@@ -18,7 +18,8 @@ public final class MatchValidator {
 
     public static void validateName(String name) {
         checkForNullOrEmpty(name, ExceptionMessages.MISSING_NAME);
-        name = name.trim();
+        checkIfStartsWithSpace(name);
+        name = name.replaceAll("\\s+", " ");
         if (name.length() < MIN_NAME_LENGTH || name.length() > MAX_NAME_LENGTH) {
             throw new ValidationException(
                     String.format(
@@ -79,6 +80,12 @@ public final class MatchValidator {
     private static void checkForNullOrEmpty(String name, String errorMessage) {
         if (name == null || name.trim().isEmpty()) {
             throw new ValidationException(errorMessage);
+        }
+    }
+
+    private static void checkIfStartsWithSpace(String name) {
+        if (name.charAt(0) == ' ') {
+            throw new ValidationException(ExceptionMessages.NAME_MUST_NOT_START_WITH_SPACE);
         }
     }
 }
