@@ -208,7 +208,18 @@ footer {
 .btn-filter {
     width: 280px;
     line-height: 45px;
-    margin-left: 20px;
+    /*margin-left: 20px;*/
+    border-radius: 18px;
+    border: none;
+    background-color: #42a7f5;
+    color: #fff;
+    cursor: pointer;
+}
+
+.btn-apply {
+    width: 280px;
+    line-height: 45px;
+    /*margin-left: 20px;*/
     border-radius: 18px;
     border: none;
     background-color: #42a7f5;
@@ -426,10 +437,18 @@ footer {
     width: 100%;
 }
 
+.form-filter {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
 .input-container {
     width: 100%;
     display: flex;
     margin-top: 20px;
+    gap: 10px;
 }
 
 .input-filter {

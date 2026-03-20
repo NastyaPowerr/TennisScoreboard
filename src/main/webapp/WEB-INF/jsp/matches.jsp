@@ -41,17 +41,18 @@
             </div>
         </c:if>
         <div class="input-container">
-            <form method="get" action="${pageContext.request.contextPath}/matches">
-                <label>
+            <form method="get" action="${pageContext.request.contextPath}/matches" class="form-filter">
                     <input class="input-filter" name="filter_by_player_name" placeholder="Filter by name" type="text"
                            value="${pageParams.filterName()}"/>
-                </label>
+                    <button type="submit" class="btn-apply">Apply</button>
             </form>
-            <div>
-                <a href="${pageContext.request.contextPath}/matches">
-                    <button class="btn-filter">Reset Filter</button>
-                </a>
-            </div>
+            <c:if test="${not empty pageParams.filterName()}">
+                <div>
+                    <a href="${pageContext.request.contextPath}/matches">
+                        <button class="btn-filter">Reset Filter</button>
+                    </a>
+                </div>
+            </c:if>
         </div>
 
         <table class="table-matches">
