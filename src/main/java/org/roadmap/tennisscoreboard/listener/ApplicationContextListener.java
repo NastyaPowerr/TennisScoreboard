@@ -12,6 +12,7 @@ import org.roadmap.tennisscoreboard.service.MatchScoreService;
 import org.roadmap.tennisscoreboard.service.OngoingMatchService;
 import org.roadmap.tennisscoreboard.service.PlayerService;
 import org.roadmap.tennisscoreboard.util.HibernateSessionFactory;
+import org.roadmap.tennisscoreboard.util.TransactionController;
 import tools.jackson.databind.ObjectMapper;
 
 @WebListener
@@ -26,14 +27,15 @@ public class ApplicationContextListener implements ServletContextListener {
         MatchRepositoryImpl matchRepositoryImpl = new MatchRepositoryImpl(sessionFactory);
         FinishedMatchesPersistenceService finishedMatchesPersistenceService = new FinishedMatchesPersistenceService(
                 matchRepositoryImpl,
-                playerRepositoryImpl
+                playerRepositoryImpl,
+                sessionFactory
         );
         OngoingMatchService ongoingMatchService = new OngoingMatchService();
         MatchScoreService matchScoreService = new MatchScoreService(
                 ongoingMatchService,
                 finishedMatchesPersistenceService
         );
-        PlayerService playerService = new PlayerService(playerRepositoryImpl);
+        PlayerService playerService = new PlayerService(playerRepositoryImpl, sessionFactory);
 
         ServletContext context = sce.getServletContext();
 

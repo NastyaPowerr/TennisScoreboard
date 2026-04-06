@@ -2,8 +2,6 @@ package org.roadmap.tennisscoreboard.filter;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.FilterConfig;
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
@@ -11,8 +9,6 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
 import org.roadmap.tennisscoreboard.exception.InvalidMatchIdException;
 import org.roadmap.tennisscoreboard.exception.PlayerAlreadyExistsException;
@@ -24,53 +20,30 @@ import java.util.NoSuchElementException;
 
 @Slf4j
 @WebFilter("/*")
-public class ExceptionAndTransactionFilter implements Filter {
-    private SessionFactory sessionFactory;
-
-    @Override
-    public void init(FilterConfig filterConfig) {
-        ServletContext context = filterConfig.getServletContext();
-        this.sessionFactory = (SessionFactory) context.getAttribute("sessionFactory");
-    }
-
+public class ExceptionFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws ServletException, IOException {
+        log.info("ExceptionFilter working....");
+
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
 
-        Session session = null;
         try {
-            session = sessionFactory.getCurrentSession();
-
-            log.debug("Start transaction.");
-            session.beginTransaction();
-
             filterChain.doFilter(servletRequest, servletResponse);
-
-            session.getTransaction().commit();
-            log.debug("Transaction commited.");
         } catch (InvalidMatchIdException | NoSuchElementException ex) {
+            log.debug("Sending 404 error page: {}", ex.getMessage());
             sendNotFoundError(ex, resp, req);
         } catch (ValidationException ex) {
+            log.debug("Sending 400 error info: {}", ex.getMessage());
             sendBadRequestError(ex, req, resp);
         } catch (PlayerAlreadyExistsException ex) {
-            log.warn("Player with that name already exists {}", ex.getMessage());
+            log.debug("Sending 409 error info: {}", ex.getMessage());
             sendConflictError(ex, resp, req);
         } catch (Exception ex) {
-            log.error("Unexpected error {}", ex.getMessage());
+            log.error("Unexpected error: {}. Sending 500 error page.", ex.getMessage());
             sendInternalError(resp, req);
-        } finally {
-            if (session != null && session.isOpen()) {
-                if (session.getTransaction() != null && session.getTransaction().isActive()) {
-                    log.debug("Rolling back transaction.");
-                    session.getTransaction().rollback();
-                    log.debug("Transaction is rolled back,");
-                }
-                log.debug("Closing session.");
-                session.close();
-                log.debug("Session is closed.");
-            }
         }
+        log.info("ExceptionFilter finished working....");
     }
 
     private static void sendInternalError(HttpServletResponse resp, HttpServletRequest req) throws ServletException, IOException {
