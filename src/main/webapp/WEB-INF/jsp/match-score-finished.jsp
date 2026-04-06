@@ -49,32 +49,32 @@
                 </thead>
                 <tbody>
                 <tr class="player1">
-                    <td class="table-text">${match.firstPlayer().name}</td>
+                    <td class="table-text">${match.firstPlayer().name()}</td>
                     <td class="table-text">${match.firstPlayerFirstSet()}</td>
                     <td class="table-text">${match.firstPlayerSecondSet()}</td>
                     <td class="table-text">${match.firstPlayerThirdSet()}</td>
                     <td class="table-text">
-                        <c:if test="${match.winner().id == match.firstPlayer().id}">
+                        <c:if test="${match.winner().id() == match.firstPlayer().id()}">
                             WINNER
                         </c:if>
                         <form method="post" action="${pageContext.request.contextPath}/match-score">
                             <input type="hidden" name="uuid" value="${match.id()}"/>
-                            <input type="hidden" name="playerId" value=${match.firstPlayer().id}>
+                            <input type="hidden" name="playerId" value=${match.firstPlayer().id()}>
                         </form>
                     </td>
                 </tr>
                 <tr class="player2">
-                    <td class="table-text">${match.secondPlayer().name}</td>
+                    <td class="table-text">${match.secondPlayer().name()}</td>
                     <td class="table-text">${match.secondPlayerFirstSet()}</td>
                     <td class="table-text">${match.secondPlayerSecondSet()}</td>
                     <td class="table-text">${match.secondPlayerThirdSet()}</td>
                     <td class="table-text">
-                        <c:if test="${match.winner().id == match.secondPlayer().id}">
+                        <c:if test="${match.winner().id() == match.secondPlayer().id()}">
                             WINNER
                         </c:if>
                         <form method="post" action="${pageContext.request.contextPath}/match-score">
                             <input type="hidden" name="uuid" value="${match.id()}"/>
-                            <input type="hidden" name="playerId" value=${match.secondPlayer().id}>
+                            <input type="hidden" name="playerId" value=${match.secondPlayer().id()}>
                         </form>
                     </td>
                 </tr>

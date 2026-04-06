@@ -49,27 +49,27 @@
                 </thead>
                 <tbody>
                 <tr class="player1">
-                    <td class="table-text">${match.firstPlayer().name}</td>
+                    <td class="table-text">${match.firstPlayer().name()}</td>
                     <td class="table-text">${match.firstPlayerSet()}</td>
                     <td class="table-text">${match.firstPlayerGame()}</td>
                     <td class="table-text">${match.firstPlayerPoints()}</td>
                     <td class="table-text">
                         <form method="post" action="${pageContext.request.contextPath}/match-score">
                             <input type="hidden" name="uuid" value="${match.id()}"/>
-                            <input type="hidden" name="playerId" value=${match.firstPlayer().id}>
+                            <input type="hidden" name="playerId" value=${match.firstPlayer().id()}>
                             <button type="submit" class="score-btn">Score</button>
                         </form>
                     </td>
                 </tr>
                 <tr class="player2">
-                    <td class="table-text">${match.secondPlayer().name}</td>
+                    <td class="table-text">${match.secondPlayer().name()}</td>
                     <td class="table-text">${match.secondPlayerSet()}</td>
                     <td class="table-text">${match.secondPlayerGame()}</td>
                     <td class="table-text">${match.secondPlayerPoints()}</td>
                     <td class="table-text">
                         <form method="post" action="${pageContext.request.contextPath}/match-score">
                             <input type="hidden" name="uuid" value="${match.id()}"/>
-                            <input type="hidden" name="playerId" value=${match.secondPlayer().id}>
+                            <input type="hidden" name="playerId" value=${match.secondPlayer().id()}>
                             <button type="submit" class="score-btn">Score</button>
                         </form>
                     </td>
