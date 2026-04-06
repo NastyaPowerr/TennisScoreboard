@@ -10,6 +10,7 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.roadmap.tennisscoreboard.exception.ExceptionMessages;
@@ -21,6 +22,7 @@ import org.roadmap.tennisscoreboard.servlet.PagePaths;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
+@Slf4j
 @WebFilter("/*")
 public class ExceptionAndTransactionFilter implements Filter {
     private SessionFactory sessionFactory;
@@ -39,23 +41,34 @@ public class ExceptionAndTransactionFilter implements Filter {
         Session session = null;
         try {
             session = sessionFactory.getCurrentSession();
+
+            log.debug("Start transaction.");
             session.beginTransaction();
+
             filterChain.doFilter(servletRequest, servletResponse);
+
             session.getTransaction().commit();
+            log.debug("Transaction commited.");
         } catch (InvalidMatchIdException | NoSuchElementException ex) {
             sendNotFoundError(ex, resp, req);
         } catch (ValidationException ex) {
             sendBadRequestError(ex, req, resp);
         } catch (PlayerAlreadyExistsException ex) {
+            log.warn("Player with that name already exists {}", ex.getMessage());
             sendConflictError(ex, resp, req);
         } catch (Exception ex) {
+            log.error("Unexpected error {}", ex.getMessage());
             sendInternalError(resp, req);
         } finally {
             if (session != null && session.isOpen()) {
                 if (session.getTransaction() != null && session.getTransaction().isActive()) {
+                    log.debug("Rolling back transaction.");
                     session.getTransaction().rollback();
+                    log.debug("Transaction is rolled back,");
                 }
+                log.debug("Closing session.");
                 session.close();
+                log.debug("Session is closed.");
             }
         }
     }
